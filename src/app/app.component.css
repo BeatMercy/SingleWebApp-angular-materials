@@ -1,7 +1,52 @@
-.example-icon {
-  padding: 0 14px;
+.example-spacer {
+    flex: 1 1 auto;
 }
 
-.example-spacer {
-  flex: 1 1 auto;
+.example-container {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+#title {
+    outline: none;
+}
+
+#title p {
+    font-size: 10pt;
+    padding: 0;
+    margin: 0;
+}
+
+#menuButton {
+    outline: none;
+    min-width: 50px;
+    padding: 0;
+}
+
+.example-sidenav-content {
+    overflow: visible;
+    display: flex;
+    height: 100%;
+    /* align-items: center; */
+    justify-content: center;
+}
+
+.example-sidenav {
+    color: #fff;
+    min-width: 170px;
+    background-color: #3f51b5;
+    padding: 20px;
+}
+
+#menuList {
+    color: white;
+}
+
+#menuList .mat-button {
+    color: white;
 }

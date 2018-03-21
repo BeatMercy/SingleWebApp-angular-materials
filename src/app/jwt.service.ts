@@ -1,36 +1,49 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Http, RequestOptions } from '@angular/http';
+import { AuthHttp, JwtHelper, tokenNotExpired, AuthConfig } from 'angular2-jwt';
+import { AuthModule, customAuthHttpServiceFactory } from '../auth.module';
+
 import { User, HOST_URL } from './entity/user';
 
 @Injectable()
 export class JwtService {
-  tokenJson: JSON;
-  token: string;
-  success = false;
-  jsonString = '';
-
-  constructor(private http: HttpClient) {
+  authConfig: AuthConfig = new AuthConfig({
+    tokenName: 'token',
+    tokenGetter: (() => sessionStorage.getItem('token')),
+    globalHeaders: [{ 'Content-Type': 'application/json' }],
+  });
+  requestOptions: RequestOptions;
+  authHttp: AuthHttp;
+  constructor(private http: Http, private httpClient: HttpClient, private jwtHttp: Http) {
+    // this.requestOptions.headers.append('Content-Type', 'application/json');
+    this.authHttp = customAuthHttpServiceFactory(this.authConfig, this.jwtHttp, this.requestOptions);
   }
 
-  login(username: string, password: string): object {
-    const json = this.http.post<JSON>('/login',
-      { username, password });
-    if (json['token'] != null) {
-      this.success = true;
-      this.jsonString = '{ "success": true, "message": "Promise!！" }';
-      console.log(this.success);
-      const result = JSON.parse(<string>this.jsonString);
-      return result;
-    } else {
-      this.success = false;
-      this.jsonString = '{ "success": false, "message": "Reject!！" }';
-      console.log(this.success);
-      console.log(<string>this.jsonString);
-      const result = JSON.parse(<string>this.jsonString);
-      return result;
+  jwtHelper: JwtHelper = new JwtHelper();
 
+  /**
+   * true if not expired
+   */
+  checkToken() {
+    const token = this.authConfig.getConfig().tokenGetter();
+    if (token === 'undefined' || token === undefined || token === null) {
+      return false;
+    } else {
+      return tokenNotExpired('', token.toString());
     }
-    /*this.http.post<JSON>('/login',
+  }
+
+  logout() {
+    console.log(sessionStorage.removeItem('token'));
+    console.log(sessionStorage.getItem('token'));
+    this.httpClient.post<JSON>('/logout', {});
+  }
+
+
+}
+
+/*this.http.post<JSON>('/login',
       { username, password }).toPromise().then(value => {
         console.log(value);
         this.success = true;
@@ -60,6 +73,3 @@ export class JwtService {
         this.success = true;
         this.jsonString = '{ "success": true, "message": "登录成功！" }';
       }); */
-  }
-
-}
