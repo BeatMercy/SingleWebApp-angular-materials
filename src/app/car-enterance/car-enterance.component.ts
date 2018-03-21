@@ -3,7 +3,7 @@ import { FileUploader, FileItem } from 'ng2-file-upload';
 import { JwtService } from '../jwt.service';
 import { MessageDialogService } from '../message-dialog.service';
 import { ImageCompressService, ResizeOptions, ImageUtilityService } from 'ng2-image-compress';
-
+import { AuthGuardService } from '../auth-guard.service';
 const URL = '/car/enter';
 
 @Component({
@@ -24,6 +24,7 @@ export class CarEnteranceComponent implements OnInit {
     this.hasAnotherDropZoneOver = e;
   }
   constructor(
+    public authGuardService: AuthGuardService,
     public jwtService: JwtService,
     private messageService: MessageDialogService,
     private imgCompressService: ImageCompressService) {
@@ -36,15 +37,14 @@ export class CarEnteranceComponent implements OnInit {
     file.upload();
     this.uploader.response.subscribe(next => {
       const result = JSON.parse(next);
-      console.log(result['msg']);
       console.log(result['content']);
       this.messageService.showMessage(result['msg'], result['content']);
+      this.uploader.response.observers.shift();
     }, error => {
       console.log(error);
     }, () => {
       console.log('finfished!!!!!!1');
     });
-    this.uploader.response = null;
   }
 
   alert(title: string, content: string) {

@@ -8,19 +8,36 @@ import { User, HOST_URL } from './entity/user';
 
 @Injectable()
 export class JwtService {
+  user: User = new User();
+
   authConfig: AuthConfig = new AuthConfig({
     tokenName: 'token',
     tokenGetter: (() => sessionStorage.getItem('token')),
     globalHeaders: [{ 'Content-Type': 'application/json' }],
   });
+
   requestOptions: RequestOptions;
   authHttp: AuthHttp;
+  jwtHelper: JwtHelper = new JwtHelper();
+
   constructor(private http: Http, private httpClient: HttpClient, private jwtHttp: Http) {
     // this.requestOptions.headers.append('Content-Type', 'application/json');
     this.authHttp = customAuthHttpServiceFactory(this.authConfig, this.jwtHttp, this.requestOptions);
+    this.updateUser(sessionStorage.getItem('token'));
   }
 
-  jwtHelper: JwtHelper = new JwtHelper();
+  getUser() {
+    return this.user;
+  }
+  updateUser(token: string) {
+    if (token === undefined || token === null || token === 'undefined') {
+      return;
+    }
+    const raw = this.jwtHelper.decodeToken(token);
+    this.user.username = raw['sub'];
+    this.user.authorities = raw['authorities'];
+    // console.log(raw['sub']);
+  }
 
   /**
    * true if not expired

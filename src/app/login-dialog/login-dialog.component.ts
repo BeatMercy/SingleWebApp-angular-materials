@@ -37,7 +37,7 @@ export class LoginDialogComponent implements OnInit {
     this.httpClient.post<JSON>('/login', { username, password })
       .subscribe(next => {
         sessionStorage.setItem('token', next['token']);
-        console.log('Get sessionStroage:' + sessionStorage.getItem('token'));
+        this.jwtService.updateUser(next['token']);
       },
       error => {
         alert('登录失败：');

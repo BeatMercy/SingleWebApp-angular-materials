@@ -11,7 +11,6 @@ import { Router } from '@angular/router';
 })
 export class AppComponent {
   title = '易车服';
-  showFiller = false;
 
   constructor(
     private router: Router,

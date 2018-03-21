@@ -55,6 +55,8 @@ import { HttpModule } from '@angular/http';
 import { AuthGuardService } from './auth-guard.service';
 import { MessageDialogService } from './message-dialog.service';
 import { MessageDialogComponent } from './message-dialog/message-dialog.component';
+import { AccountInfoComponent } from './account-info/account-info.component';
+import { ProductRetrieveService } from './product-retrieve.service';
 
 
 @NgModule({
@@ -64,7 +66,7 @@ import { MessageDialogComponent } from './message-dialog/message-dialog.componen
     CarEnteranceComponent,
     IndexPageComponent,
     MessageDialogComponent,
-    MessageDialogComponent
+    AccountInfoComponent
   ],
   imports: [
     FormsModule,
@@ -121,7 +123,9 @@ import { MessageDialogComponent } from './message-dialog/message-dialog.componen
     AuthGuardService,
     MessageDialogService,
     ImageCompressService,
-    ResizeOptions],
+    ResizeOptions,
+    ProductRetrieveService
+  ],
   bootstrap: [
     AppComponent,
   ]

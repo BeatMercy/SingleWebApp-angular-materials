@@ -1,8 +1,8 @@
-<ng-container>
+<ng-container *ngIf="authGuardService.canActivate()">
 
   <div class="navbar navbar-default">
     <div class="navbar-header">
-      <a class="navbar-brand" (click)="alert()">对准要检测的车牌</a>
+      <a class="navbar-brand">对准要检测的车牌</a>
     </div>
   </div>
 
