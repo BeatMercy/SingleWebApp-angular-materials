@@ -1,0 +1,38 @@
+<mat-drawer-container class="example-container" autosize>
+  <!-- 菜单栏 -->
+  <mat-drawer color="primary" #drawer class="example-sidenav" mode='over'>
+    <div id="title" mat-button>
+      <div style="font-size:20pt;">{{title}}</div>
+      <i style="font-size:8pt;">汽车美容中心</i>
+    </div>
+    <div>
+      <mat-list id="menuList">
+        <mat-list-item>
+          <a mat-button focus='false' routerLink="/" (click)="drawer.toggle()">首页</a>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+          <a mat-button routerLink="/carEnterance" (click)="drawer.toggle()">扫描车牌</a>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+          <a mat-button routerLink="/table" (click)="drawer.toggle()">列表</a>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+
+      </mat-list>
+    </div>
+  </mat-drawer>
+
+  <!-- 主页面 -->
+  <mat-toolbar style="margin-top:56px;" color="primary">
+    <button class="menuButton" type="button" mat-button (click)="drawer.toggle()">
+      <mat-icon class="example-icon">menu</mat-icon>
+    </button>
+  </mat-toolbar>
+  <div class="example-sidenav-content">
+      
+
+    <router-outlet></router-outlet>
+  </div>
+</mat-drawer-container>

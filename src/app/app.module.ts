@@ -57,6 +57,9 @@ import { MessageDialogService } from './message-dialog.service';
 import { MessageDialogComponent } from './message-dialog/message-dialog.component';
 import { AccountInfoComponent } from './account-info/account-info.component';
 import { ProductRetrieveService } from './product-retrieve.service';
+import { SlideNavComponent } from './slide-nav/slide-nav.component';
+import { CdkTableBasicExampleComponent } from './cdk-table-basic-example/cdk-table-basic-example.component';
+import { CdkTableModule } from '@angular/cdk/table';
 
 
 @NgModule({
@@ -66,7 +69,9 @@ import { ProductRetrieveService } from './product-retrieve.service';
     CarEnteranceComponent,
     IndexPageComponent,
     MessageDialogComponent,
-    AccountInfoComponent
+    AccountInfoComponent,
+    SlideNavComponent,
+    CdkTableBasicExampleComponent
   ],
   imports: [
     FormsModule,
@@ -113,6 +118,8 @@ import { ProductRetrieveService } from './product-retrieve.service';
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
+    CdkTableModule,
+    ReactiveFormsModule
   ],
   entryComponents: [
     LoginDialogComponent,

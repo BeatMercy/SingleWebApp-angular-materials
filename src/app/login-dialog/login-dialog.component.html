@@ -8,7 +8,7 @@
   <br>
   <br>
   <div fxLayout="row" fxLayoutAlign="center center">
-    <div fxFelx="100%" class="loginForm">
+    <div (keyup.enter)="loginSubmit()" fxFelx="100%" class="loginForm">
 
       <mat-form-field class="loginInput">
 
@@ -20,7 +20,7 @@
         <mat-icon matSuffix color="primary">vpn_key</mat-icon>
       </mat-form-field>
 
-      <button mat-button ng-keypress="submit($event)" (click)="loginSubmit()" color="primary">
+      <button mat-button (click)="loginSubmit()" color="primary">
         <mat-icon class="mat-18">fingerprint</mat-icon>
         <span>登录</span>
       </button>

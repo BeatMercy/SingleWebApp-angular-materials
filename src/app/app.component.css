@@ -1,4 +1,4 @@
-.example-spacer {
+.flex-spacer {
     flex: 1 1 auto;
 }
 
@@ -10,6 +10,10 @@
     bottom: 0;
     left: 0;
     right: 0;
+}
+
+.navContent {
+    margin-top: 56px;
 }
 
 #title {
@@ -29,6 +33,7 @@
 }
 
 .example-sidenav-content {
+    /* margin-top: 64px; */
     overflow: visible;
     display: flex;
     height: 100%;
@@ -49,4 +54,10 @@
 
 #menuList .mat-button {
     color: white;
+}
+
+.toolbar {
+    /* box-shadow: 0 2px 10px #192048; */
+    z-index: 2;
+    position: fixed;
 }

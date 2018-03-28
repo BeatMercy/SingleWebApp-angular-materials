@@ -1,82 +1,45 @@
 <ng-container>
-  <mat-drawer-container class="example-container" autosize>
-    <div style="text-align:center">
-      <mat-toolbar color="primary">
-        <mat-toolbar-row style="padding:0;" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="gappx">
-
-          <div style="text-align:left" fxFlex="20%" fxFlexAlign="start center">
-            <button id="menuButton" type="button" mat-button (click)="drawer.toggle()">
-              <mat-icon class="example-icon">menu</mat-icon>
+  <mat-toolbar class="toolbar mat-elevation-z6" color="primary">
+    <mat-toolbar-row  fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="gappx">
+      <div style="display:flex;" fxFlexAlign="start center">
+        <b >{{title}}</b>
+        <span style="font-size: 10px">汽车美容中心</span>
+      </div>
+      <div class="flex-spacer"></div>
+      <div fxFlexAlign="end center">
+        <ng-container *ngIf="this.jwtService.checkToken(); else elseTemplate">
+          <button id='menuButton' mat-icon-button [matMenuTriggerFor]="menu">
+            <span>{{jwtService.getUser().username}}</span>
+            <mat-icon class="example-icon">person_pin</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button routerLink='/me' mat-menu-item>
+              <mat-icon>notifications_off</mat-icon>
+              <span>我的信息</span>
             </button>
-          </div>
-
-          <div fxFlex="60%" fxFlexAlign="center center">
-            <div style="font-size:20pt;">{{title}}</div>
-
-          </div>
-
-          <div fxFlex="20%" fxFlexAlign="start center">
-            <ng-container *ngIf="this.jwtService.checkToken(); else elseTemplate">
-              <button id='menuButton' mat-icon-button [matMenuTriggerFor]="menu">
-                <span>{{jwtService.getUser().username}}</span>
-                <mat-icon class="example-icon">person_pin</mat-icon>
-              </button>
-              <mat-menu #menu="matMenu">
-                <button mat-menu-item>
-                  <mat-icon>notifications_off</mat-icon>
-                  <span>我的信息</span>
-                </button>
-                <button mat-menu-item disabled>
-                  <mat-icon>voicemail</mat-icon>
-                  <span>我的订单</span>
-                </button>
-                <button (click)='logout()' mat-menu-item>
-                  <mat-icon>exit_to_app</mat-icon>
-                  <span>退出登录</span>
-                </button>
+            <button mat-menu-item disabled>
+              <mat-icon>voicemail</mat-icon>
+              <span>我的订单</span>
+            </button>
+            <button (click)='logout()' mat-menu-item>
+              <mat-icon>exit_to_app</mat-icon>
+              <span>退出登录</span>
+            </button>
 
 
-              </mat-menu>
+          </mat-menu>
 
-            </ng-container>
-            <ng-template #elseTemplate>
-              <button mat-button (click)="loginDialog()">
-                <span>登录</span>
-                <mat-icon class="example-icon">person_pin</mat-icon>
-              </button>
-            </ng-template>
+        </ng-container>
+        <ng-template #elseTemplate>
+          <button mat-button (click)="loginDialog()">
+            <span>登录</span>
+            <mat-icon class="example-icon">person_pin</mat-icon>
+          </button>
+        </ng-template>
 
 
-          </div>
-        </mat-toolbar-row>
-      </mat-toolbar>
-      <router-outlet></router-outlet>
-    </div>
-
-    <!-- 菜单栏 -->
-    <mat-drawer color="primary" #drawer class="example-sidenav" mode='over'>
-      <div id="title" mat-button>
-        <div style="font-size:20pt;">{{title}}</div>
-        <i style="font-size:8pt;">汽车美容中心</i>
       </div>
-      <div>
-        <mat-list id="menuList">
-          <mat-list-item>
-            <a mat-button focus='false' routerLink="/" (click)="drawer.toggle()">首页</a>
-          </mat-list-item>
-          <mat-divider></mat-divider>
-          <mat-list-item>
-            <a mat-button routerLink="/carEnterance" (click)="drawer.toggle()">扫描车牌</a>
-          </mat-list-item>
-          <mat-divider></mat-divider>
-
-        </mat-list>
-      </div>
-    </mat-drawer>
-
-    <!-- 主页面 -->
-    <div class="example-sidenav-content">
-      <router-outlet></router-outlet>
-    </div>
-  </mat-drawer-container>
+    </mat-toolbar-row>
+  </mat-toolbar>
 </ng-container>
+<app-slide-nav></app-slide-nav>

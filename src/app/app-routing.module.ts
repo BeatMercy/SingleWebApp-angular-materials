@@ -4,11 +4,13 @@ import { RouterModule, Routes } from '@angular/router';
 import { CarEnteranceComponent } from './car-enterance/car-enterance.component';
 import { IndexPageComponent } from './index-page/index-page.component';
 import { AccountInfoComponent } from './account-info/account-info.component';
+import { CdkTableBasicExampleComponent } from './cdk-table-basic-example/cdk-table-basic-example.component';
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: IndexPageComponent },
-  { path: 'account', component: AccountInfoComponent },
-  { path: 'carEnterance', component: CarEnteranceComponent }
+  { path: 'me', component: AccountInfoComponent },
+  { path: 'carEnterance', component: CarEnteranceComponent },
+  { path: 'table', component: CdkTableBasicExampleComponent }
 ];
 
 @NgModule({

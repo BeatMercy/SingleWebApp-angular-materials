@@ -12,7 +12,7 @@ import { HttpClient } from '@angular/common/http';
 export class LoginDialogComponent implements OnInit {
   user = new User();
   isAuthenticated = false;
-
+  values = '';
   constructor(private httpClient: HttpClient,
     public dialogRef: MatDialogRef<LoginDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -24,7 +24,10 @@ export class LoginDialogComponent implements OnInit {
     this.dialogRef.close();
     this.user = new User();
   }
-
+  onKey(event) {
+    console.log(event);
+    this.values += (<HTMLInputElement>event.target).value + ' | ';
+  }
   submit($event) {
     if ($event.keyCode === 13) { // Enter按键
       this.loginSubmit();
@@ -39,16 +42,16 @@ export class LoginDialogComponent implements OnInit {
         sessionStorage.setItem('token', next['token']);
         this.jwtService.updateUser(next['token']);
       },
-      error => {
-        alert('登录失败：');
-      },
-      () => {
-        if (this.jwtService.checkToken()) {
-          this.isAuthenticated = true;
-        } else {
-          this.isAuthenticated = false;
-        }
-      });
+        error => {
+          alert('登录失败：');
+        },
+        () => {
+          if (this.jwtService.checkToken()) {
+            this.isAuthenticated = true;
+          } else {
+            this.isAuthenticated = false;
+          }
+        });
 
     // this.jwtService.login(this.user.username, this.user.password);
     // if (this.jwtService.checkToken()) {
