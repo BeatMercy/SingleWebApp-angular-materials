@@ -1,66 +1,78 @@
+<mat-progress-bar style="position: absolute;top: 0;left:0;" mode="indeterminate" *ngIf="!resultState"></mat-progress-bar>
 <div class="serviceWrap">
   <div class="serviceSearch">
-<form class="example-form">
-  <mat-form-field class="example-full-width">
-    <input type="text" #searchBox 
-     (mouseenter)="toggleSearchResult(true)"
-    (mouseleave)="toggleSearchResult(false)"
-      (keyup)="search(searchBox.value)" placeholder="店内产品搜索" matInput>
-  </mat-form-field>
-  <div style="position:relative">
-    <div id="searchResult" class="searchResult">
-    <mat-option *ngFor="let option of product$ | async" [value]="option">
-      {{ option.name }}
-    </mat-option>
-    </div>
+    <form class="flexCenterContainer" autocomplete="off">
+      <mat-icon matSuffix class="example-icon" color="primary">search</mat-icon>
+      <mat-form-field class="example-full-width">
+        <input #searchBox type="text" (click)="searchMode=true" (keyup)="search(searchBox.value)" placeholder="店内产品搜索" matInput>
+      </mat-form-field>
+      <a mat-icon-button *ngIf="searchMode" (click)="searchMode=false" color="primary">
+        <mat-icon class="mat-18">close</mat-icon>
+      </a>
+      <!-- 搜索框 -->
+      <!-- 
+      <div style="position:relative">
+        <div id="searchResult" class="searchResult">
+          <mat-option *ngFor="let option of product$ | async" [value]="option">
+            {{ option.name }}
+          </mat-option>
+        </div>
+      </div>  -->
+    </form>
   </div>
-</form>
-</div>
-
-<ng-container *ngFor="let item of products;index as i">
-  <ng-container *ngIf="i%2==0;">
-    <div class="serviceShow" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
-    
-      <mat-card class="example-card">
-        <mat-card-header>
-          <div mat-card-avatar class="example-header-image"></div>
-          <mat-card-title>{{products[i].name}} </mat-card-title>
-          <mat-card-subtitle>{{products[i].type}}</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-          <p>
-            {{products[i].description}}
-          </p>
-        </mat-card-content>
-        <mat-card-actions>
-          <button mat-raised-button color="primary">购买</button>
-          <button mat-icon-button color="warn">
-            <mat-icon class="starButton" aria-label="Example icon-button with a heart icon">star</mat-icon>
-          </button>
-        </mat-card-actions>
-      </mat-card> 
-
-      <ng-container *ngIf="i+1<products.length">
-        <mat-card class="example-card">
-          <mat-card-header>
-            <div mat-card-avatar class="example-header-image"></div>
-            <mat-card-title>{{products[i+1].name}} </mat-card-title>
-            <mat-card-subtitle>{{products[i+1].type}}</mat-card-subtitle>
-          </mat-card-header>
-          <mat-card-content>
-            <p>
-              {{products[i+1].description}}
-            </p>
-          </mat-card-content>
-          <mat-card-actions>
-            <button mat-raised-button color="primary">购买</button>
-            <button mat-icon-button color="warn">
-            <mat-icon  class="starButton"  aria-label="Example icon-button with a heart icon">star</mat-icon> 
-          </button>
-          </mat-card-actions>
-        </mat-card>
-      </ng-container>
-    </div>
+  <ng-container *ngIf="!searchMode; else showSearch">
+    <ngb-carousel class="carousel " *ngIf="images">
+      <ng-template ngbSlide>
+        <img [src]="images[0]" alt="Random first slide">
+        <div class="carousel-caption">
+          <h3>First slide label</h3>
+          <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+        </div>
+      </ng-template>
+      <ng-template ngbSlide>
+        <img [src]="images[1]" alt="Random second slide">
+        <div class="carousel-caption">
+          <h3>Second slide label</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        </div>
+      </ng-template>
+      <ng-template ngbSlide>
+        <img [src]="images[2]" alt="Random third slide">
+        <div class="carousel-caption">
+          <h3>Third slide label</h3>
+          <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+        </div>
+      </ng-template>
+    </ngb-carousel>
   </ng-container>
-</ng-container>
+  <ng-template #showSearch>
+    <div class="searchResultFeild">
+      <div style="flex: 1 1 auto;"></div>
+      <div class="serviceShow">
+        <!-- <mat-progress-bar mode="indeterminate" *ngIf="!resultState"></mat-progress-bar> -->
+        <ng-container *ngFor="let item of product$ | async;index as i">
+          <mat-card class="service-card">
+            <mat-card-header>
+              <div mat-card-avatar class="example-header-image"></div>
+              <mat-card-title>{{item.name}} </mat-card-title>
+              <mat-card-subtitle>{{item.type}}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <p>
+                {{item.description}}
+              </p>
+            </mat-card-content>
+            <mat-card-actions>
+              <button mat-raised-button color="primary">购买</button>
+              <button mat-icon-button class="starButton">
+                <mat-icon class="starButton">star</mat-icon>
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        </ng-container>
+      </div>
+      <div style="flex: 1 1 auto;"></div>
+    </div>
+  </ng-template>
+
 </div>

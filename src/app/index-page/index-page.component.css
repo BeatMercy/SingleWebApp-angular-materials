@@ -1,5 +1,18 @@
+:host {
+    width: 80%;
+}
+
 .example-full-width {
-    width: 100%;
+    width: 80%;
+}
+
+.flexCenterContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.flexCenterContainer * {
+    align-self: center;
 }
 
 .carouselExampleControls {
@@ -12,22 +25,44 @@
 }
 
 .serviceShow {
-    margin-top: 10px;
-}
-
-.disappear {
-    display: none;
+    display: flex;
+    justify-content: space-between;
+    /* 两端*/
+    flex-wrap: wrap;
 }
 
 .starButton {
+    outline: none;
     color: #e6e600;
+}
+
+.starButton:focus {
+    outline: none;
+}
+
+.service-card {
+    margin: 10px;
+    animation: showUp 0.1s linear;
 }
 
 .searchResult {
     position: absolute;
     z-index: 2;
     background-color: rgba(255, 255, 255, 0.897);
-    width: 100%;
+    width: 80%;
     top: -10px;
     box-shadow: 0 1px 3px 0 grey;
+}
+
+.carousel {
+    animation: showUp 0.3s linear;
+}
+
+@keyframes showUp {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }

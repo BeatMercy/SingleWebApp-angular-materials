@@ -41,6 +41,7 @@ import 'hammerjs';
 import { FileUploadModule } from 'ng2-file-upload/file-upload/file-upload.module';
 import { AppRoutingModule } from './app-routing.module';
 import { ImageCompressService, ResizeOptions, ImageUtilityService } from 'ng2-image-compress';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 // App
 import { AppComponent } from './app.component';
@@ -60,6 +61,7 @@ import { ProductRetrieveService } from './product-retrieve.service';
 import { SlideNavComponent } from './slide-nav/slide-nav.component';
 import { CdkTableBasicExampleComponent } from './cdk-table-basic-example/cdk-table-basic-example.component';
 import { CdkTableModule } from '@angular/cdk/table';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
 
 @NgModule({
@@ -119,13 +121,18 @@ import { CdkTableModule } from '@angular/cdk/table';
     MatToolbarModule,
     MatTooltipModule,
     CdkTableModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgbModule.forRoot()
   ],
   entryComponents: [
     LoginDialogComponent,
     MessageDialogComponent
   ],
   providers: [
+    {
+      provide: LocationStrategy,
+      useClass: HashLocationStrategy
+    },
     JwtService,
     AuthGuardService,
     MessageDialogService,

@@ -1,33 +1,42 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, trigger, state, transition, style, animate } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { of } from 'rxjs/observable/of';
 import {
-  debounceTime, distinctUntilChanged, switchMap
+  debounceTime, distinctUntilChanged, switchMap, map
 } from 'rxjs/operators';
 
 import { ProductRetrieveService } from '../product-retrieve.service';
 import { Product, PRODUCTS } from '../entity/product';
 import { FormControl } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-index-page',
   templateUrl: './index-page.component.html',
-  styleUrls: ['./index-page.component.css']
+  styleUrls: ['./index-page.component.css'],
+  animations: [
+    trigger('indexAnimation', [
+      state('showUp', style({
+        opacity: 1
+      })),
+      state('disappear', style({
+        opacity: 0
+      })),
+      transition('showUp <=> disappear', animate('300ms ease-in'))
+    ])
+  ]
 })
 export class IndexPageComponent implements OnInit {
   products: Product[];
-  searchControl = new FormControl();
   private searchTerms = new Subject<string>();
-
-  options = [
-    new Product('小型车洗车'),
-    new Product('小型车洗车'),
-    new Product('大型车洗车')
-  ];
+  images: Array<string>;
+  resultState = true;
+  searchMode = false;
   product$: Observable<Product[]>;
 
   constructor(
+    private _http: HttpClient,
     private productRetrieveService: ProductRetrieveService
   ) { }
 
@@ -35,23 +44,25 @@ export class IndexPageComponent implements OnInit {
     this.products = PRODUCTS;
     // this.getProducts();
     this.product$ = this.searchTerms.pipe(
-      // wait 300ms after each keystroke before considering the term
+      // 等待300毫秒输入搜索关键字
       debounceTime(300),
-
-      // ignore new term if same as previous term
+      // 忽略相同的搜索字段
       distinctUntilChanged(),
 
       // switch to new search observable each time the term changes
-      switchMap((term: string) => this.searchFromProducts(term)),
+      switchMap((term: string) => this.searchFromProducts(term))
     );
+
+    this._http.get('https://picsum.photos/list')
+      .pipe(map((images: Array<{ id: number }>) => this._randomImageUrls(images)))
+      .subscribe(images => this.images = images);
   }
 
-  toggleSearchResult(show: boolean) {
-    if (!show) {
-      document.getElementById('searchResult').classList.add('disappear');
-    } else {
-      document.getElementById('searchResult').classList.remove('disappear');
-    }
+  private _randomImageUrls(images: Array<{ id: number }>): Array<string> {
+    return [1, 2, 3].map(() => {
+      const randomId = images[Math.floor(Math.random() * images.length)].id;
+      return 'https://picsum.photos/900/500?image=' + randomId;
+    });
   }
 
   searchFromProducts(term: string): Observable<Product[]> {
@@ -61,10 +72,12 @@ export class IndexPageComponent implements OnInit {
         result.push(product);
       }
     });
+    this.resultState = true;
     return of(result);
   }
 
   search(term: string): void {
+    this.resultState = false;
     this.searchTerms.next(term);
   }
 

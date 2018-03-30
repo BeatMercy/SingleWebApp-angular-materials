@@ -24,6 +24,7 @@
     "@angular/platform-browser": "5.2.9",
     "@angular/platform-browser-dynamic": "5.2.9",
     "@angular/router": "5.2.9",
+    "@ng-bootstrap/ng-bootstrap": "^1.1.0",
     "@types/angular-jwt": "0.0.29",
     "angular-http-file-upload": "0.0.6",
     "angular2-jwt": "^0.2.3",
