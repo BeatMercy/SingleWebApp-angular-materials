@@ -12,7 +12,6 @@ import { HttpClient } from '@angular/common/http';
 export class LoginDialogComponent implements OnInit {
   user = new User();
   isAuthenticated = false;
-  values = '';
   constructor(private httpClient: HttpClient,
     public dialogRef: MatDialogRef<LoginDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -23,15 +22,6 @@ export class LoginDialogComponent implements OnInit {
   loginCancel($event) {
     this.dialogRef.close();
     this.user = new User();
-  }
-  onKey(event) {
-    console.log(event);
-    this.values += (<HTMLInputElement>event.target).value + ' | ';
-  }
-  submit($event) {
-    if ($event.keyCode === 13) { // Enter按键
-      this.loginSubmit();
-    }
   }
 
   loginSubmit() {

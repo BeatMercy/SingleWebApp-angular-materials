@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { startWith } from 'rxjs/operators/startWith';
-import { map } from 'rxjs/operators/map';
+import { Subject } from 'rxjs/Subject';
+import { of } from 'rxjs/observable/of';
+import {
+  debounceTime, distinctUntilChanged, switchMap
+} from 'rxjs/operators';
 
 import { ProductRetrieveService } from '../product-retrieve.service';
 import { Product, PRODUCTS } from '../entity/product';
@@ -15,13 +18,15 @@ import { FormControl } from '@angular/forms';
 export class IndexPageComponent implements OnInit {
   products: Product[];
   searchControl = new FormControl();
+  private searchTerms = new Subject<string>();
 
   options = [
     new Product('小型车洗车'),
     new Product('小型车洗车'),
     new Product('大型车洗车')
   ];
-  filteredOptions: Observable<Product[]>;
+  product$: Observable<Product[]>;
+
   constructor(
     private productRetrieveService: ProductRetrieveService
   ) { }
@@ -29,23 +34,40 @@ export class IndexPageComponent implements OnInit {
   ngOnInit() {
     this.products = PRODUCTS;
     // this.getProducts();
-    this.filteredOptions = this.searchControl.valueChanges
-      .pipe(
-        startWith<string | Product>(''),
-        map(value => typeof value === 'string' ? value : value.name),
-        map(name => name ? this.filter(name) : this.options.slice())
-      );
+    this.product$ = this.searchTerms.pipe(
+      // wait 300ms after each keystroke before considering the term
+      debounceTime(300),
+
+      // ignore new term if same as previous term
+      distinctUntilChanged(),
+
+      // switch to new search observable each time the term changes
+      switchMap((term: string) => this.searchFromProducts(term)),
+    );
   }
 
-
-  filter(name: string): Product[] {
-    return this.options.filter(option =>
-      option.name.toLowerCase().indexOf(name.toLowerCase()) === 0);
+  toggleSearchResult(show: boolean) {
+    if (!show) {
+      document.getElementById('searchResult').classList.add('disappear');
+    } else {
+      document.getElementById('searchResult').classList.remove('disappear');
+    }
   }
 
-  displayFn(user?: Product): string | undefined {
-    return user ? user.name : undefined;
+  searchFromProducts(term: string): Observable<Product[]> {
+    let result = new Array<Product>();
+    this.products.forEach(product => {
+      if (product.name === term) {
+        result.push(product);
+      }
+    });
+    return of(result);
   }
+
+  search(term: string): void {
+    this.searchTerms.next(term);
+  }
+
   getProducts() {
     this.productRetrieveService.getAllProduct().subscribe(
       products => {

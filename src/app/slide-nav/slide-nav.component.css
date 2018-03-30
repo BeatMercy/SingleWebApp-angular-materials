@@ -8,7 +8,6 @@
 }
 
 .example-sidenav {
-    margin-top: 64px;
     color: #fff;
     min-width: 170px;
     background-color: #3f51b5;
@@ -27,10 +26,16 @@
     display: flex;
     flex-direction: column;
     position: absolute;
-    top: 0;
+    top: 64px;
     bottom: 0;
     left: 0;
     right: 0;
+}
+
+@media (max-width: 599px) {
+    .example-container {
+        top: 56px;
+    }
 }
 
 .menuButton {

@@ -2,13 +2,18 @@
   <div class="serviceSearch">
 <form class="example-form">
   <mat-form-field class="example-full-width">
-    <input type="text" placeholder="Assignee" aria-label="Assignee" matInput [formControl]="searchControl" [matAutocomplete]="auto">
-    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-      <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-        {{ option.name }}
-      </mat-option>
-    </mat-autocomplete>
+    <input type="text" #searchBox 
+     (mouseenter)="toggleSearchResult(true)"
+    (mouseleave)="toggleSearchResult(false)"
+      (keyup)="search(searchBox.value)" placeholder="店内产品搜索" matInput>
   </mat-form-field>
+  <div style="position:relative">
+    <div id="searchResult" class="searchResult">
+    <mat-option *ngFor="let option of product$ | async" [value]="option">
+      {{ option.name }}
+    </mat-option>
+    </div>
+  </div>
 </form>
 </div>
 

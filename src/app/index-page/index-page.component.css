@@ -1,8 +1,13 @@
+.example-full-width {
+    width: 100%;
+}
+
 .carouselExampleControls {
     max-width: 1024px;
 }
 
 .serviceWrap {
+    padding: 0 5px;
     margin-top: 10px;
 }
 
@@ -10,6 +15,19 @@
     margin-top: 10px;
 }
 
+.disappear {
+    display: none;
+}
+
 .starButton {
     color: #e6e600;
+}
+
+.searchResult {
+    position: absolute;
+    z-index: 2;
+    background-color: rgba(255, 255, 255, 0.897);
+    width: 100%;
+    top: -10px;
+    box-shadow: 0 1px 3px 0 grey;
 }
