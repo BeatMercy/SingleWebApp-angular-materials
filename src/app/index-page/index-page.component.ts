@@ -1,4 +1,4 @@
-import { Component, OnInit, trigger, state, transition, style, animate } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { of } from 'rxjs/observable/of';
@@ -14,23 +14,12 @@ import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-index-page',
   templateUrl: './index-page.component.html',
-  styleUrls: ['./index-page.component.css'],
-  animations: [
-    trigger('indexAnimation', [
-      state('showUp', style({
-        opacity: 1
-      })),
-      state('disappear', style({
-        opacity: 0
-      })),
-      transition('showUp <=> disappear', animate('300ms ease-in'))
-    ])
-  ]
+  styleUrls: ['./index-page.component.css']
 })
 export class IndexPageComponent implements OnInit {
   products: Product[];
   private searchTerms = new Subject<string>();
-  images: Array<string>;
+  images;
   resultState = true;
   searchMode = false;
   product$: Observable<Product[]>;
@@ -50,23 +39,24 @@ export class IndexPageComponent implements OnInit {
       distinctUntilChanged(),
 
       // switch to new search observable each time the term changes
-      switchMap((term: string) => this.searchFromProducts(term))
+      switchMap((term: string) => this.searchFromHome(term))
     );
 
-    this._http.get('https://picsum.photos/list')
-      .pipe(map((images: Array<{ id: number }>) => this._randomImageUrls(images)))
-      .subscribe(images => this.images = images);
+    this._http.get('/home/carousel')
+      .pipe()
+      .subscribe(images => { this.images = images; });
   }
 
-  private _randomImageUrls(images: Array<{ id: number }>): Array<string> {
-    return [1, 2, 3].map(() => {
-      const randomId = images[Math.floor(Math.random() * images.length)].id;
-      return 'https://picsum.photos/900/500?image=' + randomId;
+  searchFromHome(term: string): Observable<Product[]> {
+    const s = this.productRetrieveService.findProductFromHome(term);
+    s.subscribe((next) => {
+      this.resultState = true;
     });
+    return s;
   }
 
   searchFromProducts(term: string): Observable<Product[]> {
-    let result = new Array<Product>();
+    const result = new Array<Product>();
     this.products.forEach(product => {
       if (product.name === term) {
         result.push(product);
@@ -79,6 +69,11 @@ export class IndexPageComponent implements OnInit {
   search(term: string): void {
     this.resultState = false;
     this.searchTerms.next(term);
+  }
+  searchBlur(searchBoxValue: string) {
+    if (searchBoxValue === '') {
+      this.searchMode = false;
+    }
   }
 
   getProducts() {

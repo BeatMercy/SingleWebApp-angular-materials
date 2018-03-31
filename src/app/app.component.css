@@ -27,6 +27,7 @@
 }
 
 #menuButton {
+    color: black;
     outline: none;
     min-width: 50px;
     padding: 0;
@@ -46,14 +47,6 @@
     min-width: 170px;
     background-color: #3f51b5;
     padding: 20px;
-}
-
-#menuList {
-    color: white;
-}
-
-#menuList .mat-button {
-    color: white;
 }
 
 .toolbar {

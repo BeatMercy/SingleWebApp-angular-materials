@@ -5,11 +5,10 @@
         <b >{{title}}</b>
       </div>
       <div class="flex-spacer"></div>
-      <div fxFlexAlign="end center">
+      <div fxFlexAlign="center center">
         <ng-container *ngIf="this.jwtService.checkToken(); else elseTemplate">
-          <button id='menuButton' mat-icon-button [matMenuTriggerFor]="menu">
+          <button id='menuButton' mat-raised-button [matMenuTriggerFor]="menu">
             <span>{{jwtService.getUser().username}}</span>
-            <mat-icon class="example-icon">person_pin</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
             <button routerLink='/me' mat-menu-item>

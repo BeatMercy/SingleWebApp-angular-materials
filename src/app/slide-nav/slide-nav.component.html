@@ -1,10 +1,6 @@
 <mat-drawer-container class="example-container" autosize>
   <!-- 菜单栏 -->
   <mat-drawer color="primary" #drawer class="example-sidenav" mode='over'>
-    <div id="title" mat-button>
-      <div style="font-size:20pt;">{{title}}</div>
-      <i style="font-size:8pt;">汽车美容中心</i>
-    </div>
     <div>
       <mat-list id="menuList">
         <mat-list-item>
@@ -31,8 +27,6 @@
     </button>
   </mat-toolbar>
   <div class="example-sidenav-content">
-      
-
     <router-outlet></router-outlet>
   </div>
 </mat-drawer-container>

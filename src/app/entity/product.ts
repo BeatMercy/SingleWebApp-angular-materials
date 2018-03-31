@@ -102,5 +102,17 @@ export const PRODUCTS: Product[] = [
         imges: null,
         isSelling: false,
         saleCount: 0
+    }, {
+        id: 3,
+        type: null,
+        name: '小型车洗车服务',
+        description: '为车型在xxxx一下的车提供洗车服务',
+        costTime: null,
+        startPrice: 35,
+        originalPrice: null,
+        thumbnailImg: null,
+        imges: null,
+        isSelling: false,
+        saleCount: 0
     }
 ];

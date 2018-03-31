@@ -15,10 +15,6 @@
     align-self: center;
 }
 
-.carouselExampleControls {
-    max-width: 1024px;
-}
-
 .serviceWrap {
     padding: 0 5px;
     margin-top: 10px;
@@ -48,7 +44,6 @@
 .searchResult {
     position: absolute;
     z-index: 2;
-    background-color: rgba(255, 255, 255, 0.897);
     width: 80%;
     top: -10px;
     box-shadow: 0 1px 3px 0 grey;

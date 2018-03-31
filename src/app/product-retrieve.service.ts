@@ -20,10 +20,14 @@ export class ProductRetrieveService {
 
   getAllProduct(): Observable<Product[]> {
     return this.http.get<Product[]>(this.homeProductUrl + 'all');
-      // .pipe(
-      //   tap(heroes => this.log(`fetched heroes`)),
-      //   catchError(this.handleError('getHeroes', []))
-      // );
+    // .pipe(
+    //   tap(heroes => this.log(`fetched heroes`)),
+    //   catchError(this.handleError('getHeroes', []))
+    // );
+  }
+
+  findProductFromHome(keyword: string): Observable<Product[]> {
+    return this.http.get<Product[]>(this.homeProductUrl + 'findFromHome?keyword=' + keyword);
   }
 
   /**

@@ -29,7 +29,7 @@ export class LoginDialogComponent implements OnInit {
     const password = this.user.password;
     this.httpClient.post<JSON>('/login', { username, password })
       .subscribe(next => {
-        sessionStorage.setItem('token', next['token']);
+        localStorage.setItem('token', next['token']);
         this.jwtService.updateUser(next['token']);
       },
         error => {

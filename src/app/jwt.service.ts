@@ -12,7 +12,7 @@ export class JwtService {
 
   authConfig: AuthConfig = new AuthConfig({
     tokenName: 'token',
-    tokenGetter: (() => sessionStorage.getItem('token')),
+    tokenGetter: (() => localStorage.getItem('token')),
     globalHeaders: [{ 'Content-Type': 'application/json' }],
   });
 
@@ -23,7 +23,7 @@ export class JwtService {
   constructor(private http: Http, private httpClient: HttpClient, private jwtHttp: Http) {
     // this.requestOptions.headers.append('Content-Type', 'application/json');
     this.authHttp = customAuthHttpServiceFactory(this.authConfig, this.jwtHttp, this.requestOptions);
-    this.updateUser(sessionStorage.getItem('token'));
+    this.updateUser(localStorage.getItem('token'));
   }
 
   getUser() {
@@ -52,8 +52,8 @@ export class JwtService {
   }
 
   logout() {
-    console.log(sessionStorage.removeItem('token'));
-    console.log(sessionStorage.getItem('token'));
+    console.log(localStorage.removeItem('token'));
+    console.log(localStorage.getItem('token'));
     this.httpClient.post<JSON>('/logout', {});
   }
 
