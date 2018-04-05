@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { JwtService } from '../jwt.service';
 
 @Component({
   selector: 'app-slide-nav',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SlideNavComponent implements OnInit {
 
-  constructor() { }
+  constructor(public jwtService: JwtService) { }
 
   ngOnInit() {
   }

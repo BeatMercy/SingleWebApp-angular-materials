@@ -1,6 +1,6 @@
 // Denpendency
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
@@ -62,6 +62,7 @@ import { SlideNavComponent } from './slide-nav/slide-nav.component';
 import { CdkTableBasicExampleComponent } from './cdk-table-basic-example/cdk-table-basic-example.component';
 import { CdkTableModule } from '@angular/cdk/table';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import { OrderSubmitComponent } from './order-submit/order-submit.component';
 
 
 @NgModule({
@@ -73,7 +74,8 @@ import { LocationStrategy, HashLocationStrategy } from '@angular/common';
     MessageDialogComponent,
     AccountInfoComponent,
     SlideNavComponent,
-    CdkTableBasicExampleComponent
+    CdkTableBasicExampleComponent,
+    OrderSubmitComponent
   ],
   imports: [
     FormsModule,

@@ -5,12 +5,16 @@ import { CarEnteranceComponent } from './car-enterance/car-enterance.component';
 import { IndexPageComponent } from './index-page/index-page.component';
 import { AccountInfoComponent } from './account-info/account-info.component';
 import { CdkTableBasicExampleComponent } from './cdk-table-basic-example/cdk-table-basic-example.component';
+import { OrderSubmitComponent } from './order-submit/order-submit.component';
 const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  // { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: '', component: IndexPageComponent },
   { path: 'home', component: IndexPageComponent },
   { path: 'me', component: AccountInfoComponent },
   { path: 'carEnterance', component: CarEnteranceComponent },
-  { path: 'table', component: CdkTableBasicExampleComponent }
+  { path: 'table', component: CdkTableBasicExampleComponent },
+  { path: 'orderSubmit', component: OrderSubmitComponent }
+  
 ];
 
 @NgModule({

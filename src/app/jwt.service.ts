@@ -4,7 +4,7 @@ import { Http, RequestOptions } from '@angular/http';
 import { AuthHttp, JwtHelper, tokenNotExpired, AuthConfig } from 'angular2-jwt';
 import { AuthModule, customAuthHttpServiceFactory } from '../auth.module';
 
-import { User, HOST_URL } from './entity/user';
+import { User } from './entity/user';
 
 @Injectable()
 export class JwtService {
@@ -26,9 +26,10 @@ export class JwtService {
     this.updateUser(localStorage.getItem('token'));
   }
 
-  getUser() {
+  getCurrentUser() {
     return this.user;
   }
+
   updateUser(token: string) {
     if (token === undefined || token === null || token === 'undefined') {
       return;
@@ -36,7 +37,15 @@ export class JwtService {
     const raw = this.jwtHelper.decodeToken(token);
     this.user.username = raw['sub'];
     this.user.authorities = raw['authorities'];
-    // console.log(raw['sub']);
+    console.log(raw['authorities']);
+    console.log(this.user);
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    this.user = new User();
+    console.log(localStorage.getItem('token'));
+    this.httpClient.post<JSON>('/logout', {});
   }
 
   /**
@@ -51,42 +60,52 @@ export class JwtService {
     }
   }
 
-  logout() {
-    console.log(localStorage.removeItem('token'));
-    console.log(localStorage.getItem('token'));
-    this.httpClient.post<JSON>('/logout', {});
+  /**
+  * 当前用户拥有权限则返回true
+  * 否则 false
+  * @param required 符合的权限
+  */
+  hasAuthority(required: string): boolean {
+    if (this.user.authorities === null) {
+      return false;
+    }
+    if (this.user.authorities.includes(required)) {
+      return true;
+    }
+    return false;
   }
-
-
+  /**
+   * 当前用户拥有任一权限集合中的权限则，返回true
+   * 否则 false
+   * @param authorities 符合的权限集合
+   */
+  hasOneOfAuthorities(authorities: string[]): boolean {
+    let result = false;
+    if (this.user.authorities === null) {
+      return false;
+    }
+    authorities.forEach(required => {
+      if (this.user.authorities.includes(required)) {
+        result = true;
+      }
+    });
+    return result;
+  }
+  /**
+     * 当前用户拥有权限集合中的所有权限，则返回true
+     * 否则 false
+     * @param authorities 符合的权限集合
+     */
+  hasBothAuthorities(authorities: string[]): boolean {
+    let result = true;
+    if (this.user.authorities === null) {
+      return false;
+    }
+    authorities.forEach(required => {
+      if (!this.user.authorities.includes(required)) {
+        result = false;
+      }
+    });
+    return result;
+  }
 }
-
-/*this.http.post<JSON>('/login',
-      { username, password }).toPromise().then(value => {
-        console.log(value);
-        this.success = true;
-        this.jsonString = '{ "success": true, "message": "Promise!！" }';
-      }, (reason) => {
-        this.success = true;
-        console.log(reason);
-        this.jsonString = '{ "success": true, "message": "Reject!！" }';
-      }); */
-    /**
-     * subscribe
-     **/
-    /* this.http.post<JSON>('/login',
-      { username, password }).subscribe(
-      next => {
-        this.token = next['token'];
-      },
-      response => {
-        const error = response['error'];
-        // console.log(response);
-        this.success = false;
-        this.jsonString = '{ "success": false, "mesage": "登录失败:' + error['message'] + '"}';
-        // console.log(this.jsonString);
-      },
-      () => {
-        // after next operation
-        this.success = true;
-        this.jsonString = '{ "success": true, "message": "登录成功！" }';
-      }); */

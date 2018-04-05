@@ -3,7 +3,7 @@ export class User {
         this.id = null;
         this.username = null;
         this.password = null;
-        this.authorities = ['NORMAL_USER'];
+        this.authorities = null;
     }
 
     id: number | null;
@@ -16,7 +16,6 @@ export const USER: User = {
     id: null,
     username: null,
     password: null,
-    authorities: ['NORMAL_USER']
+    authorities: null
 };
-export const HOST_URL = 'http://beatmercy.com:8080';
 export const RSA_PRIVATE_KEY = 'ss';

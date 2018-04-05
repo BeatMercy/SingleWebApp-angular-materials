@@ -10,7 +10,7 @@ export class AuthGuardService implements CanActivate {
     if (this.jwtService.checkToken()) {
       return true;
     } else {
-      this.messageService.showMessage('凭据过期', '请登录后再访问');
+      this.messageService.showMessage('登录信息过期', '请重新登录后再访问');
       this.router.navigate(['home']);
       return false;
     }

@@ -7,12 +7,16 @@
           <a mat-button focus='false' routerLink="/" (click)="drawer.toggle()">首页</a>
         </mat-list-item>
         <mat-divider></mat-divider>
-        <mat-list-item>
+        <mat-list-item >
           <a mat-button routerLink="/carEnterance" (click)="drawer.toggle()">扫描车牌</a>
         </mat-list-item>
         <mat-divider></mat-divider>
         <mat-list-item>
           <a mat-button routerLink="/table" (click)="drawer.toggle()">列表</a>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+          <a mat-button routerLink="/orderSubmit" (click)="drawer.toggle()">创建订单</a>
         </mat-list-item>
         <mat-divider></mat-divider>
 
@@ -21,7 +25,7 @@
   </mat-drawer>
 
   <!-- 主页面 -->
-  <mat-toolbar  color="primary">
+  <mat-toolbar *ngIf="true||this.jwtService.hasOneOfAuthorities(['ROLE_STAFF','ROLE_ADMIN'])"  color="primary">
     <button class="menuButton" type="button" mat-button (click)="drawer.toggle()">
       <mat-icon class="example-icon">menu</mat-icon>
     </button>

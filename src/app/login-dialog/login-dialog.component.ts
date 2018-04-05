@@ -3,6 +3,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { User } from '../entity/user';
 import { JwtService } from '../jwt.service';
 import { HttpClient } from '@angular/common/http';
+import { MessageDialogService } from '../message-dialog.service';
 
 @Component({
   selector: 'app-login-dialog',
@@ -14,12 +15,12 @@ export class LoginDialogComponent implements OnInit {
   isAuthenticated = false;
   constructor(private httpClient: HttpClient,
     public dialogRef: MatDialogRef<LoginDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    private messageService: MessageDialogService,
     private jwtService: JwtService
   ) {
   }
 
-  loginCancel($event) {
+  loginCancel() {
     this.dialogRef.close();
     this.user = new User();
   }
@@ -31,16 +32,14 @@ export class LoginDialogComponent implements OnInit {
       .subscribe(next => {
         localStorage.setItem('token', next['token']);
         this.jwtService.updateUser(next['token']);
+        this.dialogRef.close();
+        this.messageService.showMessage('消息', '登录成功');
       },
         error => {
-          alert('登录失败：');
+          this.messageService.showMessage('消息', '登录失败: ' + error);
         },
         () => {
-          if (this.jwtService.checkToken()) {
-            this.isAuthenticated = true;
-          } else {
-            this.isAuthenticated = false;
-          }
+
         });
 
     // this.jwtService.login(this.user.username, this.user.password);

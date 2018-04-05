@@ -1,4 +1,4 @@
-<ng-container *ngIf="isAuthenticated != true; else elseTemplate">
+<ng-container >
 <div style="font-size:20pt;">
   <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="gappx">
     <div fxFlex="100%" fxLayoutAlign="center center" fxFlexFill>
@@ -34,12 +34,3 @@
   </div>
 </div>
 </ng-container>
-<ng-template #elseTemplate>
-  <div style="text-align:center;">登录成功</div>
-  <div style="text-align:center;">
-    <button mat-button (click)="loginCancel()" color="primary">
-    <mat-icon class="mat-18">close</mat-icon>
-    <span>确定</span>
-  </button>
-</div>
-</ng-template>

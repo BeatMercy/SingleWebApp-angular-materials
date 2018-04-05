@@ -1,0 +1,35 @@
+:host {
+    width: 80%;
+    display: flex;
+    justify-content: center;
+}
+
+.fieldHead {
+    font-weight: bold;
+    width: 100%;
+}
+
+.inputField {
+    width: 100%;
+}
+
+.fieldContent {
+    width: 100%;
+    margin-left: 10px;
+}
+
+.plateHead {
+    max-width: 50px;
+    flex-grow: 1;
+}
+
+.plateBody {
+    flex-grow: 9;
+}
+
+#basePriceExpansion,
+#basePriceExpansion mat-expansion-panel-header {
+    padding: 0;
+    box-shadow: 0 0 0;
+    background: none;
+}

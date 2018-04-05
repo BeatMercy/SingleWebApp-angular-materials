@@ -30,7 +30,7 @@ export class CarEnteranceComponent implements OnInit {
     private imgCompressService: ImageCompressService) {
     this.uploader = new FileUploader({
       url: URL,
-      authToken: sessionStorage.getItem('token')
+      authToken: localStorage.getItem('token')
     });
   }
   uploadOne(file: FileItem) {
@@ -56,5 +56,6 @@ export class CarEnteranceComponent implements OnInit {
     // refresh token
     this.uploader.setOptions({ url: URL, authToken: sessionStorage.getItem('token') });
   }
+
 
 }

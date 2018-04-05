@@ -1,4 +1,5 @@
 :host {
+    /* 对父标签样式操作 即component的directive */
     width: 80%;
 }
 

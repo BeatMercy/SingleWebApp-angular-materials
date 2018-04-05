@@ -8,7 +8,7 @@
       <div fxFlexAlign="center center">
         <ng-container *ngIf="this.jwtService.checkToken(); else elseTemplate">
           <button id='menuButton' mat-raised-button [matMenuTriggerFor]="menu">
-            <span>{{jwtService.getUser().username}}</span>
+            <span>{{jwtService.getCurrentUser().username}}</span>
           </button>
           <mat-menu #menu="matMenu">
             <button routerLink='/me' mat-menu-item>

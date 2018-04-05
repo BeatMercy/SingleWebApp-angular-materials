@@ -1,0 +1,82 @@
+<div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="gappx">
+  <div class="orderTitle">
+    <h2>创建订单</h2>
+  </div>
+  <!-- <div style="flex:1 1 auto;"></div> -->
+  <div class="fieldHead">
+    服务订单类型
+    <font color="red">*</font>
+  </div>
+  <div class="fieldContent">
+    <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="gappx">
+      <mat-form-field class="inputField">
+        <mat-select [(value)]="selectedService">
+          <!-- <mat-option *ngFor="let state of states" [value]="state">{{state}}</mat-option> -->
+          <mat-option value="carBeautifyOrder">洗车美容</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="fieldHead">
+    车牌号
+    <font color="red">*</font>
+    <button style="display:inline-block;min-width:50px;padding:0; position:relative; overflow:hidden;" mat-button color="primary" >
+      <mat-icon class="mat-18">camera_enhance</mat-icon>
+      <input style="opacity: 0;position:absolute; right:0; top:0; " mat-button type="file" (change)="addFile(file)"  ng2FileSelect [uploader]="uploader"/>
+    </button>
+  </div>
+  <div class="fieldContent" id="plateNo">
+    <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="gappx">
+      <mat-form-field class="plateHead">
+        <input matInput [matAutocomplete]="auto" type="text" placeholder="省份">
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let abbr of provinceAbbr" [value]="abbr.value">{{abbr.viewValue}}</mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <mat-form-field class="plateBody">
+        <input matInput type="text" placeholder="号码">
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="fieldHead">
+    服务选项
+  </div>
+  <div class="fieldContent">
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="panelOpenState" id="basePriceExpansion">
+        <mat-expansion-panel-header>
+          <mat-panel-title>基础费用</mat-panel-title>
+          <mat-panel-description>
+            <ng-container *ngIf="basePrice === 0.00; else hasBasePrice">
+              默认{{basePrice}}元
+            </ng-container>
+            <ng-template #hasBasePrice>
+              <font color="red">{{basePrice| number : '1.2-2'}}</font>元
+            </ng-template>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-form-field>
+          <input matInput type="number" [(ngModel)]="basePrice" [(value)]="basePrice">
+          <span matPrefix>￥&nbsp;</span>
+        </mat-form-field>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+  <div class="fieldContent">
+    <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="gappx">
+      <mat-form-field class="inputField">
+        <mat-select [(value)]="selectedService">
+          <!-- <mat-option *ngFor="let state of states" [value]="state">{{state}}</mat-option> -->
+          <mat-option value="carBeautifyOrder">洗车美容</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="fieldHead">
+    <div fxLayout="row " style="justify-content:space-between;" fxLayoutGap="gappx">
+      <button mat-raised-button color="primary" (click)="onClick">提交</button>
+      <button mat-raised-button color="warn" (click)="onClick">重置</button>
+    </div>
+  </div>
+</div>
