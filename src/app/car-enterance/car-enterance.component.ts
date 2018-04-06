@@ -54,7 +54,11 @@ export class CarEnteranceComponent implements OnInit {
   }
   ngOnInit() {
     // refresh token
-    this.uploader.setOptions({ url: URL, authToken: sessionStorage.getItem('token') });
+    this.uploader.setOptions({
+      url: URL,
+      authToken: localStorage.getItem('token')
+
+    });
   }
 
 

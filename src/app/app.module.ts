@@ -42,6 +42,9 @@ import { FileUploadModule } from 'ng2-file-upload/file-upload/file-upload.module
 import { AppRoutingModule } from './app-routing.module';
 import { ImageCompressService, ResizeOptions, ImageUtilityService } from 'ng2-image-compress';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { CdkTableBasicExampleComponent } from './cdk-table-basic-example/cdk-table-basic-example.component';
+import { CdkTableModule } from '@angular/cdk/table';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
 // App
 import { AppComponent } from './app.component';
@@ -59,9 +62,6 @@ import { MessageDialogComponent } from './message-dialog/message-dialog.componen
 import { AccountInfoComponent } from './account-info/account-info.component';
 import { ProductRetrieveService } from './product-retrieve.service';
 import { SlideNavComponent } from './slide-nav/slide-nav.component';
-import { CdkTableBasicExampleComponent } from './cdk-table-basic-example/cdk-table-basic-example.component';
-import { CdkTableModule } from '@angular/cdk/table';
-import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { OrderSubmitComponent } from './order-submit/order-submit.component';
 
 
@@ -132,6 +132,7 @@ import { OrderSubmitComponent } from './order-submit/order-submit.component';
   ],
   providers: [
     {
+      // 路由方式：/#/xxx
       provide: LocationStrategy,
       useClass: HashLocationStrategy
     },

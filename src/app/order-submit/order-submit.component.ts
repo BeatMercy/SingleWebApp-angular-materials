@@ -2,6 +2,13 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { FileUploader, FileItem } from 'ng2-file-upload';
 import { MessageDialogService } from '../message-dialog.service';
+import { ServiceOption, mapServiceOption } from '../entity/service-option';
+import { AuthHttp } from 'angular2-jwt';
+import { authHttpServiceFactory } from '../../auth.module';
+import { Http, RequestOptions } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+import { map } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-order-submit',
@@ -44,46 +51,73 @@ export class OrderSubmitComponent implements OnInit, OnDestroy {
   // 文件
   public uploader: FileUploader;
 
-  defaultService = '洗车美容';
   // 此处的值是mat option的value 而不是viewValue
-  selectedService = 'carBeautifyOrder';
+  selectedService = 'carBeautify';
+  selectedOption = new Array<ServiceOption>();
+  plateString = '';
+  plateAbbr = '粤';
   basePrice = 0.00;
+  serviceOption: Observable<ServiceOption[]>;
   panelOpenState = false;
 
-  constructor(private messageService: MessageDialogService) {
+  private authHttp: AuthHttp;
+  constructor(private messageService: MessageDialogService,
+    private http: Http, requestOption: RequestOptions) {
 
+    this.authHttp = authHttpServiceFactory(http, requestOption);
     this.uploader = new FileUploader({
-      url: 'URL',
+      url: '/plate-recognize/order',
       authToken: localStorage.getItem('token')
     });
 
   }
 
   ngOnInit() {
-    console.log('此时执行创建方法');
-  }
-  ngOnDestroy() {
-    // 在切换component时会执行销毁方法
-    console.log('此时执行销毁方法');
+    // console.log('此时执行创建方法:');
+    this.updateServiceOption();
   }
 
-  addFile(file) {
-    console.log('方法传入的文件');
-    console.log(file);
-    console.log('uploader的文件');
-    console.log(this.uploader.queue[0]);
+  updateServiceOption() {
+    this.authHttp.get('/serviceOption/' + this.selectedService + '/all').subscribe(data => {
+      // TODO 刷新服务选项
+      const array: ServiceOption[] = data.json();
+      this.serviceOption = mapServiceOption(array);
+      // console.log(this.serviceOption);
+
+    }, error => {
+      this.messageService.showMessage('发生错误', error);
+    }, () => { });
   }
-  uploadOne(file: FileItem) {
-    file.upload();
+  optionTrack(index: number, item: any) {
+    // TODO 跟踪
+  }
+
+  ngOnDestroy() {
+    // 在切换component时会执行销毁方法
+    // console.log('此时执行销毁方法');
+  }
+  /**
+   * 上传车牌图片并识别
+   */
+  addFile() {
+    // TODO 压缩图片
+    // .....
+    console.log(this.uploader.queue[0]);
+    this.uploader.queue[0].upload();
     this.uploader.response.subscribe(next => {
       const result = JSON.parse(next);
-      console.log(result['content']);
-      this.messageService.showMessage(result['msg'], result['content']);
+      console.log(result['plateAbbr']);
+      console.log(result['plateString']);
+      this.plateAbbr = result['plateAbbr'];
+      this.plateString = result['plateString'];
+
       this.uploader.response.observers.shift();
+      this.uploader.clearQueue();
     }, error => {
-      console.log(error);
+      this.uploader.clearQueue();
+      this.messageService.showMessage('发生错误', error);
     }, () => {
-      console.log('finfished!!!!!!1');
+      console.log('完成车牌图片上传');
     });
   }
 

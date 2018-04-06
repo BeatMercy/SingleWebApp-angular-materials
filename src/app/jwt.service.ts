@@ -20,12 +20,11 @@ export class JwtService {
   authHttp: AuthHttp;
   jwtHelper: JwtHelper = new JwtHelper();
 
-  constructor(private http: Http, private httpClient: HttpClient, private jwtHttp: Http) {
+  constructor(private http: Http, private httpClient: HttpClient, private generalHttp: Http) {
     // this.requestOptions.headers.append('Content-Type', 'application/json');
-    this.authHttp = customAuthHttpServiceFactory(this.authConfig, this.jwtHttp, this.requestOptions);
+    this.authHttp = customAuthHttpServiceFactory(this.authConfig, this.generalHttp, this.requestOptions);
     this.updateUser(localStorage.getItem('token'));
   }
-
   getCurrentUser() {
     return this.user;
   }
@@ -109,3 +108,5 @@ export class JwtService {
     return result;
   }
 }
+
+

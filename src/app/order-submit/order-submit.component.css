@@ -33,3 +33,18 @@
     box-shadow: 0 0 0;
     background: none;
 }
+
+.option {
+    animation: popup 0.3s ease-out;
+}
+
+@keyframes popup {
+    from {
+        width: 80%;
+        opacity: 0;
+    }
+    to {
+        width: 100%;
+        opacity: 1;
+    }
+}

@@ -14,7 +14,6 @@ const routes: Routes = [
   { path: 'carEnterance', component: CarEnteranceComponent },
   { path: 'table', component: CdkTableBasicExampleComponent },
   { path: 'orderSubmit', component: OrderSubmitComponent }
-  
 ];
 
 @NgModule({
