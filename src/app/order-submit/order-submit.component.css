@@ -9,7 +9,8 @@
     width: 100%;
 }
 
-.inputField {
+.inputField,
+.sumField {
     width: 100%;
 }
 

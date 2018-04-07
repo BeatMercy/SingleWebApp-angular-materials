@@ -16,6 +16,7 @@ export class ServiceOption {
     }
 
     id: number | null;
+    name: string | null;
     serviceType: string | null;
     dtype: string | null;
     optionType: string | null;
@@ -27,17 +28,18 @@ export function mapServiceOption(serviceOptions: ServiceOption[]): Observable<Se
     const options = new Array;
     const optionsName = new Set(serviceOptions.map(child => child.optionType));
 
-    optionsName.forEach(name => {
+    optionsName.forEach(oName => {
         const items = new Array();
+        const o = new ServiceOption();
         for (let i = 0; i < serviceOptions.length; i++) {
-            if (serviceOptions[i].optionType !== name) {
+            if (serviceOptions[i].optionType !== oName) {
                 continue;
             }
+            if (o.name === undefined) { o.name = serviceOptions[i].name; }
             const item = new OptionDetail(serviceOptions[i].itemName, serviceOptions[i].price);
             items.push(item);
         }
-        const o = new ServiceOption();
-        o.optionType = name;
+        o.optionType = oName;
         o.options = items;
         options.push(o);
     });
