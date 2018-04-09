@@ -4,6 +4,10 @@
     justify-content: center;
 }
 
+.wrapper {
+    width: 100%;
+}
+
 .fieldHead {
     font-weight: bold;
     width: 100%;

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MatSelectChange } from '@angular/material';
+import { MatSelectChange, MatSliderChange } from '@angular/material';
 import { FormControl } from '@angular/forms';
 import { FileUploader, FileItem } from 'ng2-file-upload';
 import { MessageDialogService } from '../message-dialog.service';
@@ -11,6 +11,7 @@ import { Observable } from 'rxjs/Observable';
 import { map, mapTo, filter } from 'rxjs/operators';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/filter';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -61,10 +62,11 @@ export class OrderSubmitComponent implements OnInit, OnDestroy {
   plateAbbr = '粤';
   basePrice = 0.00;
   serviceOption: Observable<ServiceOption[]>;
-  panelOpenState = false;
-
+  travelMiles = 0;
+  note = '';
   private authHttp: AuthHttp;
   constructor(
+    private router: Router,
     private messageService: MessageDialogService,
     private http: Http, requestOption: RequestOptions
   ) {
@@ -158,6 +160,9 @@ export class OrderSubmitComponent implements OnInit, OnDestroy {
       }
 
     });
+    /**
+     * filter 用法
+     */
     // this.serviceOption.filter((array: ServiceOption[], index) => {
     //   if (array[index].options.filter(option => option.itemName === valueSet[1]).length > 0) {
     //     return true;
@@ -167,7 +172,10 @@ export class OrderSubmitComponent implements OnInit, OnDestroy {
     // }).subscribe(array => {
     //   this.selectedOption[valueSet[0]].optionType =  array.pop().optionType;
     // });
+  }
 
+  onChangeMiles(event: MatSliderChange) {
+    this.travelMiles = event.value;
   }
   sumUp(): number {
     let sum = this.basePrice;
@@ -178,14 +186,36 @@ export class OrderSubmitComponent implements OnInit, OnDestroy {
   }
 
   submit() {
+    if (this.plateString === '' || this.plateAbbr === '') {
+      this.messageService.showMessage('订单数据有误', '车牌号未填写');
+      return;
+    }
+    const orderDto = {
+      'selectedService': this.selectedService,
+      'plateNo': this.plateAbbr + this.plateString.toUpperCase(),
+      'basePrice': this.basePrice,
+      'travelMiles': this.travelMiles,
+      'note': this.note
+    };
     this.authHttp.post(
       '/order/' + this.selectedService + '/submit',
       {
-        'plateNo': this.plateAbbr + this.plateString,
-        'serviceOptions': this.selectedOption,
+        'orderDto': orderDto,
+        'optionDto': this.selectedOption,
         'total': this.sumUp()
       }
-    ).subscribe();
+    ).subscribe(next => {
+      const result = next.json();
+      if (result['success']) {
+        this.messageService.showMessage('订单提交成功', '请开始作业');
+      } else {
+        this.messageService.showMessage('订单提交失败', result['msg']);
+      }
+    }, error => {
+      this.messageService.showMessage('订单提交失败', error);
+    }, () => {
+      this.router.navigate(['work-list']);
+    });
   }
 
 }

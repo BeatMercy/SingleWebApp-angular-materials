@@ -1,4 +1,4 @@
-<div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="gappx">
+<div class="wrapper" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="gappx">
   <div class="orderTitle">
     <h2>创建订单</h2>
   </div>
@@ -14,8 +14,6 @@
           <!-- <mat-option *ngFor="let state of states" [value]="state">{{state}}</mat-option> -->
           <mat-option value="carBeautify">洗车美容</mat-option>
           <mat-option value="carMaintenance">保养维护</mat-option>
-          <mat-option value="carRepair">汽车维修</mat-option>
-
         </mat-select>
       </mat-form-field>
     </div>
@@ -38,17 +36,32 @@
         </mat-autocomplete>
       </mat-form-field>
       <mat-form-field class="plateBody">
-        <input matInput type="text" placeholder="号码" [(ngModel)]="plateString">
+        <input matInput type="text" placeholder="号码" [(ngModel)]="plateString" required>
       </mat-form-field>
     </div>
   </div>
-
+  <div class="fieldHead">
+    汽车公里数
+  </div>
+  <div class="fieldContent">
+    <mat-input-container style="width:100%" floatPlaceholder="auto">
+      <input matInput type="number" [(ngModel)]="travelMiles">
+    </mat-input-container>
+  </div>
+  <div class="fieldContent">
+    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="gappx">
+      <div id="mileShow">0</div>
+      <mat-slider style="width:80%;" (input)="onChangeMiles($event)" [disabled]="false" [max]="300000" [min]="0" [step]="1" [tick-interval]="100000" [(ngModel)]="travelMiles">
+      </mat-slider>
+      <div>30万</div>
+    </div>
+  </div>
   <div class="fieldHead">
     服务选项
   </div>
   <div class="fieldContent">
     <mat-accordion>
-      <mat-expansion-panel [expanded]="panelOpenState" id="basePriceExpansion">
+      <mat-expansion-panel  id="basePriceExpansion">
         <mat-expansion-panel-header>
           <mat-panel-title>基础费用</mat-panel-title>
           <mat-panel-description>
@@ -91,6 +104,19 @@
       </mat-form-field>
     </div> -->
   </div>
+  <div class="fieldContent">
+    <mat-accordion>
+      <mat-expansion-panel  id="basePriceExpansion">
+        <mat-expansion-panel-header>
+          <mat-panel-title>备注</mat-panel-title>
+          <mat-panel-description></mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-form-field>
+          <textarea matInput placeholder="留言" [(ngModel)]="note"></textarea>
+        </mat-form-field>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
   <div class="sumField">
     <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="gappx">
       <div>
@@ -99,12 +125,12 @@
       <div style="flex:1 1 auto"></div>
       <div>
         <h3>
-          <font color="green" wight="bold">￥{{sumUp()}}</font>
+          <font color="green" wight="bold">￥{{sumUp()| number : '1.2-2'}}</font>
         </h3>
       </div>
     </div>
   </div>
-  <mat-divider></mat-divider>
+  
   <div class="fieldHead">
     <div fxLayout="row-reverse " style="justify-content:space-between;" fxLayoutGap="gappx">
       <button mat-raised-button (click)="submit()" color="primary">提交</button>

@@ -1,0 +1,9 @@
+:host {
+    width: 80%;
+    display: flex;
+    justify-content: center;
+}
+
+.wrapper {
+    width: 100%;
+}

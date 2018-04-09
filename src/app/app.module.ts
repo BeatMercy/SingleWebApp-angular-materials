@@ -63,6 +63,7 @@ import { AccountInfoComponent } from './account-info/account-info.component';
 import { ProductRetrieveService } from './product-retrieve.service';
 import { SlideNavComponent } from './slide-nav/slide-nav.component';
 import { OrderSubmitComponent } from './order-submit/order-submit.component';
+import { StaffWorkListComponent } from './staff-work-list/staff-work-list.component';
 
 
 @NgModule({
@@ -75,7 +76,8 @@ import { OrderSubmitComponent } from './order-submit/order-submit.component';
     AccountInfoComponent,
     SlideNavComponent,
     CdkTableBasicExampleComponent,
-    OrderSubmitComponent
+    OrderSubmitComponent,
+    StaffWorkListComponent
   ],
   imports: [
     FormsModule,
