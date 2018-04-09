@@ -214,7 +214,7 @@ export class OrderSubmitComponent implements OnInit, OnDestroy {
     }, error => {
       this.messageService.showMessage('订单提交失败', error);
     }, () => {
-      this.router.navigate(['work-list']);
+      // this.router.navigate(['work-list']);
     });
   }
 

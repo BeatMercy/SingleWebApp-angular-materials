@@ -7,3 +7,31 @@
 .wrapper {
     width: 100%;
 }
+
+.ordersPanel {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 5px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.orderItem {
+    margin: 5px 5px;
+    width: 300px;
+}
+
+#basePriceExpansion,
+#basePriceExpansion mat-expansion-panel-header {
+    padding: 0;
+    box-shadow: 0 0 0;
+    background: none;
+}
+
+.paginator {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 2;
+}

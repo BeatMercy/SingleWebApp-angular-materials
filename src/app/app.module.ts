@@ -77,7 +77,7 @@ import { StaffWorkListComponent } from './staff-work-list/staff-work-list.compon
     SlideNavComponent,
     CdkTableBasicExampleComponent,
     OrderSubmitComponent,
-    StaffWorkListComponent
+    StaffWorkListComponent,
   ],
   imports: [
     FormsModule,

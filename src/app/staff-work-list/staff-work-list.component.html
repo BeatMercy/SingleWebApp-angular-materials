@@ -1,10 +1,120 @@
 <div class="wrapper">
-      <mat-tab-group [disableRipple]="false">
-        <mat-tab label="未完成的订单">
-          未完成的订单
-        </mat-tab>
-        <mat-tab label="已完成的订单">
-          已完成的订单
-        </mat-tab>
-      </mat-tab-group>
+  <mat-tab-group (selectedTabChange)="active($event)" [disableRipple]="false">
+    <mat-tab origin=0 label="准备中">
+      <div class="ordersPanel" *ngIf="this.activePage==='PENDING'">
+        <ng-container *ngFor="let item of pendingPage.content">
+          <mat-card class="orderItem">
+            <mat-card-header>
+              <mat-card-title>
+                <h5>
+                  <b>{{item.name}}</b>
+                </h5>
+              </mat-card-title>
+              <mat-card-subtitle>
+                <i style="font-size:10px;">{{item.orderNo}}</i>
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <mat-accordion>
+                <mat-expansion-panel id="basePriceExpansion">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>详情</mat-panel-title>
+                    <mat-panel-description>公里数：{{item.travelMiles}}</mat-panel-description>
+                  </mat-expansion-panel-header>
+                  <mat-list>
+                    <ng-container *ngFor="let key of item.optionKeys">
+                      <mat-list-item>
+                        <font weight="blod">{{key}}</font>
+                      </mat-list-item>
+                      <mat-divider></mat-divider>
+                    </ng-container>
+                  </mat-list>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </mat-card-content>
+            <mat-card-actions>
+              <button align="start" mat-raised-button color="primary" (click)="startWork( item.orderNo )">开始</button>
+              <button align="end" mat-button color="primary" (click)="cancelWork( item.orderNo )">取消</button>
+              <div>总价：
+                <font color="green">{{item.total}}</font>
+              </div>
+            </mat-card-actions>
+            <mat-card-footer>
+              <ng-container *ngIf="item.note!==''">
+                <div align="start">备注
+                  <font align="end" color="blue" weight="bold">{{item.note}}</font>
+                </div>
+              </ng-container>
+            </mat-card-footer>
+          </mat-card>
+        </ng-container>
+      </div>
+      
+    </mat-tab>
+    <!-- 进行中 -->
+    <mat-tab origin=1 label="进行中">
+      <div class="ordersPanel" *ngIf="this.activePage==='WORKING'">
+        <ng-container *ngFor="let item of pendingPage.content">
+          <mat-card class="orderItem">
+            <mat-card-header>
+              <mat-card-title>
+                <h5>
+                  <b>{{item.name}}</b>
+                </h5>
+              </mat-card-title>
+              <mat-card-subtitle>
+                <i style="font-size:10px;"> item.orderNo </i>
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <mat-accordion>
+                <mat-expansion-panel id="basePriceExpansion">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>详情</mat-panel-title>
+                    <mat-panel-description>公里数：{{item.travelMiles}}</mat-panel-description>
+                  </mat-expansion-panel-header>
+                  <mat-list>
+                    <ng-container *ngFor="let key of item.optionKeys">
+                      <mat-list-item>
+                        <font weight="blod">{{key}}</font>
+                      </mat-list-item>
+                      <mat-divider></mat-divider>
+                    </ng-container>
+                  </mat-list>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </mat-card-content>
+            <mat-card-actions>
+              <button align="start" mat-raised-button color="primary" (click)="finishWork( item.orderNo )">完成</button>
+              <button align="end" mat-button color="primary" (click)="cancelWork( item.orderNo )">取消</button>
+              <div>总价：
+                <font color="green">{{item.total}}</font>
+              </div>
+            </mat-card-actions>
+            <mat-card-footer>
+              <ng-container *ngIf="item.note!==''">
+                <div align="start">备注
+                  <font align="end" color="blue" weight="bold">{{item.note}}</font>
+                </div>
+              </ng-container>
+            </mat-card-footer>
+          </mat-card>
+        </ng-container>
+      </div>
+    </mat-tab>
+    <mat-tab origin=2 label="待确认">
+      <div *ngIf="activePage==='WAITING_CONFIRM'">
+        
+      </div>
+    </mat-tab>
+    <mat-tab origin=3 (selectedTabChange)="active('FINISHED')" label="已完成">
+      <div *ngIf="activePage==='FINISHED'">
+        
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+  <div class="paginator">
+  <mat-paginator [length]="pendingPage.totalElements" [pageSize]="pendingPage.size">
+  </mat-paginator>
+  </div>
 </div>
