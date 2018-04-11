@@ -1,8 +1,59 @@
-<h2 style="text-align:center;" mat-dialog-title>{{data.title}}</h2>
-<mat-dialog-content>
-  <div class="dilog-content">{{data.content}}</div>
-</mat-dialog-content>
-<mat-dialog-actions fxFlexAlign='center center'>
-  <!-- <button mat-button mat-dialog-close>Cancel</button> -->
-  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>确认</button>
-</mat-dialog-actions>
+<ng-container *ngIf="data.messageOnly">
+  <h3 style="text-align:center;" mat-dialog-title>{{data.title}}</h3>
+  <mat-dialog-content>
+    <div class="dilog-content">{{data.content}}</div>
+  </mat-dialog-content>
+  <mat-dialog-actions fxFlexAlign='center center'>
+    <!-- <button mat-button mat-dialog-close>Cancel</button> -->
+    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>确认</button>
+  </mat-dialog-actions>
+</ng-container>
+
+
+<ng-container *ngIf="data.isConfirmForm">
+  <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px">
+    <div class="messagePos">
+      <mat-dialog-content>
+        <ng-container *ngIf="data.messageDetail.text!==undefined; else elseTemplate">
+          {{data.messageDetail.text}}
+        </ng-container>
+        <ng-template #elseTemplate>
+          是否执行该操作？
+        </ng-template>
+      </mat-dialog-content>
+    </div>
+    <mat-dialog-actions class="actionPos" fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="5px">
+      <button [mat-dialog-close]="submit()" cdkFocusInitial mat-raised-button>
+        <ng-container *ngIf="data.messageDetail.confirmText!==undefined; else elseTemplate">
+          {{data.messageDetail.confirmText}}
+        </ng-container>
+        <ng-template #elseTemplate>
+          确定
+        </ng-template>
+      </button>
+      <button mat-button [mat-dialog-close]="false">取消</button>
+    </mat-dialog-actions>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="data.isInputForm">
+  <h3 style="text-align:center;" mat-dialog-title>{{data.messageDetail.text}}</h3>
+  <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px">
+    <ng-container *ngFor="let item of data.inputFields; index as i">
+      <mat-form-field>
+        <input matInput [type]="item.type" (keyup)="makeBody(i)" [value]="item.value"  [name]="item.name"  [placeholder]="item.placeHolder" />
+      </mat-form-field>
+    </ng-container>
+  </div>
+  <mat-dialog-actions class="actionPos" fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="5px">
+    <button color="warn" [mat-dialog-close]="submitInputForm()" cdkFocusInitial mat-raised-button>
+      <ng-container *ngIf="data.messageDetail.confirmText!==undefined; else elseTemplate">
+        {{data.messageDetail.confirmText}}
+      </ng-container>
+      <ng-template #elseTemplate>
+        确定
+      </ng-template>
+    </button>
+    <button mat-button [mat-dialog-close]="false">取消</button>
+  </mat-dialog-actions>
+</ng-container>

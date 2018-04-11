@@ -64,6 +64,7 @@ import { ProductRetrieveService } from './product-retrieve.service';
 import { SlideNavComponent } from './slide-nav/slide-nav.component';
 import { OrderSubmitComponent } from './order-submit/order-submit.component';
 import { StaffWorkListComponent } from './staff-work-list/staff-work-list.component';
+import { CashierBoardComponent } from './cashier-board/cashier-board.component';
 
 
 @NgModule({
@@ -78,6 +79,7 @@ import { StaffWorkListComponent } from './staff-work-list/staff-work-list.compon
     CdkTableBasicExampleComponent,
     OrderSubmitComponent,
     StaffWorkListComponent,
+    CashierBoardComponent,
   ],
   imports: [
     FormsModule,

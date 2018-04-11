@@ -1,36 +1,71 @@
-<ng-container >
-<div style="font-size:20pt;">
-  <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="gappx">
-    <div fxFlex="100%" fxLayoutAlign="center center" fxFlexFill>
-      <span>用户登录</span>
+<div class="panel" style="font-size:20pt;">
+  <ng-container *ngIf="loginMode; else registerTemplate">
+    <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="gappx">
+      <div fxFlex="100%" fxLayoutAlign="center center" fxFlexFill>
+        <span>用户登录</span>
+      </div>
     </div>
-  </div>
-  <br>
-  <br>
-  <div fxLayout="row" fxLayoutAlign="center center">
-    <div (keyup.enter)="loginSubmit()" fxFelx="100%" class="loginForm">
+    <br>
+    <br>
+    <div fxLayout="row" fxLayoutAlign="center center">
+      <div (keyup.enter)="loginSubmit()" fxFelx="100%" class="loginForm">
 
-      <mat-form-field class="loginInput">
+        <mat-form-field class="loginInput">
 
-        <input matInput placeholder="用户名/手机号码" [(ngModel)]="user.username">
-        <mat-icon matSuffix class="example-icon" color="primary">account_box</mat-icon>
-      </mat-form-field>
-      <mat-form-field class="loginInput">
-        <input type="password" matInput placeholder="密码" [(ngModel)]="user.password">
-        <mat-icon matSuffix color="primary">vpn_key</mat-icon>
-      </mat-form-field>
+          <input matInput placeholder="用户名/手机号码" [(ngModel)]="user.username">
+          <mat-icon matSuffix class="example-icon" color="primary">account_box</mat-icon>
+        </mat-form-field>
+        <mat-form-field class="loginInput">
+          <input type="password" matInput placeholder="密码" [(ngModel)]="user.password">
+          <mat-icon matSuffix color="primary">vpn_key</mat-icon>
+        </mat-form-field>
 
-      <button mat-button (click)="loginSubmit()" color="primary">
-        <mat-icon class="mat-18">fingerprint</mat-icon>
-        <span>登录</span>
-      </button>
+        <div style="display: flex;">
+          <button mat-button (click)="loginSubmit()" color="primary">
+            <mat-icon class="mat-18">fingerprint</mat-icon>
+            <span>登录</span>
+          </button>
 
-      <button mat-button (click)="loginCancel()" color="primary">
-        <mat-icon class="mat-18">close</mat-icon>
-        <span>取消</span>
-      </button>
+          <button mat-button (click)="loginCancel()" color="primary">
+            <mat-icon class="mat-18">close</mat-icon>
+            <span>关闭</span>
+          </button>
+          <div style="flex:1 1 auto;"></div>
+          <button mat-button (click)="loginMode=false" color="primary">
+            <span>注册</span>
+          </button>
+        </div>
+      </div>
+
     </div>
-
-  </div>
+  </ng-container>
+  <ng-template #registerTemplate>
+    <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="5px">
+      <div class="registerTop">
+          <div>
+            <span>用户注册</span>
+          </div>
+      </div>
+      <div class="registerBody">
+        <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="2px">
+          <mat-input-container>
+              <input matInput
+                     type="text"
+                     required
+                     placeholder="">
+              <span matPrefix>手机号：</span>
+          </mat-input-container>
+          <mat-input-container>
+            <input matInput type="password" required placeholder="">
+            <span matPrefix>密码：</span>
+          </mat-input-container>
+        </div>
+      </div>
+      <div class="registerBottom">
+        <button mat-button (click)="loginMode=true" color="primary">
+          <span>登录</span>
+        </button>
+      </div>
+    </div>
+  </ng-template>
 </div>
-</ng-container>

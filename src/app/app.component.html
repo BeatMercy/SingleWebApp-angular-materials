@@ -1,25 +1,26 @@
 <ng-container>
   <mat-toolbar class="toolbar mat-elevation-z6" color="primary">
-    <mat-toolbar-row  fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="gappx">
+    <mat-toolbar-row fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="gappx">
       <div style="display:flex;" fxFlexAlign="start center">
-        <b >{{title}}</b>
+        <b>{{title}}</b>
       </div>
       <div class="flex-spacer"></div>
       <div fxFlexAlign="center center">
         <ng-container *ngIf="this.jwtService.checkToken(); else elseTemplate">
-          <button id='menuButton' mat-raised-button [matMenuTriggerFor]="menu">
-            <span>{{jwtService.getCurrentUser().username}}</span>
+          <button id='menuButton' mat-button [matMenuTriggerFor]="menu">
+            <img class="headImg" [src]="this.userHeadImg()" alt="">
+            <span style="color:white;">{{jwtService.getCurrentUser().username}}</span>
           </button>
           <mat-menu #menu="matMenu">
             <button routerLink='/me' mat-menu-item>
               <mat-icon>notifications_off</mat-icon>
               <span>我的信息</span>
             </button>
-            <button mat-menu-item >
+            <button mat-menu-item>
               <mat-icon>voicemail</mat-icon>
               <span>我的订单</span>
             </button>
-            <button routerLink='/work-list' mat-menu-item >
+            <button routerLink='/work-list' mat-menu-item>
               <mat-icon>voicemail</mat-icon>
               <span>我的工单</span>
             </button>

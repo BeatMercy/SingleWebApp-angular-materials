@@ -12,7 +12,7 @@ import { MessageDialogService } from '../message-dialog.service';
 })
 export class LoginDialogComponent implements OnInit {
   user = new User();
-  isAuthenticated = false;
+  loginMode = true;
   constructor(private httpClient: HttpClient,
     public dialogRef: MatDialogRef<LoginDialogComponent>,
     private messageService: MessageDialogService,
@@ -30,7 +30,7 @@ export class LoginDialogComponent implements OnInit {
     const password = this.user.password;
     this.httpClient.post<JSON>('/login', { username, password })
       .subscribe(next => {
-        localStorage.setItem('token', next['token']);
+        // localStorage.setItem('token', next['token']);
         this.jwtService.updateUser(next['token']);
         this.dialogRef.close();
         this.messageService.showMessage('消息', '登录成功');

@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Http, RequestOptions } from '@angular/http';
+import { Http, RequestOptions, Response } from '@angular/http';
 import { AuthHttp, JwtHelper, tokenNotExpired, AuthConfig } from 'angular2-jwt';
 import { AuthModule, customAuthHttpServiceFactory } from '../auth.module';
+import { Observable } from 'rxjs/Observable';
 
-import { User } from './entity/user';
+import { User, buildUser } from './entity/user';
 
 @Injectable()
 export class JwtService {
@@ -31,14 +32,23 @@ export class JwtService {
 
   updateUser(token: string) {
     if (token === undefined || token === null || token === 'undefined') {
-      return;
+      token = localStorage.getItem('token');
+      if (token === null) { return; }
+    } else {
+      localStorage.setItem('token', token);
     }
+
     const raw = this.jwtHelper.decodeToken(token);
-    this.user.username = raw['sub'];
-    this.user.authorities = raw['authorities'];
-    console.log(raw['authorities']);
-    console.log(this.user);
+    this.authHttp.get('me').map(rsp => rsp.json())
+      .subscribe(json => {
+        if (json['success']) {
+          buildUser(this.user, json['content']);
+          this.user.authorities = raw['authorities'];
+          console.log(this.user);
+        }
+      });
   }
+
 
   logout() {
     localStorage.removeItem('token');

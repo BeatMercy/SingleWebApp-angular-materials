@@ -2,6 +2,12 @@
     flex: 1 1 auto;
 }
 
+.headImg {
+    max-width: 36px;
+    max-height: 36px;
+    border-radius: 18px;
+}
+
 .example-container {
     display: flex;
     flex-direction: column;
