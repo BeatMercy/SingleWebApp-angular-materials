@@ -35,3 +35,10 @@ export function getOrdersFromPage(page: Page<Order>) {
     });
     return orders;
 }
+
+export function buildOrderOptionKeys(orders: Order[]): Order[] {
+    orders.forEach(element => {
+        element.optionKeys = Object.keys(element.selectedOption);
+    });
+    return orders;
+}

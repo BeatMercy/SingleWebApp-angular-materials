@@ -72,3 +72,12 @@
     margin: 0;
     padding: 0;
 }
+
+/* 由于angular渲染组件css时会加入.className[xxx]
+ * 限定了选择器
+ * [attribute]	[target]	选择带有 target 属性所有元素。
+ */
+
+#basePriceExpansion .mat-expansion-panel-content .mat-expansion-panel-body {
+    padding: 0 10px 16px;
+}

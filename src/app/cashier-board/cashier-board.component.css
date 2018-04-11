@@ -8,7 +8,16 @@
     width: 100%;
 }
 
-.ordersPanel {
+.flexCenterContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.flexCenterContainer * {
+    align-self: center;
+}
+
+#searchResult {
     display: flex;
     flex-wrap: wrap;
     padding: 5px;
@@ -22,7 +31,7 @@
     height: 100%;
     opacity: 1;
     transition: all ease-out 0.2s;
-    animation: circleTocube 0.2s;
+    animation: circleTocube 0.4s ease-out;
 }
 
 #basePriceExpansion,
@@ -30,26 +39,6 @@
     padding: 0;
     box-shadow: 0 0 0;
     background: none;
-}
-
-.fuild {
-    width: 210px;
-    opacity: 0;
-}
-
-.paginator {
-    box-shadow: 0px -3px 8px rgba(0, 0, 0, 0.38);
-    padding: 0px 20px;
-    background-color: #3f51b5;
-    color: white;
-    align-items: center;
-    align-content: center;
-    display: flex;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    z-index: 2;
 }
 
 @keyframes circleTocube {
