@@ -91,7 +91,6 @@ export class MyMessageData {
     this.postData = new MyPostData();
     this.inputFields = new Array<MyInputField>();
   }
-
   isConfirmForm: boolean | false;
   messageOnly: boolean | true;
   isInputForm: boolean | false;
