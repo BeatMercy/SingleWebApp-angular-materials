@@ -12,7 +12,6 @@ import { MessageDialogService } from './message-dialog.service';
 })
 export class AppComponent {
   title = '易车服';
-  headimg = 'assets/img/default_head.jpg';
   constructor(
     private messageService: MessageDialogService,
     private router: Router,
@@ -24,10 +23,11 @@ export class AppComponent {
   }
 
   userHeadImg(): string {
-    if (this.jwtService.getCurrentUser().headimg !== null) {
-      this.headimg = this.jwtService.getCurrentUser().headimg;
+    let headimg = 'assets/img/default_head.jpg';
+    if (this.jwtService.getCurrentUser().headimg !== undefined && this.jwtService.getCurrentUser().headimg !== null) {
+      headimg = this.jwtService.getCurrentUser().headimg;
     }
-    return this.headimg;
+    return headimg;
   }
 
   loginDialog() {

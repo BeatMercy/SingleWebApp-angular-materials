@@ -9,11 +9,11 @@
         <ng-container *ngIf="this.jwtService.checkToken(); else elseTemplate">
           <button id='menuButton' mat-button [matMenuTriggerFor]="menu">
             <img class="headImg" [src]="this.userHeadImg()" alt="">
-            <span style="color:white;">{{jwtService.getCurrentUser().username}}</span>
+            <span style="color:white;">{{jwtService.getCurrentUser().realName}}</span>
           </button>
           <mat-menu #menu="matMenu">
             <button routerLink='/me' mat-menu-item>
-              <mat-icon>notifications_off</mat-icon>
+              <mat-icon>account_circle</mat-icon>
               <span>我的信息</span>
             </button>
             <button mat-menu-item>

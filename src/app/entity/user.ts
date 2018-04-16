@@ -11,9 +11,9 @@ export class User {
     weixin: string | null;
     qq: string | null;
     realName: string | null;
-
+    consumePoint: number;
 }
-export function buildUser( user: User, userdata: any) {
+export function buildUser(user: User, userdata: any) {
     user.id = userdata['id'];
     user.username = userdata['username'];
     user.headimg = userdata['headimg'];
@@ -21,6 +21,7 @@ export function buildUser( user: User, userdata: any) {
     user.weixin = userdata['weixin'];
     user.qq = userdata['qq'];
     user.realName = userdata['realName'];
+    user.consumePoint = userdata['consumePoint'];
 
 }
 export const USER: User = {
@@ -33,5 +34,6 @@ export const USER: User = {
     weixin: null,
     qq: null,
     realName: null,
+    consumePoint: 0,
 };
 export const RSA_PRIVATE_KEY = 'ss';

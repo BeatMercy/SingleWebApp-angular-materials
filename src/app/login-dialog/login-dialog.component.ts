@@ -4,6 +4,7 @@ import { User } from '../entity/user';
 import { JwtService } from '../jwt.service';
 import { HttpClient } from '@angular/common/http';
 import { MessageDialogService } from '../message-dialog.service';
+import { Response } from '@angular/http';
 
 @Component({
   selector: 'app-login-dialog',
@@ -13,6 +14,10 @@ import { MessageDialogService } from '../message-dialog.service';
 export class LoginDialogComponent implements OnInit {
   user = new User();
   loginMode = true;
+  password = '';
+  confirmPassword = '';
+  realName = '';
+  phone = '';
   constructor(private httpClient: HttpClient,
     public dialogRef: MatDialogRef<LoginDialogComponent>,
     private messageService: MessageDialogService,
@@ -41,22 +46,50 @@ export class LoginDialogComponent implements OnInit {
         () => {
 
         });
-
-    // this.jwtService.login(this.user.username, this.user.password);
-    // if (this.jwtService.checkToken()) {
-    //   this.isAuthenticated = true;
-    //   this.user = new User();
-    // } else {
-    //   alert('登录失败：');
-    // }
-    // const result = this.jwtService.login(this.user.username, this.user.password);
-    // if (result['success'] === true) {
-    //   this.isAuthenticated = true;
-    //   this.user = USER;
-    // } else {
-    //   alert('登录失败：' + result['message']);
-    // }
   }
+
+  private phoneValid(phone: string): boolean {
+    if (phone.length !== 11) {
+      return false;
+    }
+    const numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
+    for (let i = 0; i < 11; i++) {
+      if (!numbers.includes(phone[i], 0)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  signUp() {
+    if (!this.phoneValid(this.phone)) {
+      this.messageService.showMessage('提交失败', '手机位数不正确');
+      return;
+    }
+    if (this.password !== this.confirmPassword || this.password === '') {
+      this.messageService.showMessage('提交失败', '密码不一致');
+      return;
+    }
+
+    this.httpClient.post<Response>(
+      'signup',
+      {
+        phone: this.phone,
+        password: this.password,
+        username: this.phone,
+        realName: this.realName
+      }
+    ).subscribe(json => {
+      if (json['success']) {
+        this.jwtService.updateUser(json['content']);
+        this.dialogRef.close();
+        this.messageService.showMessage('注册成功', '');
+      } else {
+        this.messageService.showMessage('注册失败', json['msg']);
+      }
+    });
+  }
+
 
   ngOnInit() {
   }
