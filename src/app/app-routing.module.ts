@@ -8,6 +8,7 @@ import { CdkTableBasicExampleComponent } from './cdk-table-basic-example/cdk-tab
 import { OrderSubmitComponent } from './order-submit/order-submit.component';
 import { StaffWorkListComponent } from './staff-work-list/staff-work-list.component';
 import { CashierBoardComponent } from './cashier-board/cashier-board.component';
+import { MyOrdersComponent } from './my-orders/my-orders.component';
 const routes: Routes = [
   // { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '', component: IndexPageComponent },
@@ -17,6 +18,7 @@ const routes: Routes = [
   { path: 'table', component: CdkTableBasicExampleComponent },
   { path: 'orderSubmit', component: OrderSubmitComponent },
   { path: 'cashier-board', component: CashierBoardComponent },
+  { path: 'my-orders', component: MyOrdersComponent },
   { path: 'work-list', component: StaffWorkListComponent }
 ];
 

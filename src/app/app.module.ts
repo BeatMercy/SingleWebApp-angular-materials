@@ -65,6 +65,7 @@ import { SlideNavComponent } from './slide-nav/slide-nav.component';
 import { OrderSubmitComponent } from './order-submit/order-submit.component';
 import { StaffWorkListComponent } from './staff-work-list/staff-work-list.component';
 import { CashierBoardComponent } from './cashier-board/cashier-board.component';
+import { MyOrdersComponent } from './my-orders/my-orders.component';
 
 
 @NgModule({
@@ -80,6 +81,7 @@ import { CashierBoardComponent } from './cashier-board/cashier-board.component';
     OrderSubmitComponent,
     StaffWorkListComponent,
     CashierBoardComponent,
+    MyOrdersComponent,
   ],
   imports: [
     FormsModule,

@@ -1,0 +1,58 @@
+:host {
+    width: 80%;
+}
+
+.wrapContent {
+    flex-wrap: wrap;
+}
+
+.wrapper {
+    width: 100%;
+    height: 100%;
+    transition: all 0.3s ease-out;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+}
+
+.orderItem {
+    margin: 5px 5px;
+    max-width: 300px;
+    height: 100%;
+    opacity: 1;
+    transition: all ease-out 0.2s;
+    animation: circleTocube 0.4s ease-out;
+}
+
+#basePriceExpansion,
+#basePriceExpansion mat-expansion-panel-header {
+    padding: 0;
+    box-shadow: 0 0 0;
+    background: none;
+}
+
+.paginator {
+    padding: 0px 20px;
+    background-color: white;
+    color: #3f51b5;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-line-pack: center;
+    align-content: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    width: 100%;
+}
+
+@keyframes circleTocube {
+    from {
+        border-radius: 100px;
+    }
+    to {
+        border-radius: 2px;
+    }
+}
