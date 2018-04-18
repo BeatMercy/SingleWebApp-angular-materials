@@ -83,12 +83,13 @@
   <div class="fieldContent">
     <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="gappx" *ngFor="let item of serviceOption | async; index as i; ">
       <mat-form-field class="inputField">
-        <mat-select (change)="updateSelectedOption($event)" value="{{i}}-default">
+        <mat-select class="option" (change)="updateSelectedOption($event)" value="{{i}}-default">
           <!-- <mat-option *ngFor="let state of states" [value]="state">{{state}}</mat-option> -->
           <mat-option value="{{i}}-default">{{item.name}}: 无</mat-option>
           <ng-container *ngFor="let option of item.options">
-            <mat-option value="{{i}}-{{option.itemName}}">
-              {{option.itemName}}
+            <mat-option class="myOptions" value="{{i}}-{{option.itemName}}">
+               {{item.name}}:{{option.itemName}}
+               <div style="flex :1 1 auto;"></div>
               <font color="green" wight="bold">￥{{option.price| number : '1.2-2'}}</font>
             </mat-option>
           </ng-container>

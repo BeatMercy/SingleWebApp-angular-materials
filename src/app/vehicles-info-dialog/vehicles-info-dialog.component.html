@@ -1,0 +1,29 @@
+<h1 matDialogTitle>车辆信息</h1>
+
+<mat-dialog-content>
+  <ng-container *ngIf="data; else elseTemplate">
+    <ng-container *ngFor="let item of data">
+      <div class="wrapContent" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+        <!-- 车标 -->
+        <div class="brandImg">
+          <img [src]="brandImg(item.brand)" alt="">
+        </div>
+        <!-- 车信息 -->
+        <mat-list role="list">
+          <mat-list-item role="listitem">{{item.plateNo}}</mat-list-item>
+          <mat-divider></mat-divider>
+          <mat-list-item role="listitem">{{item.fuseType}}</mat-list-item>
+          <mat-divider></mat-divider>
+          <mat-list-item role="listitem">{{item.VehicleType}}</mat-list-item>
+        </mat-list>
+      </div>
+    </ng-container>
+  </ng-container>
+  <ng-template #elseTemplate>
+    <h4>没有数据</h4>
+  </ng-template>
+</mat-dialog-content>
+
+<mat-dialog-actions [attr.align]="start">
+  <button mat-button matDialogClose>关闭</button>
+</mat-dialog-actions>

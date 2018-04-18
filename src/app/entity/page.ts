@@ -27,6 +27,6 @@ export function jsonToPage<T>(json: any): Page<T> {
     page.totalElements = json['totalElements'];
     page.totalPages = json['totalPages'];
 
-    page.content = json['content'];
+    page.content = Array.from(<ArrayLike<T>>json['content']);
     return page;
 }

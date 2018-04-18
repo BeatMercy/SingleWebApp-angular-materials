@@ -43,6 +43,7 @@
     animation: popup 0.3s ease-out;
 }
 
+
 @keyframes popup {
     from {
         width: 80%;

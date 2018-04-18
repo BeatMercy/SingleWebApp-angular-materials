@@ -19,64 +19,76 @@
         <div>
           <div style="display:flex;flex-wrap: wrap;">
             <ng-container *ngIf="ordersPage.content === undefined||ordersPage.content.length === 0; else showOrders">
-              <div>未有数据</div>              
+              <div>未有数据</div>
             </ng-container>
             <ng-template #showOrders>
-            <ng-container *ngFor="let item of ordersPage.content ">
-              <mat-card class="orderItem">
-                <mat-card-header>
-                  <mat-card-title>
-                    <h5>
-                      <b>
-                        <ng-container *ngIf="item.state ==='UNPAY'">
-                          [
-                          <font color="red">未付款</font>]
+              <ng-container *ngFor="let item of ordersPage.content ">
+                <mat-card class="orderItem">
+                  <mat-card-header>
+                    <mat-card-title>
+                      <h5>
+                        <ng-container *ngIf="item.progress ==='PENDING'">
+                           [<font color="LightSeaGreen">准备中</font>]
                         </ng-container>
-                        <ng-container *ngIf="item.state ==='FINISHED'">
-                          [
-                          <font color="green">已付款</font>]
+                        <ng-container *ngIf="item.progress ==='WORKING'">
+                           [<font color="coral">进行中</font>]
                         </ng-container>
-                      </b>
-                      <br> {{item.name}}
-                    </h5>
-                  </mat-card-title>
-                  <mat-card-subtitle>
-                    <i style="font-size:10px;">{{ item.orderNo}} </i>
-                  </mat-card-subtitle>
-                </mat-card-header>
-                <mat-card-content>
-                  <mat-accordion>
-                    <mat-expansion-panel id="basePriceExpansion">
-                      <mat-expansion-panel-header>
-                        <mat-panel-title>详情</mat-panel-title>
-                        <mat-panel-description>公里数：{{item.travelMiles}}</mat-panel-description>
-                      </mat-expansion-panel-header>
-                      <mat-list>
-                        <ng-container *ngFor="let key of item.optionKeys">
-                          <mat-list-item>
-                            <font weight="blod">{{key}}</font>
-                          </mat-list-item>
-                          <mat-divider></mat-divider>
+                        <ng-container *ngIf="item.progress ==='WAITING_CONFIRM'">
+                           [<font color="crimson">待客户确认</font>]
                         </ng-container>
-                      </mat-list>
-                    </mat-expansion-panel>
-                  </mat-accordion>
-                </mat-card-content>
-                <mat-card-actions>
-                  <div>总价：
-                    <font color="green">{{item.total}}</font>
-                  </div>
-                </mat-card-actions>
-                <mat-card-footer>
-                  <ng-container *ngIf="item.note!==''">
-                    <div align="start">备注
-                      <font align="end" color="blue" weight="bold">{{item.note}}</font>
+                        <ng-container *ngIf="item.progress ==='FINISHED'">
+                           [<font color="green">完成</font>]
+                        </ng-container>
+                        <b>
+                          <ng-container *ngIf="item.state ==='UNPAY'">
+                        
+                            <font color="red">未付款</font>
+                          </ng-container>
+                          <ng-container *ngIf="item.state ==='FINISHED'">
+                        
+                            <font color="green">已付款</font>
+                          </ng-container>
+                        </b>
+                        <br> {{item.name}}
+                      </h5>
+                    </mat-card-title>
+                    <mat-card-subtitle>
+                      <i style="font-size:10px;">{{ item.orderNo}} </i>
+                    </mat-card-subtitle>
+                  </mat-card-header>
+                  <mat-card-content>
+                    <mat-accordion>
+                      <mat-expansion-panel id="basePriceExpansion">
+                        <mat-expansion-panel-header>
+                          <mat-panel-title>公里数：{{item.travelMiles}}</mat-panel-title>
+                          <mat-panel-description>详情</mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <mat-list>
+                          <ng-container *ngFor="let key of item.optionKeys">
+                            <mat-list-item>
+                              <font weight="blod">{{key}}</font>
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                          </ng-container>
+                        </mat-list>
+                      </mat-expansion-panel>
+                    </mat-accordion>
+                  </mat-card-content>
+                  <mat-card-actions>
+                    <div>总价：
+                      <font color="green">{{item.total}}</font>
                     </div>
-                  </ng-container>
-                </mat-card-footer>
-              </mat-card>
-            </ng-container>
-          </ng-template>
+                  </mat-card-actions>
+                  <mat-card-footer>
+                    <ng-container *ngIf="item.note!==''">
+                      <div align="start">备注
+                        <font align="end" color="blue" weight="bold">{{item.note}}</font>
+                      </div>
+                    </ng-container>
+                  </mat-card-footer>
+                </mat-card>
+              </ng-container>
+            </ng-template>
           </div>
           <div class="paginator">
             <div>第{{ordersPage.number+1}}/{{ordersPage.totalPages}}页</div>

@@ -76,8 +76,22 @@
 /* 由于angular渲染组件css时会加入.className[xxx]
  * 限定了选择器
  * [attribute]	[target]	选择带有 target 属性所有元素。
+ * 
+ * @Component({
+ * template: `<h1>test</h1>`,
+ * styles: [`h1 { color: #f50; }`],
+ * encapsulation: ViewEncapsulation.Native
+ * })
  */
 
 #basePriceExpansion .mat-expansion-panel-content .mat-expansion-panel-body {
     padding: 0 10px 16px;
+}
+
+.myOptions .mat-option-text {
+    display: flex;
+}
+
+.myPaginator .mat-icon-button[disabled][disabled] {
+    color: rgba(255, 255, 255, 0.5);
 }

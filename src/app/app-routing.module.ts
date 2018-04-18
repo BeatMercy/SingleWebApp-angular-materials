@@ -4,18 +4,18 @@ import { RouterModule, Routes } from '@angular/router';
 import { CarEnteranceComponent } from './car-enterance/car-enterance.component';
 import { IndexPageComponent } from './index-page/index-page.component';
 import { AccountInfoComponent } from './account-info/account-info.component';
-import { CdkTableBasicExampleComponent } from './cdk-table-basic-example/cdk-table-basic-example.component';
 import { OrderSubmitComponent } from './order-submit/order-submit.component';
 import { StaffWorkListComponent } from './staff-work-list/staff-work-list.component';
 import { CashierBoardComponent } from './cashier-board/cashier-board.component';
 import { MyOrdersComponent } from './my-orders/my-orders.component';
+import { MgUserComponent } from './mg-user/mg-user.component';
 const routes: Routes = [
   // { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '', component: IndexPageComponent },
   { path: 'home', component: IndexPageComponent },
   { path: 'me', component: AccountInfoComponent },
   { path: 'carEnterance', component: CarEnteranceComponent },
-  { path: 'table', component: CdkTableBasicExampleComponent },
+  { path: 'mg-user', component: MgUserComponent },
   { path: 'orderSubmit', component: OrderSubmitComponent },
   { path: 'cashier-board', component: CashierBoardComponent },
   { path: 'my-orders', component: MyOrdersComponent },

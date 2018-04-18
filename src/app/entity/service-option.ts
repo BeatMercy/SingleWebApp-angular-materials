@@ -16,30 +16,30 @@ export class ServiceOption {
     }
 
     id: number | null;
-    name: string | null;
-    serviceType: string | null;
+    name: string | null; // 选项所属类型
+    serviceType: string | null; // 所属服务类型
     dtype: string | null;
-    optionType: string | null;
-    itemName: string | null;
+    optionType: string | null;  // 选项名称代号
+    itemName: string | null;    // 选项名称
     price: number | null;
     options: OptionDetail[] | null;
 }
 export function mapServiceOption(serviceOptions: ServiceOption[]): Observable<ServiceOption[]> {
     const options = new Array;
-    const optionsName = new Set(serviceOptions.map(child => child.optionType));
+    const optionsName = new Set(serviceOptions.map(child => child.name));
 
     optionsName.forEach(oName => {
         const items = new Array();
         const o = new ServiceOption();
         for (let i = 0; i < serviceOptions.length; i++) {
-            if (serviceOptions[i].optionType !== oName) {
+            if (serviceOptions[i].name !== oName) {
                 continue;
             }
             if (o.name === undefined) { o.name = serviceOptions[i].name; }
             const item = new OptionDetail(serviceOptions[i].itemName, serviceOptions[i].price);
             items.push(item);
         }
-        o.optionType = oName;
+        o.name = oName;
         o.options = items;
         options.push(o);
     });

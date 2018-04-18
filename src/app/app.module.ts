@@ -36,15 +36,16 @@ import {
   MatTabsModule,
   MatToolbarModule,
   MatTooltipModule,
+  MatPaginatorIntl,
 } from '@angular/material';
 import 'hammerjs';
 import { FileUploadModule } from 'ng2-file-upload/file-upload/file-upload.module';
 import { AppRoutingModule } from './app-routing.module';
 import { ImageCompressService, ResizeOptions, ImageUtilityService } from 'ng2-image-compress';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { CdkTableBasicExampleComponent } from './cdk-table-basic-example/cdk-table-basic-example.component';
 import { CdkTableModule } from '@angular/cdk/table';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+
 
 // App
 import { AppComponent } from './app.component';
@@ -66,6 +67,11 @@ import { OrderSubmitComponent } from './order-submit/order-submit.component';
 import { StaffWorkListComponent } from './staff-work-list/staff-work-list.component';
 import { CashierBoardComponent } from './cashier-board/cashier-board.component';
 import { MyOrdersComponent } from './my-orders/my-orders.component';
+import { MgUserComponent } from './mg-user/mg-user.component';
+import { MgServiceOptionComponent } from './mg-service-option/mg-service-option.component';
+import { LocaleModule } from './locale';
+import { MyPaginator } from './my-paginator';
+import { VehiclesInfoDialogComponent } from './vehicles-info-dialog/vehicles-info-dialog.component';
 
 
 @NgModule({
@@ -77,16 +83,20 @@ import { MyOrdersComponent } from './my-orders/my-orders.component';
     MessageDialogComponent,
     AccountInfoComponent,
     SlideNavComponent,
-    CdkTableBasicExampleComponent,
     OrderSubmitComponent,
     StaffWorkListComponent,
     CashierBoardComponent,
     MyOrdersComponent,
+    MgUserComponent,
+    MgServiceOptionComponent,
+    VehiclesInfoDialogComponent,
   ],
   imports: [
     FormsModule,
     BrowserModule,
     BrowserAnimationsModule,
+    // 时区Module
+    LocaleModule,
     // http client
     HttpModule,
     HttpClientModule,
@@ -134,13 +144,17 @@ import { MyOrdersComponent } from './my-orders/my-orders.component';
   ],
   entryComponents: [
     LoginDialogComponent,
-    MessageDialogComponent
+    MessageDialogComponent,
+    VehiclesInfoDialogComponent
   ],
   providers: [
     {
       // 路由方式：/#/xxx
       provide: LocationStrategy,
       useClass: HashLocationStrategy
+    }, {
+      provide: MatPaginatorIntl,
+      useClass: MyPaginator
     },
     JwtService,
     AuthGuardService,
@@ -153,4 +167,5 @@ import { MyOrdersComponent } from './my-orders/my-orders.component';
     AppComponent,
   ]
 })
-export class AppModule { }
+export class AppModule {
+}

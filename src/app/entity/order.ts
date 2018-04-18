@@ -36,6 +36,10 @@ export function getOrdersFromPage(page: Page<Order>) {
     return orders;
 }
 
+/**
+ * 将订单的selectedOption map中的itemName 取出来放入optionKeys中
+ * @param orders 订单
+ */
 export function buildOrderOptionKeys(orders: Order[]): Order[] {
     orders.forEach(element => {
         element.optionKeys = Object.keys(element.selectedOption);
