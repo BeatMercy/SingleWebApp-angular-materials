@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import {
-  MatSort, MatTableDataSource, MatPaginator, MatInput, MatButtonToggleChange,
-  MatSlideToggleChange, MatDialog, MatSnackBar
-} from '@angular/material';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { AuthHttp } from 'angular2-jwt';
+import { MatTableDataSource, MatSort, MatPaginator, MatDialog, MatSnackBar, MatSlideToggleChange } from '@angular/material';
 import { Http, RequestOptions, Response } from '@angular/http';
+import { MessageDialogService } from '../message-dialog.service';
+import { authHttpServiceFactory } from '../../auth.module';
 import { Observable } from 'rxjs/Observable';
 import { merge } from 'rxjs/observable/merge';
 import { of as observableOf } from 'rxjs/observable/of';
@@ -12,28 +12,21 @@ import { startWith } from 'rxjs/operators/startWith';
 import {
   debounceTime, distinctUntilChanged, switchMap, map
 } from 'rxjs/operators';
-
 import { Subject } from 'rxjs/Subject';
-
-import { AuthHttp } from 'angular2-jwt';
-import { authHttpServiceFactory } from '../../auth.module';
-import { Page, jsonToPage } from '../entity/page';
+import { jsonToPage } from '../entity/page';
 import { User } from '../entity/user';
-import { mergeAll } from 'rxjs/operator/mergeAll';
-import { MessageDialogService } from '../message-dialog.service';
-import { VehiclesInfoDialogComponent } from '../vehicles-info-dialog/vehicles-info-dialog.component';
+import { OrdersInfoDialogComponent } from '../orders-info-dialog/orders-info-dialog.component';
+import { StaffFormDialogComponent } from '../staff-form-dialog/staff-form-dialog.component';
 
 @Component({
-  selector: 'app-mg-user',
-  templateUrl: './mg-user.component.html',
-  styleUrls: ['./mg-user.component.css'],
+  selector: 'app-mg-staff',
+  templateUrl: './mg-staff.component.html',
+  styleUrls: ['./mg-staff.component.css']
 })
-export class MgUserComponent implements OnInit {
+export class MgStaffComponent implements OnInit {
   authHttp: AuthHttp;
-  displayedColumns = ['id', 'headimg', 'createTime', 'realName', 'phone', 'weixin', 'qq', 'consumePoint', 'enable', 'action'];
+  displayedColumns = ['id', 'headimg', 'createTime', 'realName', 'phone', 'weixin', 'department', 'enable', 'action'];
   tableSource = new MatTableDataSource();
-  usersRsp$: Observable<Response>;
-
   resultsLength = 0;
   isLoadingResults = true;
   isRateLimitReached = false;
@@ -44,7 +37,6 @@ export class MgUserComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-
   constructor(http: Http,
     requestOptions: RequestOptions,
     private messageService: MessageDialogService,
@@ -53,6 +45,7 @@ export class MgUserComponent implements OnInit {
   ) {
     this.authHttp = authHttpServiceFactory(http, requestOptions);
   }
+
 
   ngOnInit() {
     this.sort.sortChange.subscribe(() => {
@@ -64,7 +57,7 @@ export class MgUserComponent implements OnInit {
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
-          return this.getRemoteUser('', this.sort.active, this.sort.direction, this.paginator.pageIndex, this.pageSize);
+          return this.getRemoteStaff('', this.sort.active, this.sort.direction, this.paginator.pageIndex, this.pageSize);
         }),
         map(response => {
           const usersPage = jsonToPage<User>(response.json());
@@ -90,7 +83,7 @@ export class MgUserComponent implements OnInit {
       // switch to new search observable each time the term changes
       switchMap((term: string) => {
         this.isLoadingResults = true;
-        return this.getRemoteUser(term, this.sort.active, this.sort.direction, this.paginator.pageIndex, this.pageSize);
+        return this.getRemoteStaff(term, this.sort.active, this.sort.direction, this.paginator.pageIndex, this.pageSize);
       }),
       map(response => {
         const usersPage = jsonToPage<User>(response.json());
@@ -110,14 +103,14 @@ export class MgUserComponent implements OnInit {
     ).subscribe(data => { this.tableSource.data = data; });
   }
 
-  private getRemoteUser(filter: string, sort: string, dir: string, page: number, pageSize: number): Observable<Response> {
+  private getRemoteStaff(filter: string, sort: string, dir: string, page: number, pageSize: number): Observable<Response> {
     if (sort === undefined || sort === null) {
       sort = 'id';
     }
     if (dir === undefined || dir === null) {
       dir = 'desc';
     }
-    const href = 'mg/users';
+    const href = 'mg/staffs';
     const requestUrl =
       `${href}?keyword=${filter}&sort=${sort}&dir=${dir}&pageNum=${page + 1}&pageSize=${pageSize}`;
 
@@ -134,7 +127,7 @@ export class MgUserComponent implements OnInit {
       // 停用
       enable = 'disable';
     }
-    this.authHttp.get(`mg/user/${enable}?id=${id}`)
+    this.authHttp.get(`mg/staff/${enable}?id=${id}`)
       .map(rsp => rsp.json()).subscribe(json => {
         if (json['success']) {
           this.snackBar.open(json['msg'], 'OK', {
@@ -152,11 +145,23 @@ export class MgUserComponent implements OnInit {
       });
   }
 
-  viewUserCar(id: number) {
-    this.authHttp.get(`mg/user/vehicles?id=${id}`)
+  addStaff() {
+    this.dialog.open(StaffFormDialogComponent, {
+      closeOnNavigation: true,
+      data: { createMode: true }
+    });
+  }
+  edit(staff: any) {
+    this.dialog.open(StaffFormDialogComponent, {
+      closeOnNavigation: true,
+      data: { createMode: true, staff: staff }
+    });
+  }
+  viewStaffOrders(id: number) {
+    this.authHttp.get(`mg/staff/latestmonth-orders?id=${id}`)
       .map(rsp => rsp.json()).subscribe(json => {
         if (json['success']) {
-          this.dialog.open(VehiclesInfoDialogComponent, {
+          this.dialog.open(OrdersInfoDialogComponent, {
             closeOnNavigation: true,
             data: json['content']
           });
@@ -166,9 +171,5 @@ export class MgUserComponent implements OnInit {
       }, error => {
         this.messageService.showMessage('查询失败', error);
       });
-  }
-
-  edit(staff: any) {
-
   }
 }

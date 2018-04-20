@@ -13,6 +13,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
             noTokenScheme: true,
             tokenName: 'token',
             tokenGetter: (() => localStorage.getItem('token')),
+            noJwtError: false,
             globalHeaders: [{ 'Content-Type': 'application/json' }],
         }),
         http, options);

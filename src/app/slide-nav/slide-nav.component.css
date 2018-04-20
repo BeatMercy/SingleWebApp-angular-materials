@@ -1,5 +1,5 @@
 .example-sidenav-content {
-    /* margin-top: 64px; */
+    /* margin-top: 60px; */
     overflow: visible;
     display: flex;
     /* height: 100%; */
@@ -39,11 +39,22 @@
 }
 
 .menuButton {
-    /* position: absolute;
-    left: 0;
-    top: 54px; */
-    color: white;
+    background: rgba(194, 198, 220, 0.29);
+    border-radius: 10%;
+    transition: all 0.2s ease-out;
+    width: 50px;
+    height: 50px;
+    box-sizing: border-box;
+    margin-top: 10px;
+    margin-left: 10px;
+    color: #3f51b5;
     outline: none;
-    min-width: 50px;
     padding: 0;
+    min-width: 50px;
+}
+
+.menuButton:hover {
+    border-radius: 50%;
+    color: white;
+    background: #3f51b5;
 }

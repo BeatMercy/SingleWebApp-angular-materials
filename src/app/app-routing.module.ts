@@ -9,6 +9,7 @@ import { StaffWorkListComponent } from './staff-work-list/staff-work-list.compon
 import { CashierBoardComponent } from './cashier-board/cashier-board.component';
 import { MyOrdersComponent } from './my-orders/my-orders.component';
 import { MgUserComponent } from './mg-user/mg-user.component';
+import { MgStaffComponent } from './mg-staff/mg-staff.component';
 const routes: Routes = [
   // { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '', component: IndexPageComponent },
@@ -16,6 +17,8 @@ const routes: Routes = [
   { path: 'me', component: AccountInfoComponent },
   { path: 'carEnterance', component: CarEnteranceComponent },
   { path: 'mg-user', component: MgUserComponent },
+  { path: 'mg-user/account/:id', component: AccountInfoComponent },
+  { path: 'mg-staff', component: MgStaffComponent },
   { path: 'orderSubmit', component: OrderSubmitComponent },
   { path: 'cashier-board', component: CashierBoardComponent },
   { path: 'my-orders', component: MyOrdersComponent },

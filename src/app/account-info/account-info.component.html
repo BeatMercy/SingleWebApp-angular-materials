@@ -1,85 +1,154 @@
-<div class="wrapper" *ngIf="jwtService.checkToken()">
-  <mat-card class="example-card">
-    <mat-card-header>
-      <mat-card-title>个人信息</mat-card-title>
-      <mat-card-subtitle>{{user.realName}}</mat-card-subtitle>
-      <div style="flex: 1 1 auto;"></div>
-      <button *ngIf="editAccountMode" mat-icon-button  color="primary" (click)="editAccountMode=false">
-        <mat-icon class="mat-18">check</mat-icon>
-      </button>
-      <button *ngIf="!editAccountMode" mat-icon-button  color="primary" (click)="editAccountMode=true">
-        <mat-icon class="mat-18">mode_edit</mat-icon>
-      </button>
-    </mat-card-header>
-    <mat-card-content>
-      <div class="wrapContent" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
-        <div fxLayout="column" fxLayoutAlign=" start center" fxLayoutGap="10px">
-          <div class="headImg">
-            <img [src]="userHeadImg()" alt="用户头像">
+<ng-container *ngIf="!customerMode; else customerView">
+  <div class="wrapper" >
+    <button mat-fab color="primary" (click)="location.back()">
+      <mat-icon class="mat-18">keyboard_arrow_left</mat-icon>
+    </button>
+    <mat-card class="example-card">
+      <mat-card-header>
+        <mat-card-title>个人信息</mat-card-title>
+        <mat-card-subtitle>{{target.realName}}</mat-card-subtitle>
+        <div style="flex: 1 1 auto;"></div>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="wrapContent" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+          <div fxLayout="column" fxLayoutAlign=" start center" fxLayoutGap="10px">
+            <div class="headImg">
+              <img [src]="target.headimg" alt="用户头像">
+            </div>
+            <div>积分：
+              <font color="green" weight="blod">{{target.consumePoint}}</font>
+            </div>
           </div>
-          <div>积分：
-            <font color="green" weight="blod">{{user.consumePoint}}</font>
-          </div>
-        </div>
 
-        <div>
-          <!-- 姓名 -->
-          <mat-input-container floatPlaceholder="auto">
-            <input matInput type="text" [(ngModel)]="user.realName" [disabled]="!editAccountMode" placeholder="姓名">
-          </mat-input-container>
-          <!-- 手机 -->
-          <mat-input-container floatPlaceholder="auto">
-            <input matInput type="text" [(ngModel)]="user.phone" [disabled]="!editAccountMode" placeholder="手机">
-          </mat-input-container>
-          <!-- 微信 -->
-          <mat-input-container floatPlaceholder="auto">
-            <input matInput type="text" [(ngModel)]="user.weixin" [disabled]="!editAccountMode" placeholder="微信">
-          </mat-input-container>
-
-        </div>
-      </div>
-    </mat-card-content>
-  </mat-card>
-  <mat-card class="example-card">
-    <mat-card-header>
-      <mat-card-title>车辆信息</mat-card-title>
-      <div style="flex: 1 1 auto;"></div>
-      <button mat-button color="primary" (click)="addVehicle()">
-        <mat-icon class="mat-18">add</mat-icon>
-        <span>添加车辆</span>
-      </button>
-    </mat-card-header>
-    <mat-card-content>
-      <ng-container *ngFor="let item of vehicles$ | async">
-        <div class="wrapContent" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
-          <!-- 车标 -->
-          <div class="brandImg">
-            <img [src]="brandImg(item.brand)" alt="">
-          </div>
-          <!-- 车信息 -->
           <div>
+            <!-- 姓名 -->
             <mat-input-container floatPlaceholder="auto">
-                <input matInput [(ngModel)]="item.plateNo" [disabled]="!editVehicleMode"
-                       type="text"
-                       required
-                       placeholder="车牌">
+              <input matInput type="text" [(ngModel)]="target.realName" [disabled]="!editAccountMode" placeholder="姓名">
             </mat-input-container>
+            <!-- 手机 -->
             <mat-input-container floatPlaceholder="auto">
-              <input matInput [(ngModel)]="item.fuseType" [disabled]="!editVehicleMode" type="text" required placeholder="燃油">
+              <input matInput type="text" [(ngModel)]="target.phone" [disabled]="!editAccountMode" placeholder="手机">
             </mat-input-container>
+            <!-- 微信 -->
             <mat-input-container floatPlaceholder="auto">
-              <input matInput [(ngModel)]="item.VehicleType" [disabled]="!editVehicleMode" type="text" required placeholder="车型">
+              <input matInput type="text" [(ngModel)]="target.weixin" [disabled]="!editAccountMode" placeholder="微信">
             </mat-input-container>
+
           </div>
-          <!-- 编辑 -->
-          <button *ngIf="!editVehicleMode" mat-icon-button  color="primary" (click)="editVehicleMode=true">
-              <mat-icon class="mat-18">mode_edit</mat-icon>
-          </button>
-          <button *ngIf="editVehicleMode" mat-icon-button  color="primary" (click)="addVehicle(item.plateNo)">
-            <mat-icon  class="mat-18">check</mat-icon>
-          </button>
         </div>
-      </ng-container>
-    </mat-card-content>
-  </mat-card>
-</div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="example-card">
+      <mat-card-header>
+        <mat-card-title>车辆信息</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <ng-container *ngFor="let item of targetVehicles$ | async">
+          <div class="wrapContent" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+            <!-- 车标 -->
+            <div class="brandImg">
+              <img [src]="brandImg(item.brand)" alt="">
+            </div>
+            <!-- 车信息 -->
+            <div>
+              <mat-input-container floatPlaceholder="auto">
+                <input matInput [(ngModel)]="item.plateNo" [disabled]="!editVehicleMode" type="text" required placeholder="车牌">
+              </mat-input-container>
+              <mat-input-container floatPlaceholder="auto">
+                <input matInput [(ngModel)]="item.fuseType" [disabled]="!editVehicleMode" type="text" required placeholder="燃油">
+              </mat-input-container>
+              <mat-input-container floatPlaceholder="auto">
+                <input matInput [(ngModel)]="item.VehicleType" [disabled]="!editVehicleMode" type="text" required placeholder="车型">
+              </mat-input-container>
+            </div>
+          </div>
+        </ng-container>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+</ng-container>
+<ng-template #customerView>
+  <div class="wrapper" *ngIf="jwtService.checkToken()">
+    <mat-card class="example-card">
+      <mat-card-header>
+        <mat-card-title>个人信息</mat-card-title>
+        <mat-card-subtitle>{{user.realName}}</mat-card-subtitle>
+        <div style="flex: 1 1 auto;"></div>
+        <button *ngIf="editAccountMode" mat-icon-button color="primary" (click)="editAccountMode=false">
+          <mat-icon class="mat-18">check</mat-icon>
+        </button>
+        <button *ngIf="!editAccountMode" mat-icon-button color="primary" (click)="editAccountMode=true">
+          <mat-icon class="mat-18">mode_edit</mat-icon>
+        </button>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="wrapContent" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+          <div fxLayout="column" fxLayoutAlign=" start center" fxLayoutGap="10px">
+            <div class="headImg">
+              <img [src]="userHeadImg()" alt="用户头像">
+            </div>
+            <div>积分：
+              <font color="green" weight="blod">{{user.consumePoint}}</font>
+            </div>
+          </div>
+
+          <div>
+            <!-- 姓名 -->
+            <mat-input-container floatPlaceholder="auto">
+              <input matInput type="text" [(ngModel)]="user.realName" [disabled]="!editAccountMode" placeholder="姓名">
+            </mat-input-container>
+            <!-- 手机 -->
+            <mat-input-container floatPlaceholder="auto">
+              <input matInput type="text" [(ngModel)]="user.phone" [disabled]="!editAccountMode" placeholder="手机">
+            </mat-input-container>
+            <!-- 微信 -->
+            <mat-input-container floatPlaceholder="auto">
+              <input matInput type="text" [(ngModel)]="user.weixin" [disabled]="!editAccountMode" placeholder="微信">
+            </mat-input-container>
+
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="example-card">
+      <mat-card-header>
+        <mat-card-title>车辆信息</mat-card-title>
+        <div style="flex: 1 1 auto;"></div>
+        <button mat-button color="primary" (click)="addVehicle()">
+          <mat-icon class="mat-18">add</mat-icon>
+          <span>添加车辆</span>
+        </button>
+      </mat-card-header>
+      <mat-card-content>
+        <ng-container *ngFor="let item of vehicles$ | async">
+          <div class="wrapContent" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+            <!-- 车标 -->
+            <div class="brandImg">
+              <img [src]="brandImg(item.brand)" alt="">
+            </div>
+            <!-- 车信息 -->
+            <div>
+              <mat-input-container floatPlaceholder="auto">
+                <input matInput [(ngModel)]="item.plateNo" [disabled]="!editVehicleMode" type="text" required placeholder="车牌">
+              </mat-input-container>
+              <mat-input-container floatPlaceholder="auto">
+                <input matInput [(ngModel)]="item.fuseType" [disabled]="!editVehicleMode" type="text" required placeholder="燃油">
+              </mat-input-container>
+              <mat-input-container floatPlaceholder="auto">
+                <input matInput [(ngModel)]="item.VehicleType" [disabled]="!editVehicleMode" type="text" required placeholder="车型">
+              </mat-input-container>
+            </div>
+            <!-- 编辑 -->
+            <button *ngIf="!editVehicleMode" mat-icon-button color="primary" (click)="editVehicleMode=true">
+              <mat-icon class="mat-18">mode_edit</mat-icon>
+            </button>
+            <button *ngIf="editVehicleMode" mat-icon-button color="primary" (click)="addVehicle(item.plateNo)">
+              <mat-icon class="mat-18">check</mat-icon>
+            </button>
+          </div>
+        </ng-container>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</ng-template>

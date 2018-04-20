@@ -1,0 +1,24 @@
+.orderItem {
+    margin: 5px 5px;
+    width: 300px;
+    height: 100%;
+    opacity: 1;
+    transition: all ease-out 0.2s;
+    animation: circleTocube 0.4s ease-out;
+}
+
+#basePriceExpansion,
+#basePriceExpansion mat-expansion-panel-header {
+    padding: 0;
+    box-shadow: 0 0 0;
+    background: none;
+}
+
+@keyframes circleTocube {
+    from {
+        border-radius: 100px;
+    }
+    to {
+        border-radius: 2px;
+    }
+}

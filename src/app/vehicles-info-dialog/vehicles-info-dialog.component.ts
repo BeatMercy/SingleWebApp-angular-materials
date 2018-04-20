@@ -9,7 +9,11 @@ import { MAT_DIALOG_DATA } from '@angular/material';
 export class VehiclesInfoDialogComponent implements OnInit {
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
-   }
+  }
+
+  ngOnInit() {
+  }
+
   brandImg(brand: string): string {
     let type = 'default';
     const url = 'img/brand/';
@@ -17,8 +21,6 @@ export class VehiclesInfoDialogComponent implements OnInit {
       type = brand;
     }
     return url + type;
-  }
-  ngOnInit() {
   }
 
 }

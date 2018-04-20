@@ -1,40 +1,50 @@
-<mat-drawer-container class="example-container" autosize>
+<mat-sidenav-container class="example-container" autosize>
   <!-- 菜单栏 -->
-  <mat-drawer color="primary" #drawer class="example-sidenav" mode='over'>
+  <mat-sidenav color="primary" #drawer class="example-sidenav" 
+    [mode]="mobileQuery.matches?'over':'side'">
     <div>
       <mat-list id="menuList">
         <mat-list-item>
-          <a mat-button focus='false' routerLink="/" (click)="drawer.toggle()">首页</a>
-        </mat-list-item>
-        <mat-divider></mat-divider>
-        <mat-list-item >
-          <a mat-button routerLink="/carEnterance" (click)="drawer.toggle()">扫描车牌</a>
+          <a mat-button focus='false' routerLink="/" (click)="navToggle()">首页</a>
         </mat-list-item>
         <mat-divider></mat-divider>
         <mat-list-item>
-          <a mat-button routerLink="/mg-user" (click)="drawer.toggle()">列表</a>
+          <a mat-button routerLink="/carEnterance" (click)="navToggle()">扫描车牌</a>
         </mat-list-item>
         <mat-divider></mat-divider>
         <mat-list-item>
-          <a mat-button routerLink="/orderSubmit" (click)="drawer.toggle()">创建订单</a>
+          <a mat-button routerLink="/mg-user" (click)="navToggle()">客户管理</a>
         </mat-list-item>
         <mat-divider></mat-divider>
         <mat-list-item>
-          <a mat-button routerLink="/cashier-board" (click)="drawer.toggle()">收银台</a>
+          <a mat-button routerLink="/mg-staff" (click)="navToggle()">员工管理</a>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+          <a mat-button routerLink="/orderSubmit" (click)="navToggle()">创建订单</a>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+          <a mat-button routerLink="/cashier-board" (click)="navToggle()">收银台</a>
         </mat-list-item>
         <mat-divider></mat-divider>
 
       </mat-list>
     </div>
-  </mat-drawer>
+  </mat-sidenav>
 
   <!-- 主页面 -->
-  <mat-toolbar *ngIf="true||this.jwtService.hasOneOfAuthorities(['ROLE_STAFF','ROLE_ADMIN'])"  color="primary">
-    <button class="menuButton" type="button" mat-button (click)="drawer.toggle()">
-      <mat-icon class="example-icon">menu</mat-icon>
+  <mat-sidenav-content>
+    <button *ngIf="true||this.jwtService.hasOneOfAuthorities(['ROLE_STAFF','ROLE_ADMIN'])" class="menuButton" type="button" mat-button
+      (click)="drawer.toggle()"
+      (mouseenter)="mouseHover=true" 
+      (mouseleave)="mouseHover=false" >
+      <mat-icon *ngIf="drawer.opened&&mouseHover" class="mat-18">keyboard_arrow_left</mat-icon>
+      <mat-icon *ngIf="!drawer.opened&&mouseHover" class="mat-18">keyboard_arrow_right</mat-icon>
+      <mat-icon *ngIf="!mouseHover" class="example-icon">menu</mat-icon>
     </button>
-  </mat-toolbar>
-  <div class="example-sidenav-content">
-    <router-outlet></router-outlet>
-  </div>
-</mat-drawer-container>
+    <div class="example-sidenav-content">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

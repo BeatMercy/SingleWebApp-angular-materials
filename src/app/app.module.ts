@@ -72,6 +72,9 @@ import { MgServiceOptionComponent } from './mg-service-option/mg-service-option.
 import { LocaleModule } from './locale';
 import { MyPaginator } from './my-paginator';
 import { VehiclesInfoDialogComponent } from './vehicles-info-dialog/vehicles-info-dialog.component';
+import { MgStaffComponent } from './mg-staff/mg-staff.component';
+import { OrdersInfoDialogComponent } from './orders-info-dialog/orders-info-dialog.component';
+import { StaffFormDialogComponent } from './staff-form-dialog/staff-form-dialog.component';
 
 
 @NgModule({
@@ -90,6 +93,9 @@ import { VehiclesInfoDialogComponent } from './vehicles-info-dialog/vehicles-inf
     MgUserComponent,
     MgServiceOptionComponent,
     VehiclesInfoDialogComponent,
+    MgStaffComponent,
+    OrdersInfoDialogComponent,
+    StaffFormDialogComponent,
   ],
   imports: [
     FormsModule,
@@ -145,7 +151,9 @@ import { VehiclesInfoDialogComponent } from './vehicles-info-dialog/vehicles-inf
   entryComponents: [
     LoginDialogComponent,
     MessageDialogComponent,
-    VehiclesInfoDialogComponent
+    VehiclesInfoDialogComponent,
+    OrdersInfoDialogComponent,
+    StaffFormDialogComponent
   ],
   providers: [
     {

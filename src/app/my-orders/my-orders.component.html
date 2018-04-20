@@ -28,24 +28,28 @@
                     <mat-card-title>
                       <h5>
                         <ng-container *ngIf="item.progress ==='PENDING'">
-                           [<font color="LightSeaGreen">准备中</font>]
+                          [
+                          <font color="LightSeaGreen">准备中</font>]
                         </ng-container>
                         <ng-container *ngIf="item.progress ==='WORKING'">
-                           [<font color="coral">进行中</font>]
+                          [
+                          <font color="coral">进行中</font>]
                         </ng-container>
                         <ng-container *ngIf="item.progress ==='WAITING_CONFIRM'">
-                           [<font color="crimson">待客户确认</font>]
+                          [
+                          <font color="crimson">待客户确认</font>]
                         </ng-container>
                         <ng-container *ngIf="item.progress ==='FINISHED'">
-                           [<font color="green">完成</font>]
+                          [
+                          <font color="green">完成</font>]
                         </ng-container>
                         <b>
                           <ng-container *ngIf="item.state ==='UNPAY'">
-                        
+
                             <font color="red">未付款</font>
                           </ng-container>
                           <ng-container *ngIf="item.state ==='FINISHED'">
-                        
+
                             <font color="green">已付款</font>
                           </ng-container>
                         </b>
@@ -89,18 +93,6 @@
                 </mat-card>
               </ng-container>
             </ng-template>
-          </div>
-          <div class="paginator">
-            <div>第{{ordersPage.number+1}}/{{ordersPage.totalPages}}页</div>
-            <div style="flex:1 1 auto;"></div>
-            <div>
-              <button mat-icon-button [disabled]="pageEnd(false,ordersPage)" (click)="beforePage()">
-                <mat-icon class="mat-18">navigate_before</mat-icon>
-              </button>
-              <button mat-icon-button [disabled]="pageEnd(true,ordersPage)" (click)="nextPage()">
-                <mat-icon class="mat-18">navigate_next</mat-icon>
-              </button>
-            </div>
           </div>
         </div>
       </div>

@@ -1,0 +1,35 @@
+<h1 matDialogTitle>
+  员工信息
+</h1>
+
+<mat-dialog-content style="width:500px;">
+  <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="0px">
+    <mat-input-container class="input" floatPlaceholder="auto">
+      <input matInput [ngModel]="realName" type="text" required placeholder="姓名">
+    </mat-input-container>
+    <mat-input-container class="input" floatPlaceholder="auto">
+      <input matInput [ngModel]="phone" type="text" required placeholder="手机">
+    </mat-input-container>
+    <mat-input-container class="input" floatPlaceholder="auto">
+      <input matInput [ngModel]="weixin" type="text" required placeholder="微信号">
+    </mat-input-container>
+
+    <mat-select [(ngModel)]="departmentId" placeholder="部门">
+      <ng-container *ngFor="let item of allDepartments">
+        <mat-option [value]="item.id">{{item.name}}</mat-option>
+      </ng-container>
+    </mat-select>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <ng-container *ngIf="createMode; else editButton">
+    <button mat-button (click)="create()">创建</button>
+  </ng-container>
+  <ng-template #editButton>
+    <button mat-button (click)="edit()">修改</button>
+  </ng-template>
+  <button mat-button matDialogClose>关闭</button>
+
+
+</mat-dialog-actions>

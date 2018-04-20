@@ -5,7 +5,10 @@
       <input matInput (keyup)="applyFilter($event.target.value)" placeholder="查找：姓名/手机/微信" />
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
-
+    <button mat-button (click)="addStaff()">
+      添加员工
+      <mat-icon class="mat-18">add</mat-icon>
+    </button>
   </div>
   <!-- 表格 -->
   <div style="position: relative;">
@@ -34,7 +37,7 @@
       <ng-container matColumnDef="createTime">
         <!-- disableClear = 清除排序 -->
         <mat-header-cell *matHeaderCellDef mat-sort-header disableClear="false">
-          注册日期
+          创建日期
         </mat-header-cell>
         <mat-cell *matCellDef="let row">{{ row.createTime | date }}</mat-cell>
       </ng-container>
@@ -61,28 +64,17 @@
         <mat-cell *matCellDef="let row">{{ row.weixin }}</mat-cell>
       </ng-container>
 
-      <ng-container matColumnDef="qq">
-        <mat-header-cell *matHeaderCellDef>QQ</mat-header-cell>
-        <mat-cell *matCellDef="let row">{{ row.qq }}</mat-cell>
+      <ng-container matColumnDef="department">
+        <mat-header-cell *matHeaderCellDef>部门</mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <button *ngIf="row.department != null" mat-button (click)="viewStaffOrders(row.id)">{{row.department.name}}</button>
+        </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="action">
         <mat-header-cell *matHeaderCellDef>操作</mat-header-cell>
         <mat-cell *matCellDef="let row">
-          <!-- <button mat-button (click)="viewUserCar(row.id)">查看</button> -->
-          <a  routerLink="account/{{row.id}}" mat-button>查看</a>
-        </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="consumePoint">
-        <!-- disableClear = 清除排序 -->
-        <mat-header-cell *matHeaderCellDef mat-sort-header disableClear="false">
-          消费积分
-        </mat-header-cell>
-        <mat-cell *matCellDef="let row">
-          <font *ngIf="row.consumePoint>=1000" color="red" weight="blod"> {{ row.consumePoint }}</font>
-          <font *ngIf="row.consumePoint>=200&&1000>row.consumePoint" color="green"> {{ row.consumePoint }}</font>
-          <font *ngIf='200>row.consumePoint'> {{ row.consumePoint }}</font>
+          <button mat-button (click)="viewStaffOrders(row.id)">本月业绩</button>
         </mat-cell>
       </ng-container>
 

@@ -6,6 +6,8 @@ import { AuthModule, customAuthHttpServiceFactory } from '../auth.module';
 import { Observable } from 'rxjs/Observable';
 
 import { User, buildUser } from './entity/user';
+import { MessageDialogComponent } from './message-dialog/message-dialog.component';
+import { MessageDialogService } from './message-dialog.service';
 
 @Injectable()
 export class JwtService {
@@ -13,6 +15,7 @@ export class JwtService {
 
   authConfig: AuthConfig = new AuthConfig({
     tokenName: 'token',
+    noJwtError: false,
     tokenGetter: (() => localStorage.getItem('token')),
     globalHeaders: [{ 'Content-Type': 'application/json' }],
   });
@@ -21,7 +24,8 @@ export class JwtService {
   authHttp: AuthHttp;
   jwtHelper: JwtHelper = new JwtHelper();
 
-  constructor(private http: Http, private httpClient: HttpClient, private generalHttp: Http) {
+  activeState = true;
+  constructor(private http: Http, private httpClient: HttpClient, private generalHttp: Http, private messageService: MessageDialogService) {
     // this.requestOptions.headers.append('Content-Type', 'application/json');
     this.authHttp = customAuthHttpServiceFactory(this.authConfig, this.generalHttp, this.requestOptions);
     this.updateUser(localStorage.getItem('token'));
@@ -37,16 +41,29 @@ export class JwtService {
     } else {
       localStorage.setItem('token', token);
     }
+    try {
+      if (!tokenNotExpired('', token)) {
+        localStorage.removeItem('token');
+        return;
+      }
+      const raw = this.jwtHelper.decodeToken(token);
 
-    const raw = this.jwtHelper.decodeToken(token);
-    this.authHttp.get('me').map(rsp => rsp.json())
-      .subscribe(json => {
-        if (json['success']) {
-          buildUser(this.user, json['content']);
-          this.user.authorities = raw['authorities'];
-          console.log(this.user);
-        }
-      });
+      this.authHttp.get('me').map(rsp => rsp.json())
+        .subscribe(json => {
+          if (json['success']) {
+            buildUser(this.user, json['content']);
+            this.user.authorities = raw['authorities'];
+            console.log(this.user);
+          }
+        }, error => {
+          const json = (<Response>error).json();
+          this.messageService.showMessage('错误', json['message']);
+        });
+    } catch (e) {
+      localStorage.removeItem('token');
+      console.log(e);
+      return;
+    }
   }
 
 
@@ -67,6 +84,27 @@ export class JwtService {
     } else {
       return tokenNotExpired('', token.toString());
     }
+  }
+
+  checkTokenFromServer(): boolean {
+    if (!this.checkToken()) {
+      localStorage.removeItem('token');
+      return false;
+    }
+    if (this.activeState) {
+      this.authHttp.get('isActiveAccount')
+        .map(rsp => rsp.json())
+        .subscribe(json => {
+          // 账户可用，重新激活状态
+          this.activeState = true;
+        }, error => {
+          // 账户不可用，取消激活状态
+          this.activeState = false;
+          const json = (<Response>error).json();
+          this.messageService.showMessage('错误', json['message']);
+        });
+    }
+    return this.activeState;
   }
 
   /**
