@@ -75,6 +75,7 @@ import { VehiclesInfoDialogComponent } from './vehicles-info-dialog/vehicles-inf
 import { MgStaffComponent } from './mg-staff/mg-staff.component';
 import { OrdersInfoDialogComponent } from './orders-info-dialog/orders-info-dialog.component';
 import { StaffFormDialogComponent } from './staff-form-dialog/staff-form-dialog.component';
+import { AccountRolesDialogComponent } from './account-roles-dialog/account-roles-dialog.component';
 
 
 @NgModule({
@@ -96,6 +97,7 @@ import { StaffFormDialogComponent } from './staff-form-dialog/staff-form-dialog.
     MgStaffComponent,
     OrdersInfoDialogComponent,
     StaffFormDialogComponent,
+    AccountRolesDialogComponent,
   ],
   imports: [
     FormsModule,
@@ -153,7 +155,8 @@ import { StaffFormDialogComponent } from './staff-form-dialog/staff-form-dialog.
     MessageDialogComponent,
     VehiclesInfoDialogComponent,
     OrdersInfoDialogComponent,
-    StaffFormDialogComponent
+    StaffFormDialogComponent,
+    AccountRolesDialogComponent
   ],
   providers: [
     {

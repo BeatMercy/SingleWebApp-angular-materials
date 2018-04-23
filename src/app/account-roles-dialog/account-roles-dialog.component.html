@@ -1,0 +1,22 @@
+<div style="width:300px;">
+  <h1 matDialogTitle>{{data.realName}}的权限</h1>
+
+  <mat-dialog-content style="overflow:visible;">
+    <div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="5px">
+      <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+        <div>权限</div>
+        <div style="flex:1 1 auto"></div>
+        <div>状态</div>
+      </div>
+      <div *ngFor="let role of allRoles" style="display: flex;justify-content: space-between;">
+        <div> {{role.name}}</div>
+        <div style="flex:1 1 auto"></div>
+        <mat-checkbox [checked]="hasRole(role.id)" (change)="changeRole($event,role.id)" color="primary">
+        </mat-checkbox>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button matDialogClose>关闭</button>
+  </mat-dialog-actions>
+</div>

@@ -17,6 +17,7 @@ import { jsonToPage } from '../entity/page';
 import { User } from '../entity/user';
 import { OrdersInfoDialogComponent } from '../orders-info-dialog/orders-info-dialog.component';
 import { StaffFormDialogComponent } from '../staff-form-dialog/staff-form-dialog.component';
+import { AccountRolesDialogComponent } from '../account-roles-dialog/account-roles-dialog.component';
 
 @Component({
   selector: 'app-mg-staff',
@@ -149,7 +150,17 @@ export class MgStaffComponent implements OnInit {
     this.dialog.open(StaffFormDialogComponent, {
       closeOnNavigation: true,
       data: { createMode: true }
-    });
+    })
+      .afterClosed().subscribe(result => {
+        if (result['success']) {
+          this.messageService.showMessage('创建成功', '');
+          this.paginator.page.next({ pageIndex: 0, pageSize: 12, length: 0 });
+        } else {
+          this.messageService.showMessage('创建失败', result['msg']);
+        }
+      }, error => {
+        this.messageService.showMessage('创建失败error', error['msg']);
+      });
   }
   edit(staff: any) {
     this.dialog.open(StaffFormDialogComponent, {
@@ -171,5 +182,11 @@ export class MgStaffComponent implements OnInit {
       }, error => {
         this.messageService.showMessage('查询失败', error);
       });
+  }
+  authority(staff: any) {
+    this.dialog.open(AccountRolesDialogComponent, {
+      closeOnNavigation: true,
+      data: staff
+    });
   }
 }

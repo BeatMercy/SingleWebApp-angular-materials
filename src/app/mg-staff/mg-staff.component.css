@@ -43,6 +43,11 @@
     justify-content: center;
 }
 
+.action[rowAction] {
+    min-width: 40px;
+    padding: 0 4px;
+}
+
 .myPaginator {
     padding: 0 5%;
     color: white;

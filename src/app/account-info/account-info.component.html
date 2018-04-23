@@ -13,7 +13,7 @@
         <div class="wrapContent" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
           <div fxLayout="column" fxLayoutAlign=" start center" fxLayoutGap="10px">
             <div class="headImg">
-              <img [src]="target.headimg" alt="用户头像">
+              <img *ngIf="target.headimg" [src]="target.headimg" alt="用户头像">
             </div>
             <div>积分：
               <font color="green" weight="blod">{{target.consumePoint}}</font>
@@ -86,7 +86,7 @@
         <div class="wrapContent" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
           <div fxLayout="column" fxLayoutAlign=" start center" fxLayoutGap="10px">
             <div class="headImg">
-              <img [src]="userHeadImg()" alt="用户头像">
+              <img *ngIf="user.headimg" [src]="userHeadImg()" alt="用户头像">
             </div>
             <div>积分：
               <font color="green" weight="blod">{{user.consumePoint}}</font>

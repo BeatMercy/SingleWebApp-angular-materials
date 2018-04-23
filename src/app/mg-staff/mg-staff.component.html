@@ -39,7 +39,7 @@
         <mat-header-cell *matHeaderCellDef mat-sort-header disableClear="false">
           创建日期
         </mat-header-cell>
-        <mat-cell *matCellDef="let row">{{ row.createTime | date }}</mat-cell>
+        <mat-cell  style="flex:1.4;" *matCellDef="let row">{{ row.createTime | date }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="realName">
@@ -70,11 +70,13 @@
           <button *ngIf="row.department != null" mat-button (click)="viewStaffOrders(row.id)">{{row.department.name}}</button>
         </mat-cell>
       </ng-container>
-
-      <ng-container matColumnDef="action">
-        <mat-header-cell *matHeaderCellDef>操作</mat-header-cell>
-        <mat-cell *matCellDef="let row">
-          <button mat-button (click)="viewStaffOrders(row.id)">本月业绩</button>
+      <mat-divider></mat-divider>
+      <ng-container  matColumnDef="action">
+        <mat-header-cell style="flex:2;text-align: center;" *matHeaderCellDef>操作</mat-header-cell>
+        <mat-cell style="flex:2;" *matCellDef="let row">
+          <button rowAction class="action" mat-button color="primary" (click)="viewStaffOrders(row.id)">本月业绩</button>
+          <button rowAction class="action" mat-button color="primary" (click)="edit(row)">编辑</button>
+          <button rowAction class="action" mat-button color="warn" (click)="authority(row)">权限</button>
         </mat-cell>
       </ng-container>
 

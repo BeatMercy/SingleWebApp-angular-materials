@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { RequestOptions, Http } from '@angular/http';
-import { MAT_DIALOG_DATA } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { AuthHttp } from 'angular2-jwt';
 import { authHttpServiceFactory } from '../../auth.module';
@@ -15,14 +15,16 @@ export class StaffFormDialogComponent implements OnInit {
   authHttp: AuthHttp;
   allDepartments: any;
   createMode: boolean;
-
+  error_msg = '';
   //
   realName: string;
+  password: string;
   phone: string;
   weixin: string;
   departmentId: number;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
+    public dialogRef: MatDialogRef<StaffFormDialogComponent>,
     http: Http,
     requestOptions: RequestOptions) {
     this.authHttp = authHttpServiceFactory(http, requestOptions);
@@ -43,6 +45,30 @@ export class StaffFormDialogComponent implements OnInit {
         this.allDepartments = json;
       });
 
+  }
+
+  create() {
+    if (this.realName === '' || this.realName === undefined) {
+      this.error_msg = '员工姓名不合法';
+      return;
+    }
+    if (this.password === undefined || this.password.length < 6) {
+      this.error_msg = '密码不可少于6位';
+      return;
+    }
+    this.error_msg = '';
+    this.authHttp.post('mg/staff/add',
+      {
+        realName: this.realName,
+        phone: this.phone,
+        password: this.password,
+        weixin: this.weixin,
+        departmentId: this.departmentId
+      }).map(rsp => rsp.json()).subscribe(json => {
+        this.dialogRef.close(json);
+      }, error => {
+        this.dialogRef.close(error);
+      });
   }
 
 }
