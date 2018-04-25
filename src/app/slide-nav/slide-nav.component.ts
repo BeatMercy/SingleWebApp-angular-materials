@@ -12,6 +12,7 @@ export class SlideNavComponent implements OnInit, OnDestroy {
   mobileQuery: MediaQueryList;
   private _mobileQueryListener: () => void;
 
+  selectedMenu = '';
   @ViewChild(MatSidenav) sidenav: MatSidenav;
 
   public mouseHover = false;
@@ -40,8 +41,8 @@ export class SlideNavComponent implements OnInit, OnDestroy {
     this.mobileQuery.removeListener(this._mobileQueryListener);
   }
 
-  navToggle() {
-
+  navToggle(selectedMenu: string) {
+    this.selectedMenu = selectedMenu;
     if (this.mobileQuery.matches) {
       this.sidenav.toggle();
     } else {

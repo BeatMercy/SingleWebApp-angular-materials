@@ -36,7 +36,7 @@
         <mat-header-cell *matHeaderCellDef mat-sort-header disableClear="false">
           注册日期
         </mat-header-cell>
-        <mat-cell *matCellDef="let row">{{ row.createTime | date }}</mat-cell>
+        <mat-cell style="flex:1.4;" *matCellDef="let row">{{ row.createTime | date }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="realName">

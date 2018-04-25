@@ -1,3 +1,95 @@
-<p>
-  mg-service-option works!
-</p>
+<div class="wrapper">
+  <!-- 汽车服务栏 -->
+  <div>
+    <mat-button-toggle-group (change)="serviceTypeChange(group.value)" #group="matButtonToggleGroup">
+      <mat-button-toggle checked="true" value="carBeautify">
+        <font color="#3f51b5">洗车服务</font>
+      </mat-button-toggle>
+      <mat-button-toggle value="carMaintenance">
+        <font color="#3f51b5">汽车保养</font>
+      </mat-button-toggle>
+      <mat-button-toggle value="carRepair">
+        <font color="#3f51b5">汽车维修</font>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+    <button style="vertical-align:sub;" mat-raised-button (click)="onClick">
+      服务类型
+      <mat-icon class="mat-18">add</mat-icon>
+    </button>
+  </div>
+  <!-- 筛选栏 -->
+  <div class="filterBar">
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="查找：选项名/选项类型" />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+    <button mat-button (click)="addOption()">
+      服务选项
+      <mat-icon class="mat-18">add</mat-icon>
+    </button>
+  </div>
+  <!-- 表格 -->
+  <div style="position: relative;">
+    <div class="loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
+      <mat-progress-bar style="top: 0px;position: absolute;" mode="indeterminate" *ngIf="isLoadingResults"></mat-progress-bar>
+      <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
+        访问频率过高，请稍后再操作
+        <br>
+        <button mat-button (click)="isRateLimitReached = false">确认</button>
+      </div>
+    </div>
+    <mat-table class="myTable " #table [dataSource]="tableSource" matSort>
+
+      <!-- 表格头部  s声明顺序不影响显示顺序，显示依据 displayedColumns数组顺序 -->
+      <ng-container matColumnDef="id">
+        <mat-header-cell style="flex:0.4;" *matHeaderCellDef>#</mat-header-cell>
+        <mat-cell style="flex:0.4;" *matCellDef="let row">{{ row.id }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="createTime">
+        <!-- disableClear = 清除排序 -->
+        <mat-header-cell  style="flex:1.2;" *matHeaderCellDef mat-sort-header disableClear="false">
+          创建日期
+        </mat-header-cell>
+        <mat-cell style="flex:1.2;" *matCellDef="let row">{{ row.createTime | date }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef>选项名</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{ row.name }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="itemName">
+        <mat-header-cell *matHeaderCellDef>选项类目</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{ row.itemName }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="price">
+        <mat-header-cell *matHeaderCellDef>价格</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{ row.price | number : '1.2-2'}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="enable">
+        <mat-header-cell *matHeaderCellDef>停用</mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <mat-slide-toggle [ngModel]="!row.enable" (change)="changeEnable($event,row.id)" color="primary"></mat-slide-toggle>
+        </mat-cell>
+      </ng-container>
+
+      
+      <ng-container matColumnDef="action">
+        <mat-header-cell *matHeaderCellDef>操作</mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <button mat-button (click)="viewUserCar(row.id)" color="primary">编辑</button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <!-- 表格头部 end -->
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+
+    <mat-paginator color="primary" class="myPaginator" showFirstLastButtons="true" [length]="resultsLength" [pageSize]="pageSize"></mat-paginator>
+  </div>
+
+</div>

@@ -1,33 +1,37 @@
 <mat-sidenav-container class="example-container" autosize>
   <!-- 菜单栏 -->
-  <mat-sidenav color="primary" #drawer class="example-sidenav" 
-    [mode]="mobileQuery.matches?'over':'side'">
+  <mat-sidenav color="primary" #drawer class="example-sidenav" [mode]="mobileQuery.matches?'over':'side'">
     <div>
       <mat-list id="menuList">
         <mat-list-item>
-          <a mat-button focus='false' routerLink="/" (click)="navToggle()">首页</a>
+          <a mat-button focus='false' routerLink="/" (click)="navToggle('')">首页</a>
         </mat-list-item>
         <mat-divider></mat-divider>
         <mat-list-item>
-          <a mat-button routerLink="/carEnterance" (click)="navToggle()">扫描车牌</a>
+          <a mat-button routerLink="/carEnterance" (click)="navToggle('扫描车牌')">扫描车牌</a>
         </mat-list-item>
         <mat-divider></mat-divider>
         <mat-list-item>
-          <a mat-button routerLink="/mg-user" (click)="navToggle()">客户管理</a>
+          <a mat-button routerLink="/mg-user" (click)="navToggle('客户管理')">客户管理</a>
         </mat-list-item>
         <mat-divider></mat-divider>
         <mat-list-item>
-          <a mat-button routerLink="/mg-staff" (click)="navToggle()">员工管理</a>
+          <a mat-button routerLink="/mg-staff" (click)="navToggle('员工管理')">员工管理</a>
         </mat-list-item>
         <mat-divider></mat-divider>
         <mat-list-item>
-          <a mat-button routerLink="/orderSubmit" (click)="navToggle()">创建订单</a>
+          <a mat-button routerLink="/mg-service-option" (click)="navToggle('服务选项管理')">服务选项管理</a>
         </mat-list-item>
         <mat-divider></mat-divider>
         <mat-list-item>
-          <a mat-button routerLink="/cashier-board" (click)="navToggle()">收银台</a>
+          <a mat-button routerLink="/orderSubmit" (click)="navToggle('创建订单')">创建订单</a>
         </mat-list-item>
         <mat-divider></mat-divider>
+        <mat-list-item>
+          <a mat-button routerLink="/cashier-board" (click)="navToggle('收银台')">收银台</a>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+
 
       </mat-list>
     </div>
@@ -36,13 +40,12 @@
   <!-- 主页面 -->
   <mat-sidenav-content>
     <button *ngIf="true||this.jwtService.hasOneOfAuthorities(['ROLE_STAFF','ROLE_ADMIN'])" class="menuButton" type="button" mat-button
-      (click)="drawer.toggle()"
-      (mouseenter)="mouseHover=true" 
-      (mouseleave)="mouseHover=false" >
+      (click)="drawer.toggle()" (mouseenter)="mouseHover=true" (mouseleave)="mouseHover=false">
       <mat-icon *ngIf="drawer.opened&&mouseHover" class="mat-18">keyboard_arrow_left</mat-icon>
       <mat-icon *ngIf="!drawer.opened&&mouseHover" class="mat-18">keyboard_arrow_right</mat-icon>
       <mat-icon *ngIf="!mouseHover" class="example-icon">menu</mat-icon>
     </button>
+    <font style="margin-left: 5px;" weight="blod">{{selectedMenu}}</font>
     <div class="example-sidenav-content">
       <router-outlet></router-outlet>
     </div>

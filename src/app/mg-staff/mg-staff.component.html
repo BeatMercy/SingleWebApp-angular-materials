@@ -67,7 +67,7 @@
       <ng-container matColumnDef="department">
         <mat-header-cell *matHeaderCellDef>部门</mat-header-cell>
         <mat-cell *matCellDef="let row">
-          <button *ngIf="row.department != null" mat-button (click)="viewStaffOrders(row.id)">{{row.department.name}}</button>
+          <button *ngIf="row.department != null" mat-button (click)="viewDepartment(row.department.id)">{{row.department.name}}</button>
         </mat-cell>
       </ng-container>
       <mat-divider></mat-divider>
