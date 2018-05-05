@@ -56,7 +56,7 @@ export class CarRepairOrderSubmitComponent implements OnInit {
 
 
   private items = new Array<number>();
-  private repairItems = new Array<object>();
+  public repairItems = new Array<object>();
 
 
   constructor(private router: Router,
@@ -73,6 +73,38 @@ export class CarRepairOrderSubmitComponent implements OnInit {
   ngOnInit() {
   }
 
+
+  /**
+   * 上传车牌图片并识别
+   */
+  addFile() {
+    // TODO 压缩图片
+    // .....
+    console.log(this.uploader.queue[0]);
+    this.uploader.queue[0].upload();
+    this.uploader.response.subscribe(next => {
+      const result = JSON.parse(next);
+      if (result['success']) {
+        this.plateAbbr = result['content']['plateAbbr'];
+        this.plateString = result['content']['plateString'];
+      } else {
+        this.messageService.showMessage('发生错误', result['msg']);
+      }
+      // 完成上传
+      this.uploader.clearQueue();
+      this.uploader.response.observers.shift();
+      this.uploader.isUploading = false;
+      // as reason of TS is a typesafe lanuage. operater value before type convertion;
+      (<HTMLInputElement>document.getElementById('carPic')).value = '';
+
+    }, error => {
+      this.uploader.clearQueue();
+      this.messageService.showMessage('发生错误', error);
+    }, () => {
+      console.log('完成车牌图片上传');
+    });
+  }
+
   onChangeMiles(event: MatSliderChange) {
     this.travelMiles = event.value;
   }
@@ -83,6 +115,7 @@ export class CarRepairOrderSubmitComponent implements OnInit {
       price: 0.00
     });
   }
+
   removeRepairItem(i: number) {
     const start = this.repairItems.slice(0, i);
     const end = this.repairItems.slice(i + 1, this.repairItems.length);
@@ -96,5 +129,8 @@ export class CarRepairOrderSubmitComponent implements OnInit {
       sum = +element['price'];
     });
     return sum;
+  }
+  submit() {
+
   }
 }
