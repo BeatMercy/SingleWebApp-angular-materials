@@ -50,8 +50,6 @@ export class OrderSubmitComponent implements OnInit, OnDestroy {
     { value: '云', viewValue: '云' }
   ];
 
-  abbrControl: FormControl = new FormControl();
-
   // 文件
   public uploader: FileUploader;
 

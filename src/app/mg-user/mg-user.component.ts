@@ -19,7 +19,6 @@ import { AuthHttp } from 'angular2-jwt';
 import { authHttpServiceFactory } from '../../auth.module';
 import { Page, jsonToPage } from '../entity/page';
 import { User } from '../entity/user';
-import { mergeAll } from 'rxjs/operator/mergeAll';
 import { MessageDialogService } from '../message-dialog.service';
 import { VehiclesInfoDialogComponent } from '../vehicles-info-dialog/vehicles-info-dialog.component';
 

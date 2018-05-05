@@ -76,6 +76,7 @@ import { MgStaffComponent } from './mg-staff/mg-staff.component';
 import { OrdersInfoDialogComponent } from './orders-info-dialog/orders-info-dialog.component';
 import { StaffFormDialogComponent } from './staff-form-dialog/staff-form-dialog.component';
 import { AccountRolesDialogComponent } from './account-roles-dialog/account-roles-dialog.component';
+import { CarRepairOrderSubmitComponent } from './car-repair-order-submit/car-repair-order-submit.component';
 
 
 @NgModule({
@@ -98,6 +99,7 @@ import { AccountRolesDialogComponent } from './account-roles-dialog/account-role
     OrdersInfoDialogComponent,
     StaffFormDialogComponent,
     AccountRolesDialogComponent,
+    CarRepairOrderSubmitComponent,
   ],
   imports: [
     FormsModule,

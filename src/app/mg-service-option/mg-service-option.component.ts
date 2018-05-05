@@ -29,7 +29,7 @@ import { MyMessageData } from '../message-dialog/message-dialog.component';
 export class MgServiceOptionComponent implements OnInit {
 
   authHttp: AuthHttp;
-  displayedColumns = ['id', 'createTime', 'name', 'itemName', 'price', 'enable', 'action'];
+  displayedColumns = ['id', 'createTime', 'itemName', 'name', 'price', 'enable', 'action'];
   tableSource = new MatTableDataSource();
   usersRsp$: Observable<Response>;
 

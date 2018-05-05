@@ -11,6 +11,7 @@ import { MyOrdersComponent } from './my-orders/my-orders.component';
 import { MgUserComponent } from './mg-user/mg-user.component';
 import { MgStaffComponent } from './mg-staff/mg-staff.component';
 import { MgServiceOptionComponent } from './mg-service-option/mg-service-option.component';
+import { CarRepairOrderSubmitComponent } from './car-repair-order-submit/car-repair-order-submit.component';
 const routes: Routes = [
   // { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '', component: IndexPageComponent },
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'mg-staff', component: MgStaffComponent },
   { path: 'mg-service-option', component: MgServiceOptionComponent },
   { path: 'orderSubmit', component: OrderSubmitComponent },
+  { path: 'car-repair-order-submit', component: CarRepairOrderSubmitComponent },
   { path: 'cashier-board', component: CashierBoardComponent },
   { path: 'my-orders', component: MyOrdersComponent },
   { path: 'work-list', component: StaffWorkListComponent }

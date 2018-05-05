@@ -33,10 +33,10 @@
       </ng-container>
       <ng-container matColumnDef="createTime">
         <!-- disableClear = 清除排序 -->
-        <mat-header-cell *matHeaderCellDef mat-sort-header disableClear="false">
+        <mat-header-cell style="flex:1.2;" *matHeaderCellDef mat-sort-header disableClear="false">
           注册日期
         </mat-header-cell>
-        <mat-cell style="flex:1.4;" *matCellDef="let row">{{ row.createTime | date }}</mat-cell>
+        <mat-cell style="flex:1.2;" *matCellDef="let row">{{ row.createTime | date }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="realName">

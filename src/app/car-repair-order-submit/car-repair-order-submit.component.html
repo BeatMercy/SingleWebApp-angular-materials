@@ -1,0 +1,134 @@
+
+<div class="wrapper" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="gappx">
+  <div class="orderTitle">
+    <h2>
+      <mat-icon class="mat-18">build</mat-icon>创建汽车维修订单</h2>
+  </div>
+  <!-- <div style="flex:1 1 auto;"></div> -->
+  <div class="fieldHead">
+    车辆信息
+    <font color="red">*</font>
+    <button style="display:inline-block;min-width:50px;padding:0; position:relative; overflow:hidden;" mat-button color="primary">
+      <mat-icon class="mat-18">camera_enhance</mat-icon>
+      <input id="carPic" style="opacity: 0;position:absolute; right:0; top:0; " mat-button type="file" (change)="addFile()" ng2FileSelect
+        [uploader]="uploader" />
+    </button>
+  </div>
+  <div class="fieldContent" id="plateNo">
+    <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px">
+      <mat-form-field class="plateHead">
+        <input matInput [matAutocomplete]="auto" type="text" placeholder="省份" [(ngModel)]="plateAbbr">
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let abbr of provinceAbbr" [value]="abbr.value">{{abbr.viewValue}}</mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <mat-form-field class="plateBody">
+        <input matInput type="text" placeholder="号码" [(ngModel)]="plateString" required>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="fieldContent parallelField">
+    <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px">
+      <mat-form-field style="flex:1 1 auto;" floatPlaceholder="auto">
+        <input matInput type="text " required placeholder="发动机号">
+      </mat-form-field>
+      <mat-form-field style="flex:1 1 auto;" floatPlaceholder="auto">
+        <input matInput type="text " required placeholder="底盘号">
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="fieldHead">
+    汽车公里数
+  </div>
+  <div class="fieldContent">
+    <mat-input-container style="width:100%" floatPlaceholder="auto">
+      <input matInput type="number" [(ngModel)]="travelMiles">
+    </mat-input-container>
+  </div>
+  <div class="fieldContent">
+    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
+      <div id="mileShow">0</div>
+      <mat-slider style="width:80%;" (input)="onChangeMiles($event)" [disabled]="false" [max]="300000" [min]="0" [step]="1" [tick-interval]="100000"
+        [(ngModel)]="travelMiles">
+      </mat-slider>
+      <div>30万</div>
+    </div>
+  </div>
+  <div class="fieldContent">
+    <mat-accordion>
+      <mat-expansion-panel id="basePriceExpansion">
+        <mat-expansion-panel-header>
+          <mat-panel-title>基础工时费用</mat-panel-title>
+          <mat-panel-description>
+            <ng-container *ngIf="basePrice === 0.00; else hasBasePrice">
+              默认{{basePrice}}元
+            </ng-container>
+            <ng-template #hasBasePrice>
+              <font color="green" wight="bold">{{basePrice| number : '1.2-2'}}</font>元
+            </ng-template>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-form-field>
+          <input matInput type="number" [(ngModel)]="basePrice" [(value)]="basePrice">
+          <span matPrefix>￥&nbsp;</span>
+        </mat-form-field>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+  <div class="fieldHead" style="display: flex;align-items:center;">
+    <div>维修项</div>
+    <button color="primary" mat-icon-button (click)="addRepairItem()">
+      <mat-icon class="mat-18">add</mat-icon>
+    </button>
+  </div>
+  <div class="fieldContent">
+    <ng-container *ngFor="let item of repairItems; index as i">
+      <div style="display: flex;" class="parallelField">
+        <mat-form-field style="flex:2;margin-right: 5px;">
+          <input matInput [(ngModel)]="item.itemName" type="text" placeholder="维修项目" />
+        </mat-form-field>
+        <mat-form-field style="flex:2;margin-right: 5px;">
+          <input matInput [(ngModel)]="item.price" type="number" placeholder="费用" />
+        </mat-form-field>
+        <button mat-button [matMenuTriggerFor]="menu" style="min-width:auto;">
+          <mat-icon class="mat-18">more_vert</mat-icon>
+        </button>
+        <mat-menu #menu>
+          <button mat-menu-item (click)="removeRepairItem(i)">删除</button>
+        </mat-menu>
+      </div>
+    </ng-container>
+  </div>
+  <div class="fieldHead">备注</div>
+  <div class="fieldContent">
+    <mat-accordion>
+      <mat-expansion-panel id="basePriceExpansion">
+        <mat-expansion-panel-header>
+          <mat-panel-title></mat-panel-title>
+          <mat-panel-description></mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-form-field>
+          <textarea matInput placeholder="留言" [(ngModel)]="note"></textarea>
+        </mat-form-field>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+  <div class="sumField">
+    <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="gappx">
+      <div>
+        <h3>总计:</h3>
+      </div>
+      <div style="flex:1 1 auto"></div>
+      <div>
+        <h3>
+          <font color="green" wight="bold">￥{{sumUp()| number : '1.2-2'}}</font>
+        </h3>
+      </div>
+    </div>
+  </div>
+  <div class="fieldHead">
+    <div fxLayout="row-reverse " style="justify-content:space-between;" fxLayoutGap="gappx">
+      <button mat-raised-button (click)="submit()" color="primary">提交</button>
+    </div>
+  </div>
+</div>

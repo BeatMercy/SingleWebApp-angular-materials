@@ -41,7 +41,7 @@ export class LoginDialogComponent implements OnInit {
         this.messageService.showMessage('消息', '登录成功');
       },
         error => {
-          this.messageService.showMessage('消息', '登录失败: ' + error);
+          this.messageService.showMessage('登录失败', '密码错误');
         },
         () => {
 
