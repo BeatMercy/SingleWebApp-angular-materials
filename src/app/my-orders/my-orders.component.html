@@ -2,6 +2,7 @@
   <mat-accordion>
     <!-- 最近一个月的订单 -->
     <mat-expansion-panel [expanded]="true">
+      <!-- 所有订单 -->
       <mat-expansion-panel-header>
         <mat-panel-title>
           订单
@@ -10,7 +11,7 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
       <div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="10px">
-        <mat-select (selectionChange)="orderDateRangeChange($event)" [(ngModel)]="orderDateRange">
+        <mat-select (selectionChange)="orderRangeChange($event)" [(ngModel)]="orderDateRange">
           <mat-option value="latestMonth">近一个月</mat-option>
           <mat-option value="latestThreeMonth">近一个月</mat-option>
           <mat-option value="latestYear">近一年</mat-option>
@@ -80,11 +81,11 @@
                   </mat-card-content>
                   <mat-card-actions>
                     <div style="display: flex;">
-                    <div>总价：
-                      <font color="green">{{item.total}}</font>
-                    </div>
-                    <div style="flex:1 1 auto;"></div>
-                    <div>日期：{{item.createTime | date}}</div>
+                      <div>总价：
+                        <font color="green">{{item.total}}</font>
+                      </div>
+                      <div style="flex:1 1 auto;"></div>
+                      <div>日期：{{item.createTime | date}}</div>
                     </div>
                   </mat-card-actions>
                   <mat-card-footer>
@@ -99,39 +100,221 @@
             </ng-template>
           </div>
         </div>
-        <mat-paginator #ordersPaginator
-          color="primary" 
-          class="myPaginator" 
-          showFirstLastButtons="true" 
-          [length]="this.ordersPage.totalElements" 
+        <mat-paginator #ordersPaginator color="primary" class="myPaginator" showFirstLastButtons="true" [length]="this.ordersPage.totalElements"
           [pageSize]="this.ordersPage.size">
         </mat-paginator>
       </div>
     </mat-expansion-panel>
 
     <!-- 保养记录 -->
-    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+    <mat-expansion-panel >
       <mat-expansion-panel-header>
         <mat-panel-title>
           保养记录
         </mat-panel-title>
         <mat-panel-description>
-          近一个月
+
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <p>I'm visible because I am open</p>
+      <div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="10px">
+        <mat-select  value='latestMonth' (selectionChange)="maintenanceRangeChange($event)">
+          <mat-option value="latestMonth">近一个月</mat-option>
+          <mat-option value="latestThreeMonth">近一个月</mat-option>
+          <mat-option value="latestYear">近一年</mat-option>
+          <mat-option value="all">所有</mat-option>
+        </mat-select>
+        <div>
+          <div style="display:flex;flex-wrap: wrap;">
+            <ng-container *ngIf="maintenancePage.content === undefined||maintenancePage.content.length === 0; else showMaintenance">
+              <div>未有数据</div>
+            </ng-container>
+            <ng-template #showMaintenance>
+              <ng-container *ngFor="let item of maintenancePage.content ">
+                <mat-card class="orderItem">
+                  <mat-card-header>
+                    <mat-card-title>
+                      <h5>
+                        <ng-container *ngIf="item.progress ==='PENDING'">
+                          [
+                          <font color="LightSeaGreen">准备中</font>]
+                        </ng-container>
+                        <ng-container *ngIf="item.progress ==='WORKING'">
+                          [
+                          <font color="coral">进行中</font>]
+                        </ng-container>
+                        <ng-container *ngIf="item.progress ==='WAITING_CONFIRM'">
+                          [
+                          <font color="crimson">待客户确认</font>]
+                        </ng-container>
+                        <ng-container *ngIf="item.progress ==='FINISHED'">
+                          [
+                          <font color="green">完成</font>]
+                        </ng-container>
+                        <b>
+                          <ng-container *ngIf="item.state ==='UNPAY'">
+
+                            <font color="red">未付款</font>
+                          </ng-container>
+                          <ng-container *ngIf="item.state ==='FINISHED'">
+
+                            <font color="green">已付款</font>
+                          </ng-container>
+                        </b>
+                        <br> {{item.name}}
+                      </h5>
+                    </mat-card-title>
+                    <mat-card-subtitle>
+                      <i style="font-size:10px;">{{ item.orderNo}} </i>
+                    </mat-card-subtitle>
+                  </mat-card-header>
+                  <mat-card-content>
+                    <mat-accordion>
+                      <mat-expansion-panel id="basePriceExpansion">
+                        <mat-expansion-panel-header>
+                          <mat-panel-title>公里数：{{item.travelMiles}}</mat-panel-title>
+                          <mat-panel-description>详情</mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <mat-list>
+                          <ng-container *ngFor="let key of item.optionKeys">
+                            <mat-list-item>
+                              <font weight="blod">{{key}}</font>
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                          </ng-container>
+                        </mat-list>
+                      </mat-expansion-panel>
+                    </mat-accordion>
+                  </mat-card-content>
+                  <mat-card-actions>
+                    <div style="display: flex;">
+                      <div>总价：
+                        <font color="green">{{item.total}}</font>
+                      </div>
+                      <div style="flex:1 1 auto;"></div>
+                      <div>日期：{{item.createTime | date}}</div>
+                    </div>
+                  </mat-card-actions>
+                  <mat-card-footer>
+                    <ng-container *ngIf="item.note!==''">
+                      <div align="start">备注
+                        <font align="end" color="blue" weight="bold">{{item.note}}</font>
+                      </div>
+                    </ng-container>
+                  </mat-card-footer>
+                </mat-card>
+              </ng-container>
+            </ng-template>
+          </div>
+        </div>
+        <mat-paginator #maintenancePaginator color="primary" class="myPaginator" showFirstLastButtons="true" [length]="this.maintenancePage.totalElements"
+          [pageSize]="this.maintenancePage.size">
+        </mat-paginator>
+      </div>
     </mat-expansion-panel>
     <!-- 维修记录 -->
-    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+    <mat-expansion-panel >
       <mat-expansion-panel-header>
         <mat-panel-title>
           维修记录
         </mat-panel-title>
         <mat-panel-description>
-          近一个月
+
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <p>I'm visible because I am open</p>
+      <div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="10px">
+        <mat-select value='latestMonth' (selectionChange)="repairRangeChange($event)">
+          <mat-option value="latestMonth">近一个月</mat-option>
+          <mat-option value="latestThreeMonth">近一个月</mat-option>
+          <mat-option value="latestYear">近一年</mat-option>
+          <mat-option value="all">所有</mat-option>
+        </mat-select>
+        <div>
+          <div style="display:flex;flex-wrap: wrap;">
+            <ng-container *ngIf="repairPage.content === undefined||repairPage.content.length === 0; else showRepair">
+              <div>未有数据</div>
+            </ng-container>
+            <ng-template #showRepair>
+              <ng-container *ngFor="let item of repairPage.content ">
+                <mat-card class="orderItem">
+                  <mat-card-header>
+                    <mat-card-title>
+                      <h5>
+                        <ng-container *ngIf="item.progress ==='PENDING'">
+                          [
+                          <font color="LightSeaGreen">准备中</font>]
+                        </ng-container>
+                        <ng-container *ngIf="item.progress ==='WORKING'">
+                          [
+                          <font color="coral">进行中</font>]
+                        </ng-container>
+                        <ng-container *ngIf="item.progress ==='WAITING_CONFIRM'">
+                          [
+                          <font color="crimson">待客户确认</font>]
+                        </ng-container>
+                        <ng-container *ngIf="item.progress ==='FINISHED'">
+                          [
+                          <font color="green">完成</font>]
+                        </ng-container>
+                        <b>
+                          <ng-container *ngIf="item.state ==='UNPAY'">
+
+                            <font color="red">未付款</font>
+                          </ng-container>
+                          <ng-container *ngIf="item.state ==='FINISHED'">
+
+                            <font color="green">已付款</font>
+                          </ng-container>
+                        </b>
+                        <br> {{item.name}}
+                      </h5>
+                    </mat-card-title>
+                    <mat-card-subtitle>
+                      <i style="font-size:10px;">{{ item.orderNo}} </i>
+                    </mat-card-subtitle>
+                  </mat-card-header>
+                  <mat-card-content>
+                    <mat-accordion>
+                      <mat-expansion-panel id="basePriceExpansion">
+                        <mat-expansion-panel-header>
+                          <mat-panel-title>公里数：{{item.travelMiles}}</mat-panel-title>
+                          <mat-panel-description>详情</mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <mat-list>
+                          <ng-container *ngFor="let key of item.optionKeys">
+                            <mat-list-item>
+                              <font weight="blod">{{key}}</font>
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                          </ng-container>
+                        </mat-list>
+                      </mat-expansion-panel>
+                    </mat-accordion>
+                  </mat-card-content>
+                  <mat-card-actions>
+                    <div style="display: flex;">
+                      <div>总价：
+                        <font color="green">{{item.total}}</font>
+                      </div>
+                      <div style="flex:1 1 auto;"></div>
+                      <div>日期：{{item.createTime | date}}</div>
+                    </div>
+                  </mat-card-actions>
+                  <mat-card-footer>
+                    <ng-container *ngIf="item.note!==''">
+                      <div align="start">备注
+                        <font align="end" color="blue" weight="bold">{{item.note}}</font>
+                      </div>
+                    </ng-container>
+                  </mat-card-footer>
+                </mat-card>
+              </ng-container>
+            </ng-template>
+          </div>
+        </div>
+        <mat-paginator #repairPaginator color="primary" class="myPaginator" showFirstLastButtons="true" [length]="this.repairPage.totalElements"
+          [pageSize]="this.repairPage.size">
+        </mat-paginator>
+      </div>
     </mat-expansion-panel>
   </mat-accordion>
 

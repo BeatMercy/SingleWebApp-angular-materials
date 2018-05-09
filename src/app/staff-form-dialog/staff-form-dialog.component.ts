@@ -33,10 +33,11 @@ export class StaffFormDialogComponent implements OnInit {
     this.createMode = this.data['createMode'];
     if (!this.createMode) {
       // editMode
-      this.realName = this.data['realName'];
-      this.phone = this.data['phone'];
-      this.weixin = this.data['weixin'];
-      this.departmentId = this.data['department']['id'];
+      const staff = this.data['staff'];
+      this.realName = staff['realName'];
+      this.phone = staff['phone'];
+      this.weixin = staff['weixin'];
+      this.departmentId = staff['department']['id'];
     }
 
     this.authHttp.get('mg/departments').map(rsp => rsp.json())

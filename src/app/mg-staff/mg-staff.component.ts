@@ -152,6 +152,7 @@ export class MgStaffComponent implements OnInit {
       data: { createMode: true }
     })
       .afterClosed().subscribe(result => {
+        if (!result) { return; }
         if (result['success']) {
           this.messageService.showMessage('创建成功', '');
           this.paginator.page.next({ pageIndex: 0, pageSize: 12, length: 0 });
@@ -162,10 +163,11 @@ export class MgStaffComponent implements OnInit {
         this.messageService.showMessage('创建失败error', error['msg']);
       });
   }
+
   edit(staff: any) {
     this.dialog.open(StaffFormDialogComponent, {
       closeOnNavigation: true,
-      data: { createMode: true, staff: staff }
+      data: { createMode: false, staff: staff }
     });
   }
   viewStaffOrders(id: number) {

@@ -44,10 +44,10 @@ export class StaffWorkListComponent implements OnInit {
         this.activePage = 'WORKING';
         break;
       case 2:
-        this.activePage = 'WAITING_CONFIRM';
+        this.activePage = 'FINISHED';
         break;
       case 3:
-        this.activePage = 'FINISHED';
+        this.activePage = 'WAITING_CONFIRM';
         break;
     }
     this.updateWorkList(1, 5, this.activePage);

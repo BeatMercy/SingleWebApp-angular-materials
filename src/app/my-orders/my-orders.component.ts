@@ -23,11 +23,13 @@ import { of as observableOf } from 'rxjs/observable/of';
 export class MyOrdersComponent implements OnInit {
   panelOpenState = false;
   authHttp: AuthHttp;
+  orderDateRange = 'latestMonth';
   ordersPage = new Page<Order>();
+  maintenanceDateRange = 'latestMonth';
   maintenancePage = new Page<Order>();
+  repairDateRange = 'latestMonth';
   repairPage = new Page<Order>();
   ordersPageNum = 1;
-  orderDateRange = 'latestMonth';
 
   @ViewChild('ordersPaginator') orderPaginator: MatPaginator;
   @ViewChild('maintenancePaginator') maintenancePaginator: MatPaginator;
@@ -39,7 +41,7 @@ export class MyOrdersComponent implements OnInit {
     this.authHttp = authHttpServiceFactory(http, requestOption);
   }
   ngOnInit() {
-    merge(this.orderPaginator.page).pipe(
+    this.orderPaginator.page.pipe(
       startWith({}),
       switchMap(() => {
         return this.authHttp.post(
@@ -58,8 +60,48 @@ export class MyOrdersComponent implements OnInit {
         return observableOf([]);
       })
     );
+    this.maintenancePaginator.page.pipe(
+      startWith({}),
+      switchMap(() => {
+        return this.authHttp.post(
+          'me/maintenanceRecord',
+          {
+            dateRange: this.maintenanceDateRange,
+            pageNum: this.maintenancePaginator.pageIndex
+          }).map(rsp => rsp.json());
+      }),
+      map(response => {
+        const page = jsonToPage<Order>(response.json());
+        this.maintenancePaginator.length = page.totalElements;
+        return page.content;
+      }), catchError(() => {
+        // 返回空数组
+        return observableOf([]);
+      })
+    );
+    this.repairPaginator.page.pipe(
+      startWith({}),
+      switchMap(() => {
+        return this.authHttp.post(
+          'me/maintenanceRecord',
+          {
+            dateRange: this.repairDateRange,
+            pageNum: this.repairPaginator.pageIndex
+          }).map(rsp => rsp.json());
+      }),
+      map(response => {
+        const page = jsonToPage<Order>(response.json());
+        this.repairPaginator.length = page.totalElements;
+        return page.content;
+      }), catchError(() => {
+        // 返回空数组
+        return observableOf([]);
+      })
+    );
 
     this.fetchMyOrder();
+    this.fetchMyMaintenance('latestMonth', 1);
+    this.fetchMyRepair('latestMonth', 1);
   }
 
   fetchMyOrder() {
@@ -81,14 +123,15 @@ export class MyOrdersComponent implements OnInit {
     this.authHttp.post(
       'me/maintenanceRecord',
       {
-        dateRange: this.orderDateRange,
-        pageNum: this.ordersPageNum
+        dateRange: dateRange,
+        pageNum: pageNum
       }).map(rsp => rsp.json())
       .subscribe(json => {
-
+        this.maintenancePage = jsonToPage(json);
+        this.maintenancePage.content = getOrdersFromPage(this.maintenancePage);
       }, error => {
-          this.messageService.showMessage('出错了！', error['message']);
-        });
+        this.messageService.showMessage('出错了！', error['message']);
+      });
   }
 
   fetchMyRepair(dateRange: string, pageNum: number) {
@@ -99,7 +142,8 @@ export class MyOrdersComponent implements OnInit {
         pageNum: pageNum
       }).map(rsp => rsp.json())
       .subscribe(json => {
-
+        this.repairPage = jsonToPage(json);
+        this.repairPage.content = getOrdersFromPage(this.repairPage);
       }, error => {
         this.messageService.showMessage('出错了！', error['message']);
       });
@@ -111,9 +155,11 @@ export class MyOrdersComponent implements OnInit {
     this.fetchMyOrder();
   }
   maintenanceRangeChange(event: MatSelectChange) {
+    this.maintenanceDateRange = event.value;
     this.fetchMyMaintenance(event.value, 1);
   }
   repairRangeChange(event: MatSelectChange) {
+    this.repairDateRange = event.value;
     this.fetchMyRepair(event.value, 1);
   }
 }

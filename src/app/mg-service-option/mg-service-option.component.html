@@ -56,12 +56,12 @@
 
       <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef>选项名</mat-header-cell>
-        <mat-cell *matCellDef="let row">{{ row.name }}</mat-cell>
+        <mat-cell *matCellDef="let row">{{ row.itemName }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="itemName">
         <mat-header-cell *matHeaderCellDef>选项类目</mat-header-cell>
-        <mat-cell *matCellDef="let row">{{ row.itemName }}</mat-cell>
+        <mat-cell *matCellDef="let row">{{ row.name }}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="price">
