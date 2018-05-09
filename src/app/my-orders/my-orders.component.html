@@ -10,7 +10,7 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
       <div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="10px">
-        <mat-select [(ngModel)]="orderDateRange">
+        <mat-select (selectionChange)="orderDateRangeChange($event)" [(ngModel)]="orderDateRange">
           <mat-option value="latestMonth">近一个月</mat-option>
           <mat-option value="latestThreeMonth">近一个月</mat-option>
           <mat-option value="latestYear">近一年</mat-option>
@@ -79,8 +79,12 @@
                     </mat-accordion>
                   </mat-card-content>
                   <mat-card-actions>
+                    <div style="display: flex;">
                     <div>总价：
                       <font color="green">{{item.total}}</font>
+                    </div>
+                    <div style="flex:1 1 auto;"></div>
+                    <div>日期：{{item.createTime | date}}</div>
                     </div>
                   </mat-card-actions>
                   <mat-card-footer>
@@ -95,8 +99,16 @@
             </ng-template>
           </div>
         </div>
+        <mat-paginator #ordersPaginator
+          color="primary" 
+          class="myPaginator" 
+          showFirstLastButtons="true" 
+          [length]="this.ordersPage.totalElements" 
+          [pageSize]="this.ordersPage.size">
+        </mat-paginator>
       </div>
     </mat-expansion-panel>
+
     <!-- 保养记录 -->
     <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
       <mat-expansion-panel-header>

@@ -7,6 +7,11 @@ import { authHttpServiceFactory } from '../../auth.module';
 import { AuthHttp } from 'angular2-jwt';
 import { Route, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import { MatDialog, MatSnackBar } from '@angular/material';
+import { CarInfoDialogComponent } from '../car-info-dialog/car-info-dialog.component';
+import { MessageDialogService } from '../message-dialog.service';
+import { FUSE_TYPE, VEHICLE_TYPE } from '../entity/const';
+import { FileUploader } from 'ng2-file-upload';
 
 @Component({
   selector: 'app-account-info',
@@ -14,6 +19,9 @@ import { Location } from '@angular/common';
   styleUrls: ['./account-info.component.css']
 })
 export class AccountInfoComponent implements OnInit {
+
+  // 文件
+  public uploader: FileUploader;
 
   customerMode = true;
 
@@ -29,9 +37,11 @@ export class AccountInfoComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private location: Location,
-    http: Http,
+    http: Http, public snackBar: MatSnackBar,
+    private messageService: MessageDialogService,
     requestOptions: RequestOptions,
-    public jwtService: JwtService
+    public jwtService: JwtService,
+    private dialog: MatDialog
   ) {
 
     this.authHttp = authHttpServiceFactory(http, requestOptions);
@@ -47,6 +57,42 @@ export class AccountInfoComponent implements OnInit {
       this.user = this.jwtService.getCurrentUser();
       this.fetchMyVehicles();
     }
+    this.uploader = new FileUploader({
+      url: '/me/upload/headimg',
+      authToken: localStorage.getItem('token')
+    });
+  }
+
+  /**
+      * 上传用户头像
+      */
+  addFile() {
+    // TODO 压缩图片
+    // .....
+    console.log(this.uploader.queue[0]);
+    this.uploader.queue[0].upload();
+    this.uploader.response.subscribe(next => {
+      const result = JSON.parse(next);
+      if (result['success']) {
+        this.jwtService.updateUser(null);
+        this.messageService.showMessage('', '头像上传成功');
+      } else {
+        this.messageService.showMessage('发生错误', result['msg']);
+      }
+      // 完成上传
+      this.uploader.clearQueue();
+      this.uploader.response.observers.shift();
+      this.uploader.isUploading = false;
+      // as reason of TS is a typesafe lanuage. operater value before type convertion;
+      (<HTMLInputElement>document.getElementById('carPic')).value = '';
+
+    }, error => {
+      this.uploader.clearQueue();
+      this.messageService.showMessage('发生错误', error);
+      (<HTMLInputElement>document.getElementById('carPic')).value = '';
+    }, () => {
+      console.log('完成车牌图片上传');
+    });
   }
 
   userHeadImg(): string {
@@ -56,9 +102,74 @@ export class AccountInfoComponent implements OnInit {
     }
     return headimg;
   }
-
+  editAccountSubmit() {
+    this.authHttp.post(
+      `me/edit`,
+      {
+        phone: this.user.phone,
+        realName: this.user.realName,
+        weixin: this.user.weixin,
+        qq: this.user.qq
+      }
+    ).subscribe(rsp => {
+      const json = rsp.json();
+      if (json['success']) {
+        this.editAccountMode = false;
+        this.snackBar.open('修改成功', 'OK');
+      } else {
+        this.editAccountMode = false;
+        this.user = this.jwtService.getCurrentUser();
+        this.messageService.showMessage('操作失败', json['msg']);
+      }
+    }, error => {
+      this.editAccountMode = false;
+      const rss = <Response>error;
+      console.log(rss.json());
+      this.user = this.jwtService.getCurrentUser();
+      this.messageService.showMessage('操作失败', error['status']);
+    });
+  }
   addVehicle(plateNo: string) {
     this.editVehicleMode = false;
+    const dialogRef = this.dialog.open(CarInfoDialogComponent,
+      {
+        hasBackdrop: true,
+        maxWidth: 500,
+      });
+    dialogRef.afterClosed().subscribe(json => {
+      if (json['success']) {
+        this.fetchMyVehicles();
+      }
+    });
+  }
+
+  editVehicle(item: any) {
+    const dialogRef = this.dialog.open(CarInfoDialogComponent,
+      {
+        hasBackdrop: true,
+        maxWidth: 500,
+        data: item
+      });
+    dialogRef.afterClosed().subscribe(json => {
+      if (json['success']) {
+        this.fetchMyVehicles();
+      }
+    });
+  }
+
+  remove(id: number) {
+    this.authHttp.get(`me/vehicle/unbind?vehicleId=${id}`)
+      .subscribe(
+        next => {
+          const json = next.json();
+          if (json['success']) {
+            this.messageService.showMessage('操作成功', '');
+            this.fetchMyVehicles();
+          } else {
+            this.messageService.showMessage('操作失败', json['msg']);
+          }
+        }
+      );
   }
   brandImg(brand: string): string {
     let type = 'default';
@@ -93,6 +204,24 @@ export class AccountInfoComponent implements OnInit {
       );
   }
 
+  fuseTypeView(fuseType: string): string {
+    let value = '无';
+    FUSE_TYPE.forEach(f => {
+      if (f.value === fuseType) {
+        value = f.viewValue;
+      }
+    });
+    return value;
+  }
 
+  carTypeView(fuseType: string): string {
+    let value = '无';
+    VEHICLE_TYPE.forEach(f => {
+      if (f.value === fuseType) {
+        value = f.viewValue;
+      }
+    });
+    return value;
+  }
 
 }

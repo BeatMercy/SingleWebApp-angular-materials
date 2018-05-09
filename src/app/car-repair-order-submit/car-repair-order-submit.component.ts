@@ -6,6 +6,7 @@ import { RequestOptions, Http } from '@angular/http';
 import { authHttpServiceFactory } from '../../auth.module';
 import { AuthHttp } from 'angular2-jwt';
 import { MatSliderChange } from '@angular/material';
+import { provinceAbbr } from '../entity/const';
 
 @Component({
   selector: 'app-car-repair-order-submit',
@@ -13,34 +14,7 @@ import { MatSliderChange } from '@angular/material';
   styleUrls: ['./car-repair-order-submit.component.css']
 })
 export class CarRepairOrderSubmitComponent implements OnInit {
-  provinceAbbr = [
-    { value: '粤', viewValue: '粤' },
-    { value: '赣', viewValue: '赣' },
-    { value: '湘', viewValue: '湘' },
-    { value: '京', viewValue: '京' },
-    { value: '冀', viewValue: '冀' },
-    { value: '苏', viewValue: '苏' },
-    { value: '豫', viewValue: '豫' },
-    { value: '辽', viewValue: '辽' },
-    { value: '黑', viewValue: '黑' },
-    { value: '皖', viewValue: '皖' },
-    { value: '新', viewValue: '新' },
-    { value: '鄂', viewValue: '鄂' },
-    { value: '晋', viewValue: '晋' },
-    { value: '陕', viewValue: '陕' },
-    { value: '吉', viewValue: '吉' },
-    { value: '青', viewValue: '青' },
-    { value: '甘', viewValue: '甘' },
-    { value: '贵', viewValue: '贵' },
-    { value: '浙', viewValue: '浙' },
-    { value: '鲁', viewValue: '鲁' },
-    { value: '蒙', viewValue: '蒙' },
-    { value: '藏', viewValue: '藏' },
-    { value: '闽', viewValue: '闽' },
-    { value: '川', viewValue: '川' },
-    { value: '琼', viewValue: '琼' },
-    { value: '云', viewValue: '云' }
-  ];
+  provinceAbbr = provinceAbbr;
 
   // 文件
   public uploader: FileUploader;
@@ -85,8 +59,16 @@ export class CarRepairOrderSubmitComponent implements OnInit {
     this.uploader.response.subscribe(next => {
       const result = JSON.parse(next);
       if (result['success']) {
-        this.plateAbbr = result['content']['plateAbbr'];
-        this.plateString = result['content']['plateString'];
+        const content = result['content'];
+        this.plateAbbr = content['plateAbbr'];
+        this.plateString = content['plateString'];
+        if (content['info'] !== null) {
+          this.engineNo = content['info']['engineNo'] || '';
+          this.chassisNo = content['info']['chassisNo'] || '';
+        } else {
+          this.engineNo = '';
+          this.chassisNo = '';
+        }
       } else {
         this.messageService.showMessage('发生错误', result['msg']);
       }
@@ -125,12 +107,54 @@ export class CarRepairOrderSubmitComponent implements OnInit {
 
   sumUp(): number {
     let sum = 0;
+    sum += this.basePrice;
     this.repairItems.forEach(element => {
-      sum = +element['price'];
+      sum += element['price'];
     });
     return sum;
   }
   submit() {
+    if (this.plateString === '' || this.plateAbbr === '') {
+      this.messageService.showMessage('订单数据有误', '车牌号未填写');
+      return;
+    }
+    if (this.engineNo === '' || this.chassisNo === '') {
+      this.messageService.showMessage('订单数据有误', '发动机号/底盘号未填写');
+      return;
+    }
+    for (const item in this.repairItems) {
+      if (item['itemName'] === '') {
+        this.messageService.showMessage('订单数据有误', '维修项目名有空缺');
+        return;
+      }
+    }
+    const plateNo = this.plateAbbr + this.plateString;
 
+    this.authHttp.post(
+      `/order/repair/submit`,
+      {
+        'orderDto': {
+          plateNo: plateNo,
+          chassisNo: this.chassisNo,
+          basePrice: this.basePrice,
+          engineNo: this.engineNo,
+          travelMiles: this.travelMiles,
+          note: this.note
+        },
+        optionDto: this.repairItems,
+      }
+    ).subscribe(
+      next => {
+        const json = next.json();
+        if (json['success']) {
+          console.log(json);
+        } else {
+          this.messageService.showMessage('订单创建失败', json['msg']);
+        }
+      },
+      error => {
+        this.messageService.showMessage('订单创建失败', error['msg']);
+      }
+    );
   }
 }

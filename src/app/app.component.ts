@@ -17,6 +17,7 @@ export class AppComponent {
     private router: Router,
     public dialog: MatDialog,
     public jwtService: JwtService) {
+
     router.onSameUrlNavigation = 'reload';
   }
   ngOnDestory(): void {

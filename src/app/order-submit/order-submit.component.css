@@ -8,6 +8,10 @@
     width: 100%;
 }
 
+.orderTitle {
+    margin-bottom: 15px;
+}
+
 .fieldHead {
     font-weight: bold;
     width: 100%;
@@ -42,7 +46,6 @@
 .option {
     animation: popup 0.3s ease-out;
 }
-
 
 @keyframes popup {
     from {

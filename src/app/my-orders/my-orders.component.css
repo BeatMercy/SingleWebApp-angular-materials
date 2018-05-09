@@ -33,10 +33,10 @@
     background: none;
 }
 
-.paginator {
+.myPaginator {
     padding: 0px 20px;
-    background-color: white;
-    color: #3f51b5;
+    color: white;
+    background: #3f51b5;
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;

@@ -1,5 +1,5 @@
 <ng-container *ngIf="!customerMode; else customerView">
-  <div class="wrapper" >
+  <div class="wrapper">
     <button mat-fab color="primary" (click)="location.back()">
       <mat-icon class="mat-18">keyboard_arrow_left</mat-icon>
     </button>
@@ -72,10 +72,12 @@
   <div class="wrapper" *ngIf="jwtService.checkToken()">
     <mat-card class="example-card">
       <mat-card-header>
-        <mat-card-title>个人信息</mat-card-title>
-        <mat-card-subtitle>{{user.realName}}</mat-card-subtitle>
+        <mat-card-title>
+          <h3>个人信息</h3>
+        </mat-card-title>
+        <mat-card-subtitle></mat-card-subtitle>
         <div style="flex: 1 1 auto;"></div>
-        <button *ngIf="editAccountMode" mat-icon-button color="primary" (click)="editAccountMode=false">
+        <button *ngIf="editAccountMode" mat-icon-button color="primary" (click)="editAccountSubmit()">
           <mat-icon class="mat-18">check</mat-icon>
         </button>
         <button *ngIf="!editAccountMode" mat-icon-button color="primary" (click)="editAccountMode=true">
@@ -87,12 +89,15 @@
           <div fxLayout="column" fxLayoutAlign=" start center" fxLayoutGap="10px">
             <div class="headImg">
               <img *ngIf="user.headimg" [src]="userHeadImg()" alt="用户头像">
+              <input id="carPic" style="opacity: 0;position:absolute;cursor: pointer;width:100px;height: 100px;;" mat-button type="file" (change)="addFile()" ng2FileSelect
+                [uploader]="uploader" />
             </div>
+            <div>{{user.realName}}</div>
             <div>积分：
               <font color="green" weight="blod">{{user.consumePoint}}</font>
             </div>
+            <br>
           </div>
-
           <div>
             <!-- 姓名 -->
             <mat-input-container floatPlaceholder="auto">
@@ -106,14 +111,15 @@
             <mat-input-container floatPlaceholder="auto">
               <input matInput type="text" [(ngModel)]="user.weixin" [disabled]="!editAccountMode" placeholder="微信">
             </mat-input-container>
-
           </div>
         </div>
       </mat-card-content>
     </mat-card>
-    <mat-card class="example-card">
+    <mat-card *ngIf="jwtService.hasAuthority('ROLE_CUSTOMER')" class="example-card">
       <mat-card-header>
-        <mat-card-title>车辆信息</mat-card-title>
+        <mat-card-title>
+          <h3>车辆信息</h3>
+        </mat-card-title>
         <div style="flex: 1 1 auto;"></div>
         <button mat-button color="primary" (click)="addVehicle()">
           <mat-icon class="mat-18">add</mat-icon>
@@ -122,31 +128,74 @@
       </mat-card-header>
       <mat-card-content>
         <ng-container *ngFor="let item of vehicles$ | async">
-          <div class="wrapContent" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
-            <!-- 车标 -->
-            <div class="brandImg">
-              <img [src]="brandImg(item.brand)" alt="">
-            </div>
-            <!-- 车信息 -->
-            <div>
-              <mat-input-container floatPlaceholder="auto">
-                <input matInput [(ngModel)]="item.plateNo" [disabled]="!editVehicleMode" type="text" required placeholder="车牌">
-              </mat-input-container>
-              <mat-input-container floatPlaceholder="auto">
-                <input matInput [(ngModel)]="item.fuseType" [disabled]="!editVehicleMode" type="text" required placeholder="燃油">
-              </mat-input-container>
-              <mat-input-container floatPlaceholder="auto">
-                <input matInput [(ngModel)]="item.VehicleType" [disabled]="!editVehicleMode" type="text" required placeholder="车型">
-              </mat-input-container>
-            </div>
-            <!-- 编辑 -->
-            <button *ngIf="!editVehicleMode" mat-icon-button color="primary" (click)="editVehicleMode=true">
-              <mat-icon class="mat-18">mode_edit</mat-icon>
-            </button>
-            <button *ngIf="editVehicleMode" mat-icon-button color="primary" (click)="addVehicle(item.plateNo)">
-              <mat-icon class="mat-18">check</mat-icon>
-            </button>
-          </div>
+          <mat-accordion>
+            <mat-expansion-panel style="margin-top:10px;">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <div style="display: flex;align-items: center;">
+                    <mat-icon class="mat-18">directions_car</mat-icon>
+                    {{item.plateNo}}
+                  </div>
+                </mat-panel-title>
+                <mat-panel-description>
+                  <div style="display: flex;">
+                    <button mat-icon-button color="primary" (click)="editVehicle(item)">
+                      <mat-icon class="mat-18 md-light">mode_edit</mat-icon>
+                    </button>
+                    <button mat-icon-button color="primary" (click)="remove(item.id)">
+                      <mat-icon class="mat-18">delete</mat-icon>
+                    </button>
+                  </div>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <div class="wrapContent" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+                <!-- 车标 -->
+                <div fxLayout="column" fxLayoutAlign=" start center" fxLayoutGap="10px">
+                  <div class="brandImg">
+                    <img [src]="brandImg(item.brand)" alt="">
+                  </div>
+                  <div>车牌号:{{item.plateNo}}</div>
+                  <div>公里数:
+                    <font color="green" weight="blod">{{item.travelMiles}}</font>
+                  </div>
+                </div>
+
+                <!-- 车信息 -->
+
+                <mat-list style="display: flex;flex-wrap: wrap;">
+                  <mat-list-item>
+                    <mat-icon mat-list-icon>label</mat-icon>
+                    <h4 mat-line>{{item.engineNo}}</h4>
+                    <p mat-line> 发动机号 </p>
+                  </mat-list-item>
+                  <mat-list-item>
+                    <mat-icon mat-list-icon>label</mat-icon>
+                    <h4 mat-line>{{item.chassisNo}}</h4>
+                    <p mat-line> 底盘号</p>
+                  </mat-list-item>
+                  <mat-list-item>
+                    <mat-icon mat-list-icon>label</mat-icon>
+                    <h4 mat-line>{{item.broughtDate | date}}</h4>
+                    <p mat-line> 购置日期</p>
+                  </mat-list-item>
+                  <mat-list-item>
+                    <mat-icon mat-list-icon>label</mat-icon>
+                    <h4 mat-line>{{this.fuseTypeView(item.fuseType)}}</h4>
+                    <p mat-line> 燃油类型</p>
+                  </mat-list-item>
+                  <mat-list-item>
+                    <mat-icon mat-list-icon>label</mat-icon>
+                    <h4 mat-line>{{this.carTypeView(item.vehicleType)}}</h4>
+                    <p mat-line>车型 </p>
+                  </mat-list-item>
+                </mat-list>
+                <!-- 编辑 -->
+
+              </div>
+
+            </mat-expansion-panel>
+          </mat-accordion>
+
         </ng-container>
       </mat-card-content>
     </mat-card>

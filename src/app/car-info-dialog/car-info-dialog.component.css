@@ -1,0 +1,11 @@
+:host {
+    border-radius: 10px;
+}
+
+.warpFlex {
+    flex-wrap: wrap;
+}
+
+.plateHead {
+    max-width: 50px;
+}

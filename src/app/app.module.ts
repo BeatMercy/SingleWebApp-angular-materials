@@ -77,6 +77,7 @@ import { OrdersInfoDialogComponent } from './orders-info-dialog/orders-info-dial
 import { StaffFormDialogComponent } from './staff-form-dialog/staff-form-dialog.component';
 import { AccountRolesDialogComponent } from './account-roles-dialog/account-roles-dialog.component';
 import { CarRepairOrderSubmitComponent } from './car-repair-order-submit/car-repair-order-submit.component';
+import { CarInfoDialogComponent } from './car-info-dialog/car-info-dialog.component';
 
 
 @NgModule({
@@ -100,6 +101,7 @@ import { CarRepairOrderSubmitComponent } from './car-repair-order-submit/car-rep
     StaffFormDialogComponent,
     AccountRolesDialogComponent,
     CarRepairOrderSubmitComponent,
+    CarInfoDialogComponent,
   ],
   imports: [
     FormsModule,
@@ -158,7 +160,8 @@ import { CarRepairOrderSubmitComponent } from './car-repair-order-submit/car-rep
     VehiclesInfoDialogComponent,
     OrdersInfoDialogComponent,
     StaffFormDialogComponent,
-    AccountRolesDialogComponent
+    AccountRolesDialogComponent,
+    CarInfoDialogComponent
   ],
   providers: [
     {

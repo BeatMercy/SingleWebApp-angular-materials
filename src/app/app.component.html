@@ -16,11 +16,12 @@
               <mat-icon>account_circle</mat-icon>
               <span>我的信息</span>
             </button>
-            <button routerLink='/my-orders' mat-menu-item>
+            <button *ngIf="this.jwtService.hasAuthority('ROLE_CUSTOMER')" routerLink='/my-orders' mat-menu-item>
               <mat-icon>insert_drive_file</mat-icon>
               <span>我的订单</span>
             </button>
-            <button routerLink='/work-list' mat-menu-item>
+            
+            <button *ngIf="this.jwtService.hasAuthority('ROLE_STAFF')" routerLink='/work-list' mat-menu-item>
               <mat-icon>insert_drive_file</mat-icon>
               <span>我的工单</span>
             </button>

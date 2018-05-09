@@ -3,15 +3,18 @@ import { MatSelectChange, MatSliderChange } from '@angular/material';
 import { FormControl } from '@angular/forms';
 import { FileUploader, FileItem } from 'ng2-file-upload';
 import { MessageDialogService } from '../message-dialog.service';
-import { ServiceOption, mapServiceOption } from '../entity/service-option';
+import { ServiceOption, mapServiceOption, OptionDetail } from '../entity/service-option';
 import { AuthHttp } from 'angular2-jwt';
 import { authHttpServiceFactory } from '../../auth.module';
 import { Http, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { map, mapTo, filter } from 'rxjs/operators';
+import { of } from 'rxjs/observable/of';
+import { map, mapTo, filter, switchMap } from 'rxjs/operators';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/filter';
 import { Router } from '@angular/router';
+import { provinceAbbr } from '../entity/const';
 
 
 @Component({
@@ -21,47 +24,23 @@ import { Router } from '@angular/router';
 })
 export class OrderSubmitComponent implements OnInit, OnDestroy {
 
-  provinceAbbr = [
-    { value: '粤', viewValue: '粤' },
-    { value: '赣', viewValue: '赣' },
-    { value: '湘', viewValue: '湘' },
-    { value: '京', viewValue: '京' },
-    { value: '冀', viewValue: '冀' },
-    { value: '苏', viewValue: '苏' },
-    { value: '豫', viewValue: '豫' },
-    { value: '辽', viewValue: '辽' },
-    { value: '黑', viewValue: '黑' },
-    { value: '皖', viewValue: '皖' },
-    { value: '新', viewValue: '新' },
-    { value: '鄂', viewValue: '鄂' },
-    { value: '晋', viewValue: '晋' },
-    { value: '陕', viewValue: '陕' },
-    { value: '吉', viewValue: '吉' },
-    { value: '青', viewValue: '青' },
-    { value: '甘', viewValue: '甘' },
-    { value: '贵', viewValue: '贵' },
-    { value: '浙', viewValue: '浙' },
-    { value: '鲁', viewValue: '鲁' },
-    { value: '蒙', viewValue: '蒙' },
-    { value: '藏', viewValue: '藏' },
-    { value: '闽', viewValue: '闽' },
-    { value: '川', viewValue: '川' },
-    { value: '琼', viewValue: '琼' },
-    { value: '云', viewValue: '云' }
-  ];
+  provinceAbbr = provinceAbbr;
 
   // 文件
   public uploader: FileUploader;
 
   // 此处的值是mat option的value 而不是viewValue
-  selectedService = 'carBeautify';
+  selectedService = 'CarBeautifyOrder';
   selectedOption = new Array<ServiceOption>();
+  selectedOptions = new Array<object>();
   plateString = '';
   plateAbbr = '粤';
   basePrice = 0.00;
   serviceOption: Observable<ServiceOption[]>;
   travelMiles = 0;
   note = '';
+
+  serviceItem = new Array<object>();
   private authHttp: AuthHttp;
   constructor(
     private router: Router,
@@ -127,11 +106,33 @@ export class OrderSubmitComponent implements OnInit, OnDestroy {
     }, error => {
       this.uploader.clearQueue();
       this.messageService.showMessage('发生错误', error);
+      (<HTMLInputElement>document.getElementById('carPic')).value = '';
     }, () => {
       console.log('完成车牌图片上传');
     });
   }
-
+  addItem() {
+    this.serviceItem.push({ name: '', value: '' });
+  }
+  removeItem(i: number) {
+    const start = this.serviceItem.slice(0, i);
+    const end = this.serviceItem.slice(i + 1, this.serviceItem.length);
+    this.serviceItem = start.concat(end);
+  }
+  getOptionDetailItem(value: string): Observable<OptionDetail[]> {
+    if (value === '') {
+      return of(new Array<ServiceOption>());
+    }
+    return this.serviceOption.switchMap(array => {
+      return array.filter(e => e.name === value).map(e => e.options);
+    });
+  }
+  selectUpdate(event: MatSelectChange, name: string) {
+    const valueSet: string[] = (<string>event.value).split('-', 2);
+    const itemName = valueSet[0];
+    const price = valueSet[1];
+    this.selectedOptions.push({ itemName: itemName, name: name, price: price });
+  }
   updateSelectedOption(event: MatSelectChange) {
     const valueSet: string[] = (<string>event.value).split('-', 2);
     const pos = Number.parseInt(valueSet[0], 10);
@@ -158,18 +159,6 @@ export class OrderSubmitComponent implements OnInit, OnDestroy {
       }
 
     });
-    /**
-     * filter 用法
-     */
-    // this.serviceOption.filter((array: ServiceOption[], index) => {
-    //   if (array[index].options.filter(option => option.itemName === valueSet[1]).length > 0) {
-    //     return true;
-    //   } else {
-    //     return false;
-    //   }
-    // }).subscribe(array => {
-    //   this.selectedOption[valueSet[0]].optionType =  array.pop().optionType;
-    // });
   }
 
   onChangeMiles(event: MatSliderChange) {
@@ -177,9 +166,13 @@ export class OrderSubmitComponent implements OnInit, OnDestroy {
   }
   sumUp(): number {
     let sum = this.basePrice;
-    this.selectedOption.forEach(option => {
-      sum += option.price;
+    this.selectedOptions.forEach(e => {
+      const price = Number.parseFloat(e['price']);
+      sum += price;
     });
+    // this.selectedOption.forEach(option => {
+    //   sum += option.price;
+    // });
     return sum;
   }
 
@@ -199,7 +192,7 @@ export class OrderSubmitComponent implements OnInit, OnDestroy {
       '/order/' + this.selectedService + '/submit',
       {
         'orderDto': orderDto,
-        'optionDto': this.selectedOption,
+        'optionDto': this.selectedOptions,
         'total': this.sumUp()
       }
     ).subscribe(next => {

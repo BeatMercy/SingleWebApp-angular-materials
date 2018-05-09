@@ -33,7 +33,7 @@ export class MgServiceOptionComponent implements OnInit {
   tableSource = new MatTableDataSource();
   usersRsp$: Observable<Response>;
 
-  serviceType = 'carBeautify';
+  serviceType = 'CarBeautifyOrder';
   resultsLength = 0;
   isLoadingResults = true;
   isRateLimitReached = false;
@@ -167,12 +167,12 @@ export class MgServiceOptionComponent implements OnInit {
       }
     };
     dialogData.inputFields = [{
-      name: 'name',
+      name: 'itemName',
       placeHolder: '选项名',
       type: 'text',
       value: ''
     }, {
-      name: 'itemName',
+      name: 'name',
       placeHolder: '选项类型',
       type: 'text',
       value: ''

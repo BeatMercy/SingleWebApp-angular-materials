@@ -1,0 +1,58 @@
+<div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="10px">
+  <h1 matDialogTitle>车辆信息</h1>
+
+  <mat-dialog-content>
+    <mat-form-field style="display: none;">
+      <input matInput [matAutocomplete]="province" type="text" placeholder="省份" [(ngModel)]="plateAbbr">
+    </mat-form-field>
+    <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="10px" class="warpFlex">
+      <mat-form-field class="plateHead">
+        <input matInput [matAutocomplete]="province" type="text" placeholder="省份" [(ngModel)]="plateAbbr">
+        <mat-autocomplete #province="matAutocomplete">
+          <mat-option *ngFor="let abbr of provinceAbbr" [value]="abbr.value">{{abbr.viewValue}}</mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <mat-form-field class="plateBody">
+        <input matInput type="text" placeholder="号码" [(ngModel)]="plateString" required>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput color="primary" [(ngModel)]="broughtDate" [matDatepicker]="picker" placeholder="购置日期">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div class="fieldContent parallelField">
+      <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px">
+        <mat-form-field style="flex:1 1 auto;" floatPlaceholder="auto">
+          <input matInput type="text" [(ngModel)]="engineNo" required placeholder="发动机号">
+        </mat-form-field>
+        <mat-form-field style="flex:1 1 auto;" floatPlaceholder="auto">
+          <input matInput type="text" [(ngModel)]="chassisNo" required placeholder="底盘号">
+        </mat-form-field>
+      </div>
+    </div>
+    <div style="display: flex;">
+      <mat-form-field>
+        <input matInput style="flex:1 1 auto;" [matAutocomplete]="vBrand" type="text" placeholder="品牌" [(ngModel)]="carBrand" required>
+        <mat-autocomplete #vBrand="matAutocomplete">
+          <mat-option *ngFor="let abbr of vehicleBrand" [value]="abbr.value">{{abbr.viewValue}}</mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+    <mat-form-field style="flex:1 1 auto;" floatPlaceholder="auto">
+      <mat-select style="flex:1 1 auto;" placeholder="车型" [(ngModel)]="carType">
+        <mat-option *ngFor="let abbr of vehicleType" [value]="abbr.value">{{abbr.viewValue}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field style="flex:1 1 auto;" floatPlaceholder="auto">
+      <mat-select style="flex:1 1 auto;" placeholder="燃油" [(ngModel)]="fuseType">
+        <mat-option *ngFor="let abbr of vehicleFuseType" [value]="abbr.value">{{abbr.viewValue}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button (click)="submit()">确定</button>
+    <button mat-button matDialogClose>取消</button>
+  </mat-dialog-actions>
+</div>

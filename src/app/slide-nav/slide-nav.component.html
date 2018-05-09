@@ -1,6 +1,6 @@
 <mat-sidenav-container class="example-container" autosize>
   <!-- 菜单栏 -->
-  <mat-sidenav color="primary" #drawer class="example-sidenav" [mode]="mobileQuery.matches?'over':'side'">
+  <mat-sidenav  color="primary" #drawer class="example-sidenav" [mode]="mobileQuery.matches?'over':'side'">
     <div>
       <mat-list id="menuList">
         <mat-list-item>
@@ -43,7 +43,7 @@
 
   <!-- 主页面 -->
   <mat-sidenav-content>
-    <button *ngIf="true||this.jwtService.hasOneOfAuthorities(['ROLE_STAFF','ROLE_ADMIN'])" class="menuButton" type="button" mat-button
+    <button *ngIf="this.jwtService.hasOneOfAuthorities(['ROLE_STAFF','ROLE_ADMIN'])" class="menuButton" type="button" mat-button
       (click)="drawer.toggle()" (mouseenter)="mouseHover=true" (mouseleave)="mouseHover=false">
       <mat-icon *ngIf="drawer.opened&&mouseHover" class="mat-18">keyboard_arrow_left</mat-icon>
       <mat-icon *ngIf="!drawer.opened&&mouseHover" class="mat-18">keyboard_arrow_right</mat-icon>

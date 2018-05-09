@@ -30,10 +30,10 @@
   <div class="fieldContent parallelField">
     <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px">
       <mat-form-field style="flex:1 1 auto;" floatPlaceholder="auto">
-        <input matInput type="text " required placeholder="发动机号">
+        <input matInput type="text" [(ngModel)]="engineNo" required placeholder="发动机号">
       </mat-form-field>
       <mat-form-field style="flex:1 1 auto;" floatPlaceholder="auto">
-        <input matInput type="text " required placeholder="底盘号">
+        <input matInput type="text" [(ngModel)]="chassisNo" required placeholder="底盘号">
       </mat-form-field>
     </div>
   </div>

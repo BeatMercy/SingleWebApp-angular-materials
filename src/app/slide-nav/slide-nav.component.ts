@@ -30,10 +30,12 @@ export class SlideNavComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (this.mobileQuery.matches) {
-      console.log('born in Mobile mode');
+      console.log('手机模式');
     } else {
-      console.log('born in Landscape mode');
-      this.sidenav.open();
+      console.log('PC模式');
+      if (this.jwtService.hasOneOfAuthorities(['ROLE_STAFF', 'ROLE_ADMIN'])) {
+        this.sidenav.open();
+      }
     }
   }
 

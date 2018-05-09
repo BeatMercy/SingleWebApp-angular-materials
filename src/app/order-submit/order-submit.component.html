@@ -1,6 +1,7 @@
 <div class="wrapper" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="gappx">
   <div class="orderTitle">
-    <h2>创建订单</h2>
+    <h2>
+      <mat-icon class="mat-18">local_car_wash</mat-icon>创建订单</h2>
   </div>
   <!-- <div style="flex:1 1 auto;"></div> -->
   <div class="fieldHead">
@@ -12,8 +13,8 @@
       <mat-form-field class="inputField">
         <mat-select class="option" [(value)]="selectedService" (change)="updateServiceOption()">
           <!-- <mat-option *ngFor="let state of states" [value]="state">{{state}}</mat-option> -->
-          <mat-option value="carBeautify">洗车美容</mat-option>
-          <mat-option value="carMaintenance">保养维护</mat-option>
+          <mat-option value="CarBeautifyOrder">洗车美容</mat-option>
+          <mat-option value="CarMaintenanceOrder">保养维护</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
@@ -51,17 +52,21 @@
   <div class="fieldContent">
     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="gappx">
       <div id="mileShow">0</div>
-      <mat-slider style="width:80%;" (input)="onChangeMiles($event)" [disabled]="false" [max]="300000" [min]="0" [step]="1" [tick-interval]="100000" [(ngModel)]="travelMiles">
+      <mat-slider style="width:80%;" (input)="onChangeMiles($event)" [disabled]="false" [max]="300000" [min]="0" [step]="1" [tick-interval]="100000"
+        [(ngModel)]="travelMiles">
       </mat-slider>
       <div>30万</div>
     </div>
   </div>
-  <div class="fieldHead">
-    服务选项
+  <div class="fieldHead" style="display: flex;align-items:center;">
+    <div>服务选项</div>
+    <button color="primary" mat-icon-button (click)="addItem()">
+      <mat-icon class="mat-18">add</mat-icon>
+    </button>
   </div>
   <div class="fieldContent">
     <mat-accordion>
-      <mat-expansion-panel  id="basePriceExpansion">
+      <mat-expansion-panel id="basePriceExpansion">
         <mat-expansion-panel-header>
           <mat-panel-title>基础费用</mat-panel-title>
           <mat-panel-description>
@@ -81,33 +86,46 @@
     </mat-accordion>
   </div>
   <div class="fieldContent">
-    <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="gappx" *ngFor="let item of serviceOption | async; index as i; ">
-      <mat-form-field class="inputField">
-        <mat-select class="option" (change)="updateSelectedOption($event)" value="{{i}}-default">
-          <!-- <mat-option *ngFor="let state of states" [value]="state">{{state}}</mat-option> -->
-          <mat-option value="{{i}}-default">{{item.name}}: 无</mat-option>
-          <ng-container *ngFor="let option of item.options">
-            <mat-option class="myOptions" value="{{i}}-{{option.itemName}}">
-               {{item.name}}:{{option.itemName}}
-               <div style="flex :1 1 auto;"></div>
-              <font color="green" wight="bold">￥{{option.price| number : '1.2-2'}}</font>
-            </mat-option>
+    <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px" *ngFor="let item of serviceItem; index as i; ">
+      <mat-form-field style="flex:2;margin-right: 5px;">
+        <mat-select #x1 value=''  placeholder="服务类型">
+          <ng-container *ngFor="let option of serviceOption|async">
+            <mat-option [value]="option.name">{{option.name}}</mat-option>
           </ng-container>
         </mat-select>
       </mat-form-field>
+      <mat-form-field style="flex:2;margin-right: 5px;">
+        <mat-select placeholder="项目" (change)="selectUpdate($event,x1.value)" >
+          <ng-container *ngFor="let option of getOptionDetailItem(x1.value)|async">
+            <mat-option [value]="option.itemName + '-' + option.price">{{option.itemName}}: <font color="green">{{option.price}}</font></mat-option>
+          </ng-container>
+        </mat-select>
+      </mat-form-field>
+      <button mat-button [matMenuTriggerFor]="menu" style="min-width:auto;">
+        <mat-icon class="mat-18">more_vert</mat-icon>
+      </button>
+      <mat-menu #menu>
+        <button mat-menu-item (click)="removeItem(i)">删除</button>
+      </mat-menu>
     </div>
-
-    <!-- <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="gappx">
+    <!-- <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px" *ngFor="let item of serviceOption | async; index as i; ">
       <mat-form-field class="inputField">
-        <mat-select [(value)]="selectedService">
-          <mat-option value="carBeautifyOrder">洗车美容</mat-option>
+        <mat-select class="option" (change)="updateSelectedOption($event)" value="{{i}}-default">
+          <mat-option value="{{i}}-default">{{item.name}}: 无</mat-option>
+          <ng-container *ngFor="let option of item.options">
+            <mat-option class="myOptions" value="{{i}}-{{option.itemName}}">
+              {{item.name}}:{{option.itemName}}
+              <div style="flex :1 1 auto;"></div>
+              <font color="green" wight="bold">￥{{option.price| number : '1.2-2'}}</font>
+            </mat-option>
+          </ng-container>
         </mat-select>
       </mat-form-field>
     </div> -->
   </div>
   <div class="fieldContent">
     <mat-accordion>
-      <mat-expansion-panel  id="basePriceExpansion">
+      <mat-expansion-panel id="basePriceExpansion">
         <mat-expansion-panel-header>
           <mat-panel-title>备注</mat-panel-title>
           <mat-panel-description></mat-panel-description>

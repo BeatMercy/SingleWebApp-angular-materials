@@ -34,6 +34,10 @@ export class JwtService {
     return this.user;
   }
 
+  /**
+   * 更新当前用户信息
+   * @param token 不传/null 默认使用本地的token
+   */
   updateUser(token: string) {
     if (token === undefined || token === null || token === 'undefined') {
       token = localStorage.getItem('token');
@@ -113,7 +117,7 @@ export class JwtService {
   * @param required 符合的权限
   */
   hasAuthority(required: string): boolean {
-    if (this.user.authorities === null) {
+    if (this.user.authorities === null || this.user.authorities === undefined) {
       return false;
     }
     if (this.user.authorities.includes(required)) {
@@ -128,7 +132,7 @@ export class JwtService {
    */
   hasOneOfAuthorities(authorities: string[]): boolean {
     let result = false;
-    if (this.user.authorities === null) {
+    if (this.user.authorities === null || this.user.authorities === undefined) {
       return false;
     }
     authorities.forEach(required => {
@@ -145,7 +149,7 @@ export class JwtService {
      */
   hasBothAuthorities(authorities: string[]): boolean {
     let result = true;
-    if (this.user.authorities === null) {
+    if (this.user.authorities === null || this.user.authorities === undefined) {
       return false;
     }
     authorities.forEach(required => {
