@@ -113,7 +113,7 @@ export class MgUserComponent implements OnInit {
     if (sort === undefined || sort === null) {
       sort = 'id';
     }
-    if (dir === undefined || dir === null) {
+    if (dir === undefined || dir === null || dir === '') {
       dir = 'desc';
     }
     const href = 'mg/users';

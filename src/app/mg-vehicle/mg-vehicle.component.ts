@@ -20,18 +20,19 @@ import { MessageDialogService } from '../message-dialog.service';
 import { jsonToPage } from '../entity/page';
 import { ServiceOption } from '../entity/service-option';
 import { MyMessageData } from '../message-dialog/message-dialog.component';
+import { FUSE_TYPE, VEHICLE_TYPE } from '../entity/const';
 
 @Component({
-  selector: 'app-mg-order',
-  templateUrl: './mg-order.component.html',
-  styleUrls: ['./mg-order.component.css']
+  selector: 'app-mg-vehicle',
+  templateUrl: './mg-vehicle.component.html',
+  styleUrls: ['./mg-vehicle.component.css']
 })
-export class MgOrderComponent implements OnInit {
+export class MgVehicleComponent implements OnInit {
 
   authHttp: AuthHttp;
   displayedColumns = [
-    'orderNo', 'createTime', 'endTime', 'plateNo',
-    'basePrice', 'total', 'state', 'progress', 'action'
+    'id', 'broughtDate', 'brand', 'plateNo',
+    'travelMiles', 'fuseType', 'vehicleType', 'owner', 'action'
   ];
   tableSource = new MatTableDataSource();
   usersRsp$: Observable<Response>;
@@ -42,6 +43,11 @@ export class MgOrderComponent implements OnInit {
   isRateLimitReached = false;
   pageSize = 12;
   keyword = new Subject<string>();
+
+
+  vehicleType = VEHICLE_TYPE;
+  fuseType = FUSE_TYPE;
+
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -66,7 +72,7 @@ export class MgOrderComponent implements OnInit {
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
-          return this.getRemoteOrder('', this.sort.active, this.sort.direction, this.paginator.pageIndex, this.pageSize);
+          return this.getRemoteVehicle('', this.sort.active, this.sort.direction, this.paginator.pageIndex, this.pageSize);
         }),
         map(response => {
           const usersPage = jsonToPage<ServiceOption>(response.json());
@@ -92,7 +98,7 @@ export class MgOrderComponent implements OnInit {
       // switch to new search observable each time the term changes
       switchMap((term: string) => {
         this.isLoadingResults = true;
-        return this.getRemoteOrder(term, this.sort.active, this.sort.direction, this.paginator.pageIndex, this.pageSize);
+        return this.getRemoteVehicle(term, this.sort.active, this.sort.direction, this.paginator.pageIndex, this.pageSize);
       }),
       map(response => {
         const usersPage = jsonToPage<ServiceOption>(response.json());
@@ -116,39 +122,14 @@ export class MgOrderComponent implements OnInit {
     this.keyword.next(filterWord.trim());
   }
 
-  serviceTypeChange(serviceType: string) {
-    this.serviceType = serviceType;
-    this.paginator.page.next({ pageIndex: 0, pageSize: 12, length: 0 });
-  }
-
-  getOption(selectedOption: any): any[] {
-    if (selectedOption === null) {
-      return new Array<object>();
-    }
-    const result = new Array<object>();
-    const keys = Object.keys(selectedOption);
-    for (let index = 0; index < keys.length; index++) {
-      result.push({
-        key: keys[index],
-        value: selectedOption[keys[index]]
-      });
-    }
-    return result;
-  }
-  handleStaff(staffId: number) {
-  }
-  belongUser(userId: number) {
-
-  }
-
-  getRemoteOrder(filter: string, sort: string, dir: string, page: number, pageSize: number): Observable<Response> {
+  getRemoteVehicle(filter: string, sort: string, dir: string, page: number, pageSize: number): Observable<Response> {
     if (sort === undefined || sort === null) {
       sort = 'id';
     }
-    if (dir === undefined || dir === null) {
+    if (dir === undefined || dir === null || dir === '') {
       dir = 'desc';
     }
-    const href = `mg/order/all`;
+    const href = `mg/vehicle/all`;
     const requestUrl =
       `${href}?serviceType=${this.serviceType}&keyword=${filter}&sort=${sort}&dir=${dir}&pageNum=${page + 1}&pageSize=${pageSize}`;
 
@@ -156,4 +137,3 @@ export class MgOrderComponent implements OnInit {
   }
 
 }
-

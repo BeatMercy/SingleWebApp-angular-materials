@@ -90,13 +90,13 @@
     <div class="parallelField" fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px" *ngFor="let item of serviceItem; index as i; ">
       <mat-form-field style="flex:2;margin-right: 5px;">
         <mat-select #x1 value='' placeholder="服务类型">
-          <ng-container *ngFor="let option of serviceOption|async">
+          <ng-container *ngFor="let option of serviceOption|async;">
             <mat-option [value]="option.name">{{option.name}}</mat-option>
           </ng-container>
         </mat-select>
       </mat-form-field>
       <mat-form-field style="flex:2;margin-right: 5px;">
-        <mat-select placeholder="项目" (change)="selectUpdate($event,x1.value)">
+        <mat-select placeholder="项目" (change)="selectUpdate($event,x1.value,i)">
           <ng-container *ngFor="let option of getOptionDetailItem(x1.value)|async">
             <mat-option [value]="option.itemName + '-' + option.price">{{option.itemName}}:
               <font color="green">{{option.price}}</font>
@@ -108,7 +108,7 @@
         <mat-icon class="mat-18">more_vert</mat-icon>
       </button>
       <mat-menu #menu>
-        <button mat-menu-item (click)="removeItem(i)">删除</button>
+        <button mat-menu-item (click)="removeItem(i,x1.value)">删除</button>
       </mat-menu>
     </div>
     <!-- <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px" *ngFor="let item of serviceOption | async; index as i; ">
@@ -157,4 +157,5 @@
       <button mat-raised-button (click)="submit()" color="primary">提交</button>
     </div>
   </div>
+  <div style="width:100%;height:40vh;"></div>
 </div>

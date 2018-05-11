@@ -114,7 +114,7 @@ export class MgServiceOptionComponent implements OnInit {
     if (sort === undefined || sort === null) {
       sort = 'id';
     }
-    if (dir === undefined || dir === null) {
+    if (dir === undefined || dir === null || dir === '') {
       dir = 'desc';
     }
     const href = 'mg/service/options';
@@ -173,7 +173,7 @@ export class MgServiceOptionComponent implements OnInit {
       value: ''
     }, {
       name: 'name',
-      placeHolder: '选项类型',
+      placeHolder: '选项类目',
       type: 'text',
       value: ''
     }, {

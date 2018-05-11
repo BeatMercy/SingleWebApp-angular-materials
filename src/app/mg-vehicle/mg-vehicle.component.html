@@ -1,0 +1,102 @@
+<div class="wrapper">
+  <!-- 筛选栏 -->
+  <div class="filterBar">
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="查找：订单号/车牌号" />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+  </div>
+  <!-- 表格 -->
+  <div style="position: relative;">
+    <div class="loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
+      <mat-progress-bar style="top: 0px;position: absolute;" mode="indeterminate" *ngIf="isLoadingResults"></mat-progress-bar>
+      <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
+        访问频率过高，请稍后再操作
+        <br>
+        <button mat-button (click)="isRateLimitReached = false">确认</button>
+      </div>
+    </div>
+    <mat-table class="myTable " #table [dataSource]="tableSource" matSort>
+
+      <!-- 表格头部  s声明顺序不影响显示顺序，显示依据 displayedColumns数组顺序 -->
+      <ng-container matColumnDef="id">
+        <mat-header-cell style="flex:0.5;" *matHeaderCellDef>#</mat-header-cell>
+        <mat-cell style="flex:0.5;" *matCellDef="let row">{{ row.id }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="broughtDate">
+        <mat-header-cell style="flex:1.4;" *matHeaderCellDef mat-sort-header disableClear="false">
+          购置日期
+        </mat-header-cell>
+        <mat-cell style="flex:1.4;" *matCellDef="let row">{{ row.broughtDate | date }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="plateNo">
+        <mat-header-cell *matHeaderCellDef>车牌号</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{ row.plateNo }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="brand">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>品牌</mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <img style="max-width:40px;max-height:40px;" [src]="'/img/brand/'+ row.brand " alt="车标">
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="travelMiles">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>行驶公里数</mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          {{row.travelMiles}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fuseType">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>燃油类型</mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          {{row.fuseType}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="vehicleType">
+        <mat-header-cell *matHeaderCellDef>状态</mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          {{row.vehicleType}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="owner">
+        <mat-header-cell styly="flex:1.2;" *matHeaderCellDef>是否本店客户</mat-header-cell>
+        <mat-cell styly="flex:1.2;" *matCellDef="let row">
+          <ng-container *ngIf="row.ownerRealName; else elseTemplate">
+             {{row.ownerRealName}}
+          </ng-container>
+          <ng-template #elseTemplate>
+            <font color="red">否</font>
+          </ng-template>
+        </mat-cell>
+      </ng-container>
+
+
+      <ng-container matColumnDef="action">
+        <mat-header-cell style="flex:2;" *matHeaderCellDef>操作</mat-header-cell>
+        <mat-cell style="flex:2;" *matCellDef="let row">
+          <div style=" display: flex;">
+            <ng-container *ngIf="row.userId; else elseTemplate">
+              <button mat-button routerLink="/mg-user/account/{{row.userId}}">
+                用户
+                <mat-icon class="mat-18">perm_identity</mat-icon>
+              </button>
+            </ng-container>
+          </div>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <!-- 表格头部 end -->
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+
+    <mat-paginator color="primary" class="myPaginator" showFirstLastButtons="true" [length]="resultsLength" [pageSize]="pageSize"></mat-paginator>
+  </div>
+
+</div>

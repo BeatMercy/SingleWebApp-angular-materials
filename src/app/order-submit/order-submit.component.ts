@@ -115,12 +115,19 @@ export class OrderSubmitComponent implements OnInit, OnDestroy {
   }
   addItem() {
     this.serviceItem.push({ name: '', value: '' });
+    this.selectedOptions.push(new ServiceOption());
   }
+
   removeItem(i: number) {
-    const start = this.serviceItem.slice(0, i);
-    const end = this.serviceItem.slice(i + 1, this.serviceItem.length);
+    let start = this.serviceItem.slice(0, i);
+    let end = this.serviceItem.slice(i + 1, this.serviceItem.length);
     this.serviceItem = start.concat(end);
+    start = this.selectedOptions.slice(0, i);
+    end = this.selectedOptions.slice(i + 1, this.selectedOptions.length);
+    this.selectedOptions = start.concat(end);
+
   }
+
   getOptionDetailItem(value: string): Observable<OptionDetail[]> {
     if (value === '') {
       return of(new Array<ServiceOption>());
@@ -129,12 +136,14 @@ export class OrderSubmitComponent implements OnInit, OnDestroy {
       return array.filter(e => e.name === value).map(e => e.options);
     });
   }
-  selectUpdate(event: MatSelectChange, name: string) {
+
+  selectUpdate(event: MatSelectChange, name: string, index: number) {
     const valueSet: string[] = (<string>event.value).split('-', 2);
     const itemName = valueSet[0];
     const price = valueSet[1];
-    this.selectedOptions.push({ itemName: itemName, name: name, price: price });
+    this.selectedOptions[index] = { itemName: itemName, name: name, price: price };
   }
+
   updateSelectedOption(event: MatSelectChange) {
     const valueSet: string[] = (<string>event.value).split('-', 2);
     const pos = Number.parseInt(valueSet[0], 10);
