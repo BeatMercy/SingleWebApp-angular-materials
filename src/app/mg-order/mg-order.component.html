@@ -1,0 +1,167 @@
+<div class="wrapper">
+  <!-- 汽车服务栏 -->
+  <div>
+    <mat-button-toggle-group (change)="serviceTypeChange(group.value)" #group="matButtonToggleGroup">
+      <mat-button-toggle checked="true" value="CarBeautifyOrder">
+        <font color="#3f51b5">洗车服务</font>
+      </mat-button-toggle>
+      <mat-button-toggle value="CarMaintenanceOrder">
+        <font color="#3f51b5">汽车保养</font>
+      </mat-button-toggle>
+      <mat-button-toggle value="CarRepairOrder">
+        <font color="#3f51b5">汽车维修</font>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+  <!-- 筛选栏 -->
+  <div class="filterBar">
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="查找：订单号/车牌号" />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+  </div>
+  <!-- 表格 -->
+  <div style="position: relative;">
+    <div class="loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
+      <mat-progress-bar style="top: 0px;position: absolute;" mode="indeterminate" *ngIf="isLoadingResults"></mat-progress-bar>
+      <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
+        访问频率过高，请稍后再操作
+        <br>
+        <button mat-button (click)="isRateLimitReached = false">确认</button>
+      </div>
+    </div>
+    <mat-table class="myTable " #table [dataSource]="tableSource" matSort>
+
+      <!-- 表格头部  s声明顺序不影响显示顺序，显示依据 displayedColumns数组顺序 -->
+      <ng-container matColumnDef="orderNo">
+        <mat-header-cell style="flex:2.4;" *matHeaderCellDef>订单号</mat-header-cell>
+        <mat-cell style="flex:2.4;" *matCellDef="let row">{{ row.orderNo }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="createTime">
+        <mat-header-cell style="flex:1.4;" *matHeaderCellDef mat-sort-header disableClear="false">
+          创建时间
+        </mat-header-cell>
+        <mat-cell style="flex:1.4;" *matCellDef="let row">{{ row.createTime | date }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="endTime">
+        <mat-header-cell style="flex:1.4;" *matHeaderCellDef mat-sort-header disableClear="false">
+          结束时间
+        </mat-header-cell>
+        <mat-cell style="flex:1.4;" *matCellDef="let row">{{ row.endTime | date }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="plateNo">
+        <mat-header-cell *matHeaderCellDef>车牌号</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{ row.plateNo }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="basePrice">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>基础价格</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{ row.basePrice | number: '1.2-2' }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="total">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>价格</mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <ng-container *ngIf="row.isResetTotal === false; else isResetTotal">
+            <font color="green" weight="bold">{{ row.total | number : '1.2-2'}}</font>
+          </ng-container>
+          <ng-template #isResetTotal>
+            <del>{{ row.total | number : '1.2-2'}}</del>
+            <font color="green" weight="bold">{{ row.resetTotal | number : '1.2-2'}}</font>
+          </ng-template>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="state">
+        <mat-header-cell *matHeaderCellDef>状态</mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <ng-container *ngIf="row.state ==='UNPAY'">
+            <font color="LightSeaGreen">未付款</font>
+          </ng-container>
+          <ng-container *ngIf="row.state ==='CANCELED'">
+            <font color="coral">已取消</font>
+          </ng-container>
+          <ng-container *ngIf="row.state ==='FINISHED'">
+            <font color="green">完成</font>
+          </ng-container>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="progress">
+        <mat-header-cell *matHeaderCellDef>进度</mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <ng-container *ngIf="row.progress ==='PENDING'">
+            <font color="LightSeaGreen">准备中</font>
+          </ng-container>
+          <ng-container *ngIf="row.progress ==='WORKING'">
+            <font color="coral">进行中</font>
+          </ng-container>
+          <ng-container *ngIf="row.progress ==='WAITING_CONFIRM'">
+            <font color="crimson">待客户确认</font>
+          </ng-container>
+          <ng-container *ngIf="row.progress ==='FINISHED'">
+            <font color="green">完成</font>
+          </ng-container>
+        </mat-cell>
+      </ng-container>
+
+
+      <ng-container matColumnDef="action">
+        <mat-header-cell style="flex:2.6;" *matHeaderCellDef>操作</mat-header-cell>
+        <mat-cell style="flex:2.6;" *matCellDef="let row">
+          <div style=" display: flex;">
+            <a mat-icon-button [matMenuTriggerFor]="optionList">
+              <mat-icon class="mat-18">zoom_in</mat-icon>
+            </a>
+            <mat-menu #optionList="matMenu">
+              <mat-card style="box-shadow: none;">
+                <mat-card-header>
+                  <mat-card-title>
+                    <h5>详情</h5>
+                  </mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                  <div style="padding:10px;" *ngFor="let item of getOption(row.selectedOption)">
+                    <div style="display: flex;">
+                      <div>{{item.key}}</div>
+                      <div style="flex:1 1 auto;"></div>
+                      <div>
+                        <font color="green"> {{item.value}}</font>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div>备注：{{row.note}}</div>
+                    <div *ngIf="row.isResetTotal">金额修改备注：
+                      <font color="#ec3a01" style="font-weight: blod;">{{row.resetNote}}</font>
+                    </div>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </mat-menu>
+            <button mat-button routerLink="/mg-user/account/{{row.staffId}}">
+              负责人
+              <mat-icon class="mat-18">supervisor_account</mat-icon>
+            </button>
+            <ng-container *ngIf="row.userId; else elseTemplate">
+              <button mat-button routerLink="/mg-user/account/{{row.userId}}">
+                用户
+                <mat-icon class="mat-18">perm_identity</mat-icon>
+              </button>
+            </ng-container>
+          </div>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <!-- 表格头部 end -->
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+
+    <mat-paginator color="primary" class="myPaginator" showFirstLastButtons="true" [length]="resultsLength" [pageSize]="pageSize"></mat-paginator>
+  </div>
+
+</div>

@@ -31,6 +31,9 @@ export class MyOrdersComponent implements OnInit {
   repairPage = new Page<Order>();
   ordersPageNum = 1;
 
+  ordersOpened = true;
+  maintenanceOpened: boolean;
+  repairOpened: boolean;
   @ViewChild('ordersPaginator') orderPaginator: MatPaginator;
   @ViewChild('maintenancePaginator') maintenancePaginator: MatPaginator;
   @ViewChild('repairPaginator') repairPaginator: MatPaginator;
@@ -149,6 +152,36 @@ export class MyOrdersComponent implements OnInit {
       });
   }
 
+  openPage(pageName: string) {
+    switch (pageName) {
+      case 'orders':
+        this.ordersOpened = true;
+        this.maintenanceOpened = false;
+        this.repairOpened = false;
+        document.getElementById('ordersPaginator').className = '';
+        document.getElementById('maintenancePaginator').className = 'disappear';
+        document.getElementById('repairPaginator').className = 'disappear';
+        return;
+      case 'maintenance':
+        this.ordersOpened = false;
+        this.maintenanceOpened = true;
+        this.repairOpened = false;
+        document.getElementById('ordersPaginator').className = 'disappear';
+        document.getElementById('maintenancePaginator').className = '';
+        document.getElementById('repairPaginator').className = 'disappear';
+        return;
+      case 'repair':
+        this.ordersOpened = false;
+        this.maintenanceOpened = false;
+        this.repairOpened = true;
+        document.getElementById('ordersPaginator').className = 'disappear';
+        document.getElementById('maintenancePaginator').className = 'disappear';
+        document.getElementById('repairPaginator').className = '';
+        return;
+      default:
+        return false;
+    }
+  }
 
   orderDateRangeChange(event: MatSelectChange) {
     this.orderDateRange = event.value;

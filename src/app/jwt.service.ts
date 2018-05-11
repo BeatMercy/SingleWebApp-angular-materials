@@ -55,8 +55,9 @@ export class JwtService {
       this.authHttp.get('me').map(rsp => rsp.json())
         .subscribe(json => {
           if (json['success']) {
-            buildUser(this.user, json['content']);
-            this.user.authorities = raw['authorities'];
+            const result = json['content'];
+            buildUser(this.user, result['user']);
+            this.user.authorities = result['authorities'];
             console.log(this.user);
           }
         }, error => {

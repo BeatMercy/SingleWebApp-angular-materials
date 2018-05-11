@@ -1,7 +1,7 @@
 <div class="wrap">
   <mat-accordion>
     <!-- 最近一个月的订单 -->
-    <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel [expanded]="true" (click)="openPage('orders')">
       <!-- 所有订单 -->
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -11,7 +11,7 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
       <div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="10px">
-        <mat-select (selectionChange)="orderRangeChange($event)" [(ngModel)]="orderDateRange">
+        <mat-select (selectionChange)="orderDateRangeChange($event)" [(ngModel)]="this.orderDateRange">
           <mat-option value="latestMonth">近一个月</mat-option>
           <mat-option value="latestThreeMonth">近一个月</mat-option>
           <mat-option value="latestYear">近一年</mat-option>
@@ -100,14 +100,12 @@
             </ng-template>
           </div>
         </div>
-        <mat-paginator #ordersPaginator color="primary" class="myPaginator" showFirstLastButtons="true" [length]="this.ordersPage.totalElements"
-          [pageSize]="this.ordersPage.size">
-        </mat-paginator>
+
       </div>
     </mat-expansion-panel>
 
     <!-- 保养记录 -->
-    <mat-expansion-panel >
+    <mat-expansion-panel (click)="openPage('maintenance')">
       <mat-expansion-panel-header>
         <mat-panel-title>
           保养记录
@@ -117,7 +115,7 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
       <div fxLayout="column" fxLayoutAlign="start stretch" fxLayoutGap="10px">
-        <mat-select  value='latestMonth' (selectionChange)="maintenanceRangeChange($event)">
+        <mat-select value='latestMonth' (selectionChange)="maintenanceRangeChange($event)">
           <mat-option value="latestMonth">近一个月</mat-option>
           <mat-option value="latestThreeMonth">近一个月</mat-option>
           <mat-option value="latestYear">近一年</mat-option>
@@ -206,13 +204,11 @@
             </ng-template>
           </div>
         </div>
-        <mat-paginator #maintenancePaginator color="primary" class="myPaginator" showFirstLastButtons="true" [length]="this.maintenancePage.totalElements"
-          [pageSize]="this.maintenancePage.size">
-        </mat-paginator>
+
       </div>
     </mat-expansion-panel>
     <!-- 维修记录 -->
-    <mat-expansion-panel >
+    <mat-expansion-panel (click)="openPage('repair')">
       <mat-expansion-panel-header>
         <mat-panel-title>
           维修记录
@@ -311,11 +307,24 @@
             </ng-template>
           </div>
         </div>
-        <mat-paginator #repairPaginator color="primary" class="myPaginator" showFirstLastButtons="true" [length]="this.repairPage.totalElements"
-          [pageSize]="this.repairPage.size">
-        </mat-paginator>
       </div>
     </mat-expansion-panel>
   </mat-accordion>
-
+  <div style="position: fixed;width:100%; bottom:0;left: 0;">
+    <div id="ordersPaginator">
+      <mat-paginator #ordersPaginator color="primary" class="myPaginator" showFirstLastButtons="true" [length]="this.ordersPage.totalElements"
+        [pageSize]="this.ordersPage.size">
+      </mat-paginator>
+    </div>
+    <div id="maintenancePaginator">
+      <mat-paginator #maintenancePaginator color="primary" class="myPaginator" showFirstLastButtons="true" [length]="this.maintenancePage.totalElements"
+        [pageSize]="this.maintenancePage.size">
+      </mat-paginator>
+    </div>
+    <div id="repairPaginator">
+      <mat-paginator #repairPaginator color="primary" class="myPaginator" showFirstLastButtons="true" [length]="this.repairPage.totalElements"
+        [pageSize]="this.repairPage.size">
+      </mat-paginator>
+    </div>
+  </div>
 </div>

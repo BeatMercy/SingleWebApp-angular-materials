@@ -12,6 +12,7 @@ import { MgUserComponent } from './mg-user/mg-user.component';
 import { MgStaffComponent } from './mg-staff/mg-staff.component';
 import { MgServiceOptionComponent } from './mg-service-option/mg-service-option.component';
 import { CarRepairOrderSubmitComponent } from './car-repair-order-submit/car-repair-order-submit.component';
+import { MgOrderComponent } from './mg-order/mg-order.component';
 const routes: Routes = [
   // { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '', component: IndexPageComponent },
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'mg-user/account/:id', component: AccountInfoComponent },
   { path: 'mg-staff', component: MgStaffComponent },
   { path: 'mg-service-option', component: MgServiceOptionComponent },
+  { path: 'mg-order', component: MgOrderComponent },
   { path: 'orderSubmit', component: OrderSubmitComponent },
   { path: 'car-repair-order-submit', component: CarRepairOrderSubmitComponent },
   { path: 'cashier-board', component: CashierBoardComponent },

@@ -1,4 +1,4 @@
-import { Component, Inject, ChangeDetectorRef } from '@angular/core';
+import { Component, Inject, ChangeDetectorRef, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 import { LoginDialogComponent } from './login-dialog/login-dialog.component';
@@ -10,7 +10,7 @@ import { MessageDialogService } from './message-dialog.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = '易车服';
   constructor(
     private messageService: MessageDialogService,
@@ -20,7 +20,21 @@ export class AppComponent {
 
     router.onSameUrlNavigation = 'reload';
   }
+  ngOnInit() {
+    if (this.jwtService.checkToken()) {
+      // if (this.jwtService.hasAuthority('ROLE_TECH_STAFF')) {
+      //   this.router.navigate(['work-list']);
+      // } else {
+      //   this.router.navigate(['me']);
+      // }
+
+    }
+  }
   ngOnDestory(): void {
+  }
+
+  public toHome() {
+    this.router.navigate(['/home']);
   }
 
   userHeadImg(): string {

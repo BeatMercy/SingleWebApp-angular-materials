@@ -40,9 +40,16 @@
   <h3 style="text-align:center;" mat-dialog-title>{{data.messageDetail.text}}</h3>
   <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="5px">
     <ng-container *ngFor="let item of data.inputFields; index as i">
-      <mat-form-field>
-        <input matInput [type]="item.type" (keyup)="makeBody(i)" [value]="item.value"  [name]="item.name"  [placeholder]="item.placeHolder" />
-      </mat-form-field>
+      <ng-container *ngIf="item.type !== 'hidden'; else hiddenInput">
+        <mat-form-field>
+          <input matInput [type]="item.type" (keyup)="makeBody(i)" [value]="item.value" [name]="item.name" [placeholder]="item.placeHolder"/>
+        </mat-form-field>
+      </ng-container>
+      <ng-template #hiddenInput>
+        <input type="hidden" value="item.value" name="item.name" (keyup)="makeBody(i)">
+      </ng-template>
+
+
     </ng-container>
   </div>
   <mat-dialog-actions class="actionPos" fxLayout="row" fxLayoutAlign="space-around center" fxLayoutGap="5px">

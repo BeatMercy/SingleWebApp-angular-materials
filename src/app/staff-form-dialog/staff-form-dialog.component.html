@@ -4,15 +4,18 @@
 
 <mat-dialog-content style="width:500px;">
   <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="0px">
+    <input type="hidden" [(ngModel)]="id" />
     <mat-input-container class="input" floatPlaceholder="auto">
       <input matInput [(ngModel)]="realName" type="text" required placeholder="姓名">
     </mat-input-container>
     <mat-input-container class="input" floatPlaceholder="auto">
       <input matInput [(ngModel)]="phone" type="text" required placeholder="手机">
     </mat-input-container>
-    <mat-input-container class="input" floatPlaceholder="auto">
-      <input matInput [(ngModel)]="password" type="password" required placeholder="密码">
-    </mat-input-container>
+    <ng-container *ngIf="createMode">
+      <mat-input-container class="input" floatPlaceholder="auto">
+        <input matInput [(ngModel)]="password" type="password" required placeholder="密码">
+      </mat-input-container>
+    </ng-container>
     <mat-input-container class="input" floatPlaceholder="auto">
       <input matInput [(ngModel)]="weixin" type="text" required placeholder="微信号">
     </mat-input-container>
@@ -27,14 +30,14 @@
 
 <mat-dialog-actions>
   <ng-container *ngIf="createMode; else editButton">
-    <button mat-button (click)="create()">创建</button>
+    <button mat-button (click)="submit('add')">创建</button>
   </ng-container>
   <ng-template #editButton>
-    <button mat-button (click)="edit()">修改</button>
+    <button mat-button (click)="submit('edit')">修改</button>
   </ng-template>
   <button mat-button matDialogClose>关闭</button>
   <mat-chip-list>
-      <mat-chip color="warn" *ngIf="error_msg.length>0">{{error_msg}}</mat-chip>
+    <mat-chip color="warn" *ngIf="error_msg.length>0">{{error_msg}}</mat-chip>
   </mat-chip-list>
 
 </mat-dialog-actions>

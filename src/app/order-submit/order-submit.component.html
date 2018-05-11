@@ -1,7 +1,7 @@
 <div class="wrapper" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="gappx">
   <div class="orderTitle">
     <h2>
-      <mat-icon class="mat-18">local_car_wash</mat-icon>创建订单</h2>
+      <mat-icon class="mat-18">local_car_wash</mat-icon>创建美容订单</h2>
   </div>
   <!-- <div style="flex:1 1 auto;"></div> -->
   <div class="fieldHead">
@@ -19,7 +19,7 @@
       </mat-form-field>
     </div>
   </div>
-  <div class="fieldHead">
+  <div class="fieldHead" style="position: relative;">
     车牌号
     <font color="red">*</font>
     <button style="display:inline-block;min-width:50px;padding:0; position:relative; overflow:hidden;" mat-button color="primary">
@@ -27,6 +27,7 @@
       <input id="carPic" style="opacity: 0;position:absolute; right:0; top:0; " mat-button type="file" (change)="addFile()" ng2FileSelect
         [uploader]="uploader" />
     </button>
+    <mat-spinner class="mySpinner" *ngIf="isLoading"></mat-spinner>
   </div>
   <div class="fieldContent" id="plateNo">
     <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="gappx">
@@ -86,18 +87,20 @@
     </mat-accordion>
   </div>
   <div class="fieldContent">
-    <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px" *ngFor="let item of serviceItem; index as i; ">
+    <div class="parallelField" fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px" *ngFor="let item of serviceItem; index as i; ">
       <mat-form-field style="flex:2;margin-right: 5px;">
-        <mat-select #x1 value=''  placeholder="服务类型">
+        <mat-select #x1 value='' placeholder="服务类型">
           <ng-container *ngFor="let option of serviceOption|async">
             <mat-option [value]="option.name">{{option.name}}</mat-option>
           </ng-container>
         </mat-select>
       </mat-form-field>
       <mat-form-field style="flex:2;margin-right: 5px;">
-        <mat-select placeholder="项目" (change)="selectUpdate($event,x1.value)" >
+        <mat-select placeholder="项目" (change)="selectUpdate($event,x1.value)">
           <ng-container *ngFor="let option of getOptionDetailItem(x1.value)|async">
-            <mat-option [value]="option.itemName + '-' + option.price">{{option.itemName}}: <font color="green">{{option.price}}</font></mat-option>
+            <mat-option [value]="option.itemName + '-' + option.price">{{option.itemName}}:
+              <font color="green">{{option.price}}</font>
+            </mat-option>
           </ng-container>
         </mat-select>
       </mat-form-field>

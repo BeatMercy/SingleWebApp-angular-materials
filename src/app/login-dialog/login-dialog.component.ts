@@ -5,6 +5,7 @@ import { JwtService } from '../jwt.service';
 import { HttpClient } from '@angular/common/http';
 import { MessageDialogService } from '../message-dialog.service';
 import { Response } from '@angular/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-dialog',
@@ -21,8 +22,11 @@ export class LoginDialogComponent implements OnInit {
   constructor(private httpClient: HttpClient,
     public dialogRef: MatDialogRef<LoginDialogComponent>,
     private messageService: MessageDialogService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
+    private router: Router
   ) {
+  }
+  ngOnInit() {
   }
 
   loginCancel() {
@@ -39,6 +43,7 @@ export class LoginDialogComponent implements OnInit {
         this.jwtService.updateUser(next['token']);
         this.dialogRef.close();
         this.messageService.showMessage('消息', '登录成功');
+        this.router.navigate(['me']);
       },
         error => {
           this.messageService.showMessage('登录失败', '密码错误');
@@ -91,7 +96,6 @@ export class LoginDialogComponent implements OnInit {
   }
 
 
-  ngOnInit() {
-  }
+
 
 }

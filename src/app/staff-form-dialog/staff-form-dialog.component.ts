@@ -16,6 +16,7 @@ export class StaffFormDialogComponent implements OnInit {
   createMode: boolean;
   error_msg = '';
   //
+  id: number;
   realName: string;
   password: string;
   phone: string;
@@ -47,18 +48,21 @@ export class StaffFormDialogComponent implements OnInit {
 
   }
 
-  create() {
+  submit(mode: string) {
     if (this.realName === '' || this.realName === undefined) {
       this.error_msg = '员工姓名不合法';
       return;
     }
-    if (this.password === undefined || this.password.length < 6) {
-      this.error_msg = '密码不可少于6位';
-      return;
+    if (mode === 'add') {
+      if (this.password === undefined || this.password.length < 6) {
+        this.error_msg = '密码不可少于6位';
+        return;
+      }
     }
     this.error_msg = '';
-    this.authHttp.post('mg/staff/add',
+    this.authHttp.post(`mg/staff/${mode}`,
       {
+        id: this.id ? null : this.id,
         realName: this.realName,
         phone: this.phone,
         password: this.password,
@@ -70,5 +74,4 @@ export class StaffFormDialogComponent implements OnInit {
         this.dialogRef.close(error);
       });
   }
-
 }

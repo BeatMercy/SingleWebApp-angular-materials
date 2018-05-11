@@ -12,10 +12,10 @@
         <font color="#3f51b5">汽车维修</font>
       </mat-button-toggle> -->
     </mat-button-toggle-group>
-    <button style="vertical-align:sub;" mat-raised-button >
+    <!-- <button style="vertical-align:sub;" mat-raised-button >
       服务类型
       <mat-icon class="mat-18">add</mat-icon>
-    </button>
+    </button> -->
   </div>
   <!-- 筛选栏 -->
   <div class="filterBar">
@@ -65,7 +65,7 @@
       </ng-container>
 
       <ng-container matColumnDef="price">
-        <mat-header-cell *matHeaderCellDef>价格</mat-header-cell>
+        <mat-header-cell *matHeaderCellDef mat-sort-header>价格</mat-header-cell>
         <mat-cell *matCellDef="let row"><font color="green" weight="bold">{{ row.price | number : '1.2-2'}}</font></mat-cell>
       </ng-container>
 
@@ -80,7 +80,7 @@
       <ng-container matColumnDef="action">
         <mat-header-cell *matHeaderCellDef>操作</mat-header-cell>
         <mat-cell *matCellDef="let row">
-          <button mat-button (click)="viewUserCar(row.id)" color="primary">编辑</button>
+          <button mat-button (click)="editOption(row)" color="primary">编辑</button>
         </mat-cell>
       </ng-container>
 

@@ -203,4 +203,56 @@ export class MgServiceOptionComponent implements OnInit {
         }
       );
   }
+
+  editOption(option: ServiceOption) {
+    const dialogData = new MyMessageData('inputForm');
+    dialogData.postData = {
+      url: `mg/service/option/edit`,
+      header: null,
+      body: {
+        serviceType: this.serviceType
+      }
+    };
+    dialogData.inputFields = [{
+      name: 'id',
+      placeHolder: '',
+      type: 'hidden',
+      value: option.id
+    }, {
+      name: 'itemName',
+      placeHolder: '选项名',
+      type: 'text',
+      value: option.itemName
+    }, {
+      name: 'name',
+      placeHolder: '选项类型',
+      type: 'text',
+      value: option.name
+    }, {
+      name: 'price',
+      placeHolder: '价格',
+      type: 'number',
+      value: option.price
+    }];
+    dialogData.messageDetail = {
+      confirmText: '修改',
+      text: '修改选项'
+    };
+    this.messageService.showAuthInputForm(dialogData)
+      .subscribe(
+        next => {
+          if (next === false) {
+            return; // 对话框选择了取消
+          }
+          next.subscribe(
+            next2 => {
+              this.messageService.showMessage('成功', next2['msg']);
+              this.paginator.page.next({ pageIndex: 0, pageSize: 12, length: 0 });
+            }, error => {
+              this.messageService.showMessage('出错了', error['msg']);
+            }
+          );
+        }
+      );
+  }
 }

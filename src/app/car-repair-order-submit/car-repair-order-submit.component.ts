@@ -28,6 +28,7 @@ export class CarRepairOrderSubmitComponent implements OnInit {
   travelMiles = 0;
   note = '';
 
+  public isLoading: boolean;
 
   private items = new Array<number>();
   public repairItems = new Array<object>();
@@ -47,7 +48,6 @@ export class CarRepairOrderSubmitComponent implements OnInit {
   ngOnInit() {
   }
 
-
   /**
    * 上传车牌图片并识别
    */
@@ -55,6 +55,7 @@ export class CarRepairOrderSubmitComponent implements OnInit {
     // TODO 压缩图片
     // .....
     console.log(this.uploader.queue[0]);
+    this.isLoading = true;
     this.uploader.queue[0].upload();
     this.uploader.response.subscribe(next => {
       const result = JSON.parse(next);
@@ -78,10 +79,11 @@ export class CarRepairOrderSubmitComponent implements OnInit {
       this.uploader.isUploading = false;
       // as reason of TS is a typesafe lanuage. operater value before type convertion;
       (<HTMLInputElement>document.getElementById('carPic')).value = '';
-
+      this.isLoading = false;
     }, error => {
       this.uploader.clearQueue();
       this.messageService.showMessage('发生错误', error);
+      this.isLoading = false;
     }, () => {
       console.log('完成车牌图片上传');
     });

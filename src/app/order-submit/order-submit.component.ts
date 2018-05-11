@@ -28,7 +28,7 @@ export class OrderSubmitComponent implements OnInit, OnDestroy {
 
   // 文件
   public uploader: FileUploader;
-
+  public isLoading: boolean;
   // 此处的值是mat option的value 而不是viewValue
   selectedService = 'CarBeautifyOrder';
   selectedOption = new Array<ServiceOption>();
@@ -87,6 +87,7 @@ export class OrderSubmitComponent implements OnInit, OnDestroy {
     // TODO 压缩图片
     // .....
     console.log(this.uploader.queue[0]);
+    this.isLoading = true;
     this.uploader.queue[0].upload();
     this.uploader.response.subscribe(next => {
       const result = JSON.parse(next);
@@ -102,11 +103,12 @@ export class OrderSubmitComponent implements OnInit, OnDestroy {
       this.uploader.isUploading = false;
       // as reason of TS is a typesafe lanuage. operater value before type convertion;
       (<HTMLInputElement>document.getElementById('carPic')).value = '';
-
+      this.isLoading = false;
     }, error => {
       this.uploader.clearQueue();
       this.messageService.showMessage('发生错误', error);
       (<HTMLInputElement>document.getElementById('carPic')).value = '';
+      this.isLoading = false;
     }, () => {
       console.log('完成车牌图片上传');
     });

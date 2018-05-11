@@ -1,4 +1,3 @@
-
 <div class="wrapper" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="gappx">
   <div class="orderTitle">
     <h2>
@@ -14,7 +13,7 @@
         [uploader]="uploader" />
     </button>
   </div>
-  <div class="fieldContent" id="plateNo">
+  <div class="fieldContent" style="position: relative;" id="plateNo">
     <div fxLayout="row" fxLayoutAlign="start start" fxLayoutGap="5px">
       <mat-form-field class="plateHead">
         <input matInput [matAutocomplete]="auto" type="text" placeholder="省份" [(ngModel)]="plateAbbr">
@@ -25,6 +24,7 @@
       <mat-form-field class="plateBody">
         <input matInput type="text" placeholder="号码" [(ngModel)]="plateString" required>
       </mat-form-field>
+      <mat-spinner class="mySpinner" *ngIf="isLoading"></mat-spinner>
     </div>
   </div>
   <div class="fieldContent parallelField">
