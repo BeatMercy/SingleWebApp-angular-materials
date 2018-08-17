@@ -4,16 +4,11 @@ import {
   MatSlideToggleChange, MatDialog, MatSnackBar
 } from '@angular/material';
 import { Http, RequestOptions, Response } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import { merge } from 'rxjs/observable/merge';
-import { of as observableOf } from 'rxjs/observable/of';
-import { catchError } from 'rxjs/operators/catchError';
-import { startWith } from 'rxjs/operators/startWith';
 import {
-  debounceTime, distinctUntilChanged, switchMap, map
+  startWith, debounceTime, distinctUntilChanged, switchMap, map, catchError
 } from 'rxjs/operators';
 
-import { Subject } from 'rxjs/Subject';
+import { merge, Observable, Subject, of as observableOf } from 'rxjs';
 import { AuthHttp } from 'angular2-jwt';
 import { authHttpServiceFactory } from '../../auth.module';
 import { MessageDialogService } from '../message-dialog.service';

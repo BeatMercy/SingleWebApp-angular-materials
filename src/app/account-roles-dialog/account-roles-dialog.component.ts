@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatCheckboxChange, MatSnackBar } from '@
 import { Http, RequestOptions } from '@angular/http';
 import { authHttpServiceFactory } from '../../auth.module';
 import { AuthHttp } from 'angular2-jwt';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-account-roles-dialog',
@@ -25,7 +26,7 @@ export class AccountRolesDialogComponent implements OnInit {
 
   ngOnInit() {
     this.authHttp.get(`mg/staff/roles?staffId=${this.data['id']}`)
-      .map(rsp => rsp.json()).subscribe(json => {
+      .pipe(map(rsp => rsp.json())).subscribe(json => {
         if (json['success']) {
           const content = json['content'];
           this.allRoles = content['all'];
@@ -52,7 +53,7 @@ export class AccountRolesDialogComponent implements OnInit {
       action = 'add';
     }
     this.authHttp.get(`mg/staff/role/${action}?staffId=${this.data['id']}&roleId=${roleId}`)
-      .map(rsp => rsp.json()).subscribe(json => {
+      .pipe(map(rsp => rsp.json())).subscribe(json => {
         if (json['success']) {
           this.snackBar.open('权限添加成功', '', {
             duration: 2000,

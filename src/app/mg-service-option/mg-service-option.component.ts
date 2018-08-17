@@ -4,22 +4,18 @@ import {
   MatSlideToggleChange, MatDialog, MatSnackBar
 } from '@angular/material';
 import { Http, RequestOptions, Response } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import { merge } from 'rxjs/observable/merge';
-import { of as observableOf } from 'rxjs/observable/of';
-import { catchError } from 'rxjs/operators/catchError';
-import { startWith } from 'rxjs/operators/startWith';
 import {
-  debounceTime, distinctUntilChanged, switchMap, map
+  debounceTime, distinctUntilChanged, switchMap, map, catchError, startWith
 } from 'rxjs/operators';
 
-import { Subject } from 'rxjs/Subject';
+import { Subject, Observable, merge, of as observableOf } from 'rxjs';
 import { AuthHttp } from 'angular2-jwt';
 import { authHttpServiceFactory } from '../../auth.module';
 import { MessageDialogService } from '../message-dialog.service';
 import { jsonToPage } from '../entity/page';
 import { ServiceOption } from '../entity/service-option';
 import { MyMessageData } from '../message-dialog/message-dialog.component';
+import { pipe } from '../../../node_modules/@angular/core/src/render3/pipe';
 
 @Component({
   selector: 'app-mg-service-option',
@@ -135,7 +131,7 @@ export class MgServiceOptionComponent implements OnInit {
       enable = 'disable';
     }
     this.authHttp.get(`mg/service/option/${enable}?id=${id}`)
-      .map(rsp => rsp.json()).subscribe(json => {
+    .pipe(map(rsp => rsp.json())).subscribe(json => {
         if (json['success']) {
           this.snackBar.open(json['msg'], 'OK', {
             verticalPosition: 'top',

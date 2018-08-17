@@ -4,15 +4,11 @@ import { MatTableDataSource, MatSort, MatPaginator, MatDialog, MatSnackBar, MatS
 import { Http, RequestOptions, Response } from '@angular/http';
 import { MessageDialogService } from '../message-dialog.service';
 import { authHttpServiceFactory } from '../../auth.module';
-import { Observable } from 'rxjs/Observable';
-import { merge } from 'rxjs/observable/merge';
-import { of as observableOf } from 'rxjs/observable/of';
-import { catchError } from 'rxjs/operators/catchError';
-import { startWith } from 'rxjs/operators/startWith';
+import { startWith, catchError } from 'rxjs/operators';
+import { merge, Observable, Subject, of as observableOf } from 'rxjs';
 import {
   debounceTime, distinctUntilChanged, switchMap, map
 } from 'rxjs/operators';
-import { Subject } from 'rxjs/Subject';
 import { jsonToPage } from '../entity/page';
 import { User } from '../entity/user';
 import { OrdersInfoDialogComponent } from '../orders-info-dialog/orders-info-dialog.component';
@@ -129,7 +125,7 @@ export class MgStaffComponent implements OnInit {
       enable = 'disable';
     }
     this.authHttp.get(`mg/staff/${enable}?id=${id}`)
-      .map(rsp => rsp.json()).subscribe(json => {
+      .pipe(map(rsp => rsp.json())).subscribe(json => {
         if (json['success']) {
           this.snackBar.open(json['msg'], 'OK', {
             verticalPosition: 'top',
@@ -172,7 +168,7 @@ export class MgStaffComponent implements OnInit {
   }
   viewStaffOrders(id: number) {
     this.authHttp.get(`mg/staff/latestmonth-orders?id=${id}`)
-      .map(rsp => rsp.json()).subscribe(json => {
+      .pipe(map(rsp => rsp.json())).subscribe(json => {
         if (json['success']) {
           this.dialog.open(OrdersInfoDialogComponent, {
             closeOnNavigation: true,

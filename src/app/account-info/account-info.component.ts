@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { JwtService } from '../jwt.service';
 import { User } from '../entity/user';
-import { Observable } from 'rxjs/observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Http, RequestOptions, Response } from '@angular/http';
 import { authHttpServiceFactory } from '../../auth.module';
 import { AuthHttp } from 'angular2-jwt';
@@ -182,26 +183,26 @@ export class AccountInfoComponent implements OnInit {
 
   fetchMyVehicles() {
     this.vehicles$ = this.authHttp.get('me/vehicles')
-      .map(rsp => {
+      .pipe(map(rsp => {
         rsp.json();
         return <Array<any>>rsp.json()['content'];
       }
-      );
+      ));
   }
 
   fetchTratgetUser(id: string) {
     this.authHttp.get(`mg/user/${id}/detail`)
-      .map(rsp => rsp.json()).subscribe(json => {
+      .pipe(map(rsp => rsp.json())).subscribe(json => {
         this.target = json;
       }, error => {
         alert((<Response>error).json()['message']);
       });
     this.targetVehicles$ = this.authHttp.get(`mg/user/${id}/vehicles`)
-      .map(rsp => {
+      .pipe(map(rsp => {
         rsp.json();
         return rsp.json();
       }
-      );
+      ));
   }
 
   fuseTypeView(fuseType: string): string {

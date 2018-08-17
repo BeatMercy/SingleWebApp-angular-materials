@@ -41,14 +41,14 @@
     汽车公里数
   </div>
   <div class="fieldContent">
-    <mat-input-container style="width:100%" floatPlaceholder="auto">
+    <mat-form-field style="width:100%" floatPlaceholder="auto">
       <input matInput type="number" [(ngModel)]="travelMiles">
-    </mat-input-container>
+    </mat-form-field>
   </div>
   <div class="fieldContent">
     <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="5px">
       <div id="mileShow">0</div>
-      <mat-slider style="width:80%;" (input)="onChangeMiles($event)" [disabled]="false" [max]="300000" [min]="0" [step]="1" [tick-interval]="100000"
+      <mat-slider style="width:80%;" (input)="onChangeMiles($event)" [disabled]="false" [max]="300000" [min]="0" [step]="1" [tickInterval]="100000"
         [(ngModel)]="travelMiles">
       </mat-slider>
       <div>30万</div>

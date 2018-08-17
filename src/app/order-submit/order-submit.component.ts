@@ -7,12 +7,8 @@ import { ServiceOption, mapServiceOption, OptionDetail } from '../entity/service
 import { AuthHttp } from 'angular2-jwt';
 import { authHttpServiceFactory } from '../../auth.module';
 import { Http, RequestOptions } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
+import { of, Observable } from 'rxjs';
 import { map, mapTo, filter, switchMap } from 'rxjs/operators';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/filter';
 import { Router } from '@angular/router';
 import { provinceAbbr } from '../entity/const';
 
@@ -69,7 +65,9 @@ export class OrderSubmitComponent implements OnInit, OnDestroy {
       // TODO 刷新服务选项
       const array: ServiceOption[] = data.json();
       this.serviceOption = mapServiceOption(array);
-      this.serviceOption.map(options => options.length).subscribe(
+      this.serviceOption.pipe(
+        map(options => options.length)
+      ).subscribe(
         value => {
           this.selectedOption = new Array<ServiceOption>(value);
         }
@@ -132,9 +130,11 @@ export class OrderSubmitComponent implements OnInit, OnDestroy {
     if (value === '') {
       return of(new Array<ServiceOption>());
     }
-    return this.serviceOption.switchMap(array => {
-      return array.filter(e => e.name === value).map(e => e.options);
-    });
+    return this.serviceOption.pipe(
+      switchMap(array => {
+        return array.filter(e => e.name === value).map(e => e.options);
+      })
+    );
   }
 
   selectUpdate(event: MatSelectChange, name: string, index: number) {

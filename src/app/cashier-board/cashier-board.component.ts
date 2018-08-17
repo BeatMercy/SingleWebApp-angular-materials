@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
-import { of } from 'rxjs/observable/of';
+import { Subject, Observable, of } from 'rxjs';
 import {
   debounceTime, distinctUntilChanged, switchMap, map
 } from 'rxjs/operators';
@@ -96,9 +94,9 @@ export class CashierBoardComponent implements OnInit {
         plateAbbr: this.plateAbbr,
         plateString: this.plateString
       }
-    ).map(result => {
+    ).pipe(map(result => {
       return buildOrderOptionKeys(result.json()['content']);
-    });
+    }));
   }
 
   confirmPay(orderNo: string) {

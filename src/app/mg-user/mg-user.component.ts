@@ -4,16 +4,11 @@ import {
   MatSlideToggleChange, MatDialog, MatSnackBar
 } from '@angular/material';
 import { Http, RequestOptions, Response } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import { merge } from 'rxjs/observable/merge';
-import { of as observableOf } from 'rxjs/observable/of';
-import { catchError } from 'rxjs/operators/catchError';
-import { startWith } from 'rxjs/operators/startWith';
 import {
-  debounceTime, distinctUntilChanged, switchMap, map
+  debounceTime, startWith, distinctUntilChanged, catchError, switchMap, map
 } from 'rxjs/operators';
 
-import { Subject } from 'rxjs/Subject';
+import { merge, Subject, of as observableOf, Observable } from 'rxjs';
 
 import { AuthHttp } from 'angular2-jwt';
 import { authHttpServiceFactory } from '../../auth.module';
@@ -61,12 +56,12 @@ export class MgUserComponent implements OnInit {
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
         startWith({}),
-        switchMap(() => {
+        map(() => {
           this.isLoadingResults = true;
           return this.getRemoteUser('', this.sort.active, this.sort.direction, this.paginator.pageIndex, this.pageSize);
         }),
         map(response => {
-          const usersPage = jsonToPage<User>(response.json());
+          const usersPage = jsonToPage<User>(response);
           this.isLoadingResults = false;
           this.isRateLimitReached = false;
           this.resultsLength = usersPage.totalElements;
@@ -134,7 +129,7 @@ export class MgUserComponent implements OnInit {
       enable = 'disable';
     }
     this.authHttp.get(`mg/user/${enable}?id=${id}`)
-      .map(rsp => rsp.json()).subscribe(json => {
+      .pipe(map(rsp => rsp.json())).subscribe(json => {
         if (json['success']) {
           this.snackBar.open(json['msg'], 'OK', {
             verticalPosition: 'top',
@@ -153,7 +148,7 @@ export class MgUserComponent implements OnInit {
 
   viewUserCar(id: number) {
     this.authHttp.get(`mg/user/vehicles?id=${id}`)
-      .map(rsp => rsp.json()).subscribe(json => {
+      .pipe(map(rsp => rsp.json())).subscribe(json => {
         if (json['success']) {
           this.dialog.open(VehiclesInfoDialogComponent, {
             closeOnNavigation: true,

@@ -53,14 +53,14 @@
       <ng-container matColumnDef="fuseType">
         <mat-header-cell *matHeaderCellDef mat-sort-header>燃油类型</mat-header-cell>
         <mat-cell *matCellDef="let row">
-          {{row.fuseType}}
+          {{fuseTypeName(row.fuseType)}}
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="vehicleType">
         <mat-header-cell *matHeaderCellDef>状态</mat-header-cell>
         <mat-cell *matCellDef="let row">
-          {{row.vehicleType}}
+          {{vehicleTypeName(row.vehicleType)}}
         </mat-cell>
       </ng-container>
 

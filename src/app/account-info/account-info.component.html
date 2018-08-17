@@ -33,17 +33,17 @@
                 </mat-list-item>
             </mat-list> -->
             <!-- 姓名 -->
-            <mat-input-container floatPlaceholder="auto">
+            <mat-form-field floatPlaceholder="auto">
               <input matInput type="text" [(ngModel)]="target.realName" [disabled]="!editAccountMode" placeholder="姓名">
-            </mat-input-container>
+            </mat-form-field>
             <!-- 手机 -->
-            <mat-input-container floatPlaceholder="auto">
+            <mat-form-field floatPlaceholder="auto">
               <input matInput type="text" [(ngModel)]="target.phone" [disabled]="!editAccountMode" placeholder="手机">
-            </mat-input-container>
+            </mat-form-field>
             <!-- 微信 -->
-            <mat-input-container floatPlaceholder="auto">
+            <mat-form-field floatPlaceholder="auto">
               <input matInput type="text" [(ngModel)]="target.weixin" [disabled]="!editAccountMode" placeholder="微信">
-            </mat-input-container>
+            </mat-form-field>
 
           </div>
         </div>
@@ -62,15 +62,15 @@
             </div>
             <!-- 车信息 -->
             <div>
-              <mat-input-container floatPlaceholder="auto">
+              <mat-form-field floatPlaceholder="auto">
                 <input matInput [(ngModel)]="item.plateNo" [disabled]="!editVehicleMode" type="text" required placeholder="车牌">
-              </mat-input-container>
-              <mat-input-container floatPlaceholder="auto">
+              </mat-form-field>
+              <mat-form-field floatPlaceholder="auto">
                 <input matInput [(ngModel)]="item.fuseType" [disabled]="!editVehicleMode" type="text" required placeholder="燃油">
-              </mat-input-container>
-              <mat-input-container floatPlaceholder="auto">
+              </mat-form-field>
+              <mat-form-field floatPlaceholder="auto">
                 <input matInput [(ngModel)]="item.VehicleType" [disabled]="!editVehicleMode" type="text" required placeholder="车型">
-              </mat-input-container>
+              </mat-form-field>
             </div>
           </div>
         </ng-container>
@@ -111,17 +111,17 @@
           </div>
           <div>
             <!-- 姓名 -->
-            <mat-input-container floatPlaceholder="auto">
+            <mat-form-field floatPlaceholder="auto">
               <input matInput type="text" [(ngModel)]="user.realName" [disabled]="!editAccountMode" placeholder="姓名">
-            </mat-input-container>
+            </mat-form-field>
             <!-- 手机 -->
-            <mat-input-container floatPlaceholder="auto">
+            <mat-form-field floatPlaceholder="auto">
               <input matInput type="text" [(ngModel)]="user.phone" [disabled]="!editAccountMode" placeholder="手机">
-            </mat-input-container>
+            </mat-form-field>
             <!-- 微信 -->
-            <mat-input-container floatPlaceholder="auto">
+            <mat-form-field floatPlaceholder="auto">
               <input matInput type="text" [(ngModel)]="user.weixin" [disabled]="!editAccountMode" placeholder="微信">
-            </mat-input-container>
+            </mat-form-field>
           </div>
         </div>
       </mat-card-content>

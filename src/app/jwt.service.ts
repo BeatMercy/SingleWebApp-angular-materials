@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Http, RequestOptions, Response } from '@angular/http';
 import { AuthHttp, JwtHelper, tokenNotExpired, AuthConfig } from 'angular2-jwt';
 import { AuthModule, customAuthHttpServiceFactory } from '../auth.module';
-import { Observable } from 'rxjs/Observable';
+import { map } from 'rxjs/operators';
 
 import { User, buildUser } from './entity/user';
 import { MessageDialogComponent } from './message-dialog/message-dialog.component';
@@ -52,7 +52,7 @@ export class JwtService {
       }
       const raw = this.jwtHelper.decodeToken(token);
 
-      this.authHttp.get('me').map(rsp => rsp.json())
+      this.authHttp.get('me').pipe(map(rsp => rsp.json()))
         .subscribe(json => {
           if (json['success']) {
             const result = json['content'];
@@ -98,7 +98,7 @@ export class JwtService {
     }
     if (this.activeState) {
       this.authHttp.get('isActiveAccount')
-        .map(rsp => rsp.json())
+        .pipe(map(rsp => rsp.json()))
         .subscribe(json => {
           // 账户可用，重新激活状态
           this.activeState = true;

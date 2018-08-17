@@ -5,20 +5,20 @@
 <mat-dialog-content style="width:500px;">
   <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="0px">
     <input type="hidden" [(ngModel)]="id" />
-    <mat-input-container class="input" floatPlaceholder="auto">
+    <mat-form-field class="input" floatPlaceholder="auto">
       <input matInput [(ngModel)]="realName" type="text" required placeholder="姓名">
-    </mat-input-container>
-    <mat-input-container class="input" floatPlaceholder="auto">
+    </mat-form-field>
+    <mat-form-field class="input" floatPlaceholder="auto">
       <input matInput [(ngModel)]="phone" type="text" required placeholder="手机">
-    </mat-input-container>
+    </mat-form-field>
     <ng-container *ngIf="createMode">
-      <mat-input-container class="input" floatPlaceholder="auto">
+      <mat-form-field class="input" floatPlaceholder="auto">
         <input matInput [(ngModel)]="password" type="password" required placeholder="密码">
-      </mat-input-container>
+      </mat-form-field>
     </ng-container>
-    <mat-input-container class="input" floatPlaceholder="auto">
+    <mat-form-field class="input" floatPlaceholder="auto">
       <input matInput [(ngModel)]="weixin" type="text" required placeholder="微信号">
-    </mat-input-container>
+    </mat-form-field>
 
     <mat-select [(ngModel)]="departmentId" placeholder="部门">
       <ng-container *ngFor="let item of allDepartments">

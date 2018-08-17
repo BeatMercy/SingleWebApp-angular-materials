@@ -4,16 +4,9 @@ import {
   MatSlideToggleChange, MatDialog, MatSnackBar
 } from '@angular/material';
 import { Http, RequestOptions, Response } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import { merge } from 'rxjs/observable/merge';
-import { of as observableOf } from 'rxjs/observable/of';
-import { catchError } from 'rxjs/operators/catchError';
-import { startWith } from 'rxjs/operators/startWith';
-import {
-  debounceTime, distinctUntilChanged, switchMap, map
-} from 'rxjs/operators';
+import { merge, Subject, Observable, of as observableOf } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, map, startWith, switchMap } from 'rxjs/operators';
 
-import { Subject } from 'rxjs/Subject';
 import { AuthHttp } from 'angular2-jwt';
 import { authHttpServiceFactory } from '../../auth.module';
 import { MessageDialogService } from '../message-dialog.service';
@@ -66,7 +59,6 @@ export class MgVehicleComponent implements OnInit {
     this.sort.sortChange.subscribe(() => {
       this.paginator.pageIndex = 0;
     });
-
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
         startWith({}),
@@ -74,7 +66,7 @@ export class MgVehicleComponent implements OnInit {
           this.isLoadingResults = true;
           return this.getRemoteVehicle('', this.sort.active, this.sort.direction, this.paginator.pageIndex, this.pageSize);
         }),
-        map(response => {
+        map((response: Response) => {
           const usersPage = jsonToPage<ServiceOption>(response.json());
           this.isLoadingResults = false;
           this.isRateLimitReached = false;
@@ -136,4 +128,19 @@ export class MgVehicleComponent implements OnInit {
     return this.authHttp.get(requestUrl);
   }
 
+  vehicleTypeName(key: string): string {
+    const result = this.vehicleType.find(v => v.value === key);
+    if (result === undefined || result === null) {
+      return '未知类型';
+    }
+    return result.viewValue;
+  }
+
+  fuseTypeName(key: string): string {
+    const result = this.fuseType.find(v => v.value === key);
+    if (result === undefined || result === null) {
+      return '未知类型';
+    }
+    return result.viewValue;
+  }
 }

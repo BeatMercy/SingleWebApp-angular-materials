@@ -1,18 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Page, jsonToPage } from '../entity/page';
 import { Order, getOrdersFromPage } from '../entity/order';
-import { Http, RequestOptions } from '@angular/http';
+import { Http, RequestOptions, Response } from '@angular/http';
 import { AuthHttp } from 'angular2-jwt';
 import { MessageDialogService } from '../message-dialog.service';
 import { authHttpServiceFactory } from '../../auth.module';
 import { MatSelectChange, MatPaginator } from '@angular/material';
-import { merge } from 'rxjs/observable/merge';
-import { startWith } from 'rxjs/operators/startWith';
 import {
-  debounceTime, distinctUntilChanged, switchMap, map
+  startWith, catchError, switchMap, map
 } from 'rxjs/operators';
-import { catchError } from 'rxjs/operators/catchError';
-import { of as observableOf } from 'rxjs/observable/of';
+import { of as observableOf } from 'rxjs';
 
 
 @Component({
@@ -52,9 +49,9 @@ export class MyOrdersComponent implements OnInit {
           {
             dateRange: this.orderDateRange,
             pageNum: this.orderPaginator.pageIndex
-          }).map(rsp => rsp.json());
+          }).pipe(map(rsp => rsp.json()));
       }),
-      map(response => {
+      map((response: Response) => {
         const page = jsonToPage<Order>(response.json());
         this.orderPaginator.length = page.totalElements;
         return page.content;
@@ -71,9 +68,9 @@ export class MyOrdersComponent implements OnInit {
           {
             dateRange: this.maintenanceDateRange,
             pageNum: this.maintenancePaginator.pageIndex
-          }).map(rsp => rsp.json());
+          }).pipe(map(rsp => rsp.json()));
       }),
-      map(response => {
+      map((response: Response) => {
         const page = jsonToPage<Order>(response.json());
         this.maintenancePaginator.length = page.totalElements;
         return page.content;
@@ -90,9 +87,9 @@ export class MyOrdersComponent implements OnInit {
           {
             dateRange: this.repairDateRange,
             pageNum: this.repairPaginator.pageIndex
-          }).map(rsp => rsp.json());
+          }).pipe(map(rsp => rsp.json()));
       }),
-      map(response => {
+      map((response: Response) => {
         const page = jsonToPage<Order>(response.json());
         this.repairPaginator.length = page.totalElements;
         return page.content;
@@ -113,7 +110,7 @@ export class MyOrdersComponent implements OnInit {
       {
         dateRange: this.orderDateRange,
         pageNum: this.ordersPageNum
-      }).map(rsp => rsp.json())
+      }).pipe(map(rsp => rsp.json()))
       .subscribe(json => {
         this.ordersPage = jsonToPage(json);
         this.ordersPage.content = getOrdersFromPage(this.ordersPage);
@@ -128,7 +125,7 @@ export class MyOrdersComponent implements OnInit {
       {
         dateRange: dateRange,
         pageNum: pageNum
-      }).map(rsp => rsp.json())
+      }).pipe(map(rsp => rsp.json()))
       .subscribe(json => {
         this.maintenancePage = jsonToPage(json);
         this.maintenancePage.content = getOrdersFromPage(this.maintenancePage);
@@ -143,7 +140,7 @@ export class MyOrdersComponent implements OnInit {
       {
         dateRange: dateRange,
         pageNum: pageNum
-      }).map(rsp => rsp.json())
+      }).pipe(map(rsp => rsp.json()))
       .subscribe(json => {
         this.repairPage = jsonToPage(json);
         this.repairPage.content = getOrdersFromPage(this.repairPage);

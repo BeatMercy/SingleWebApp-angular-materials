@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { RequestOptions, Http } from '@angular/http';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { Observable } from 'rxjs/Observable';
+import { map } from 'rxjs/operators';
 import { AuthHttp } from 'angular2-jwt';
 import { authHttpServiceFactory } from '../../auth.module';
 @Component({
@@ -41,7 +41,7 @@ export class StaffFormDialogComponent implements OnInit {
       this.departmentId = staff['department']['id'];
     }
 
-    this.authHttp.get('mg/departments').map(rsp => rsp.json())
+    this.authHttp.get('mg/departments').pipe(map(rsp => rsp.json()))
       .subscribe(json => {
         this.allDepartments = json;
       });
@@ -68,7 +68,9 @@ export class StaffFormDialogComponent implements OnInit {
         password: this.password,
         weixin: this.weixin,
         departmentId: this.departmentId
-      }).map(rsp => rsp.json()).subscribe(json => {
+      })
+      .pipe(map(rsp => rsp.json()))
+      .subscribe(json => {
         this.dialogRef.close(json);
       }, error => {
         this.dialogRef.close(error);

@@ -1,6 +1,5 @@
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
-import { of } from 'rxjs/observable/of';
+import { Observable } from 'rxjs';
+import { Subject, of } from 'rxjs';
 
 export class OptionDetail {
     constructor(itemName: string, price: number) {

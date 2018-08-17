@@ -3,7 +3,8 @@ import { MatDialog, MAT_DIALOG_DATA } from '@angular/material';
 import { AuthHttp } from 'angular2-jwt';
 import { Http, RequestOptions, Response } from '@angular/http';
 import { authHttpServiceFactory } from '../../auth.module';
-import { Observable } from 'rxjs/Observable';
+import { Observable} from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-message-dialog',
@@ -30,7 +31,7 @@ export class MessageDialogComponent implements OnInit {
     this.confirmResult = this.authHttp.post(
       this.data.postData.url,
       this.data.postData.body
-    ).map(rsp => rsp.json());
+    ).pipe( map(rsp => rsp.json()));
     return this.confirmResult;
   }
 
@@ -44,7 +45,7 @@ export class MessageDialogComponent implements OnInit {
         data: this.messageData.postData.body,
         inputFields: this.messageData.inputFields
       }
-    ).map(rsp => rsp.json());
+    ).pipe(map(rsp => rsp.json()));
     return this.confirmResult;
   }
   ngOnInit() {

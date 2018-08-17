@@ -48,27 +48,27 @@
       </div>
       <div style="width:100%;" class="registerBody">
         <div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="2px">
-          <mat-input-container class="loginInput">
+          <mat-form-field class="loginInput">
             <input matInput [(ngModel)]="realName" type="text" placeholder="姓名" required>
             <span matPrefix>
               <mat-icon class="mat-18">account_box</mat-icon>
             </span>
-          </mat-input-container>
-          <mat-input-container class="loginInput">
+          </mat-form-field>
+          <mat-form-field class="loginInput">
               <input matInput
                     [(ngModel)]="phone"
                      type="text"
                      required
                      placeholder="中国大陆手机号">
               <span matPrefix><mat-icon class="mat-18">phone</mat-icon></span>
-          </mat-input-container>
-          <mat-input-container class="loginInput">
+          </mat-form-field>
+          <mat-form-field class="loginInput">
             <input matInput [(ngModel)]="password" type="password" placeholder="密码" required>
             <span matPrefix><mat-icon class="mat-18">vpn_key</mat-icon></span>
-          </mat-input-container>
-          <mat-input-container class="loginInput">
+          </mat-form-field>
+          <mat-form-field class="loginInput">
             <input matInput [(ngModel)]="confirmPassword" type="password" placeholder="确认密码" required>
-          </mat-input-container>
+          </mat-form-field>
         </div>
       </div>
       <div class="registerBottom">

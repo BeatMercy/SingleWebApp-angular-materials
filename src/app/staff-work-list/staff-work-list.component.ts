@@ -8,7 +8,6 @@ import { Order, getOrdersFromPage } from '../entity/order';
 import { MatTabChangeEvent } from '@angular/material';
 import { debounceTime, switchMap, map } from 'rxjs/operators';
 import 'rxjs/add/operator/delay';
-import { Element } from '@angular/compiler';
 @Component({
   selector: 'app-staff-work-list',
   templateUrl: './staff-work-list.component.html',
@@ -68,7 +67,7 @@ export class StaffWorkListComponent implements OnInit {
       {
         'orderNo': orderNo
       }
-    ).map(result => result.json()).delay(300).subscribe(next => {
+    ).pipe(map(result => result.json())).delay(300).subscribe(next => {
       if (next['success']) {
         this.pendingPage.content = this.pendingPage.content.filter(child => {
           return child.orderNo !== orderNo;
@@ -107,8 +106,8 @@ export class StaffWorkListComponent implements OnInit {
         'progress': progress
       }
     )
-      .map(result => result.json())
-      .subscribe(next => {
+    .pipe(map(result => result.json()))
+    .subscribe(next => {
         this.pendingPage = jsonToPage(next['content']);
         this.pendingPage.content = getOrdersFromPage(this.pendingPage);
       });
